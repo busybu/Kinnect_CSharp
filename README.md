@@ -31,5 +31,4 @@ Equipe Papa - Felipe, Manu, **Bruno**
     
     Registro diário:
     
-- [ ]  
 - [ ]  ***ENTREGA FINAL - DIA 23/12***
