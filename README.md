@@ -1,7 +1,7 @@
-Equipe Hotel - hand
-Status:
+Equipe Hotel - hand <br>
+Status: <br>
 iniciando
 
-Lucas Fortunato
-Peterson Montez
+Lucas Fortunato <br>
+Peterson Montez <br>
 Nycollas Wenndy
