@@ -1,7 +1,7 @@
 
 # Esquematização do Projeto
 
-## **Blur** - Responsável pela diferenciação do cenário e do usuário
+### **Blur** - Responsável pela diferenciação do cenário e do usuário
 
 Equipe Bravo - Murilo, Hemerson, **Falango** 
 
