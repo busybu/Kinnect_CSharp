@@ -9,7 +9,7 @@ pb.Dock = DockStyle.Fill;
 form.Controls.Add(pb);
 
 //string path = @"C:/Users/Aluno/Downloads/shrek.jpg";
-string path = @"C:/Users/Aluno/Downloads/shrek.jpg";
+string path = "shrek.jpg";
 
 form.KeyDown += (o, e) =>
 {
@@ -20,7 +20,7 @@ form.KeyDown += (o, e) =>
 form.Load += (o, e) =>
 {
     Bitmap bmp = (Bitmap)Image.FromFile(path);
-    bmp = Blur.ApplyBlur(bmp);
+    bmp = Blur.ApplyFastBlur(bmp);
 
     pb.Image = bmp;
     pb.Refresh();

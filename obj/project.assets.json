@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\leonardo-falango\\leonardo-falango.csproj",
-      "projectName": "leonardo-falango",
-      "projectPath": "E:\\leonardo-falango\\leonardo-falango.csproj",
+      "projectUniqueName": "E:\\Kinnect_CSharp\\hemer.csproj",
+      "projectName": "hemer",
+      "projectPath": "E:\\Kinnect_CSharp\\hemer.csproj",
       "packagesPath": "C:\\Users\\Aluno\\.nuget\\packages\\",
-      "outputPath": "E:\\leonardo-falango\\obj\\",
+      "outputPath": "E:\\Kinnect_CSharp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Kinnect_CSharp\\leonardo-falango.csproj": {}
+    "E:\\Kinnect_CSharp\\hemer.csproj": {}
   },
   "projects": {
-    "E:\\Kinnect_CSharp\\leonardo-falango.csproj": {
+    "E:\\Kinnect_CSharp\\hemer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Kinnect_CSharp\\leonardo-falango.csproj",
-        "projectName": "leonardo-falango",
-        "projectPath": "E:\\Kinnect_CSharp\\leonardo-falango.csproj",
+        "projectUniqueName": "E:\\Kinnect_CSharp\\hemer.csproj",
+        "projectName": "hemer",
+        "projectPath": "E:\\Kinnect_CSharp\\hemer.csproj",
         "packagesPath": "C:\\Users\\Aluno\\.nuget\\packages\\",
         "outputPath": "E:\\Kinnect_CSharp\\obj\\",
         "projectStyle": "PackageReference",

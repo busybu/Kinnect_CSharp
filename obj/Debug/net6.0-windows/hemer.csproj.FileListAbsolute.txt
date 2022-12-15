@@ -1,0 +1,15 @@
+E:\Kinnect_CSharp\bin\Debug\net6.0-windows\hemer.exe
+E:\Kinnect_CSharp\bin\Debug\net6.0-windows\hemer.deps.json
+E:\Kinnect_CSharp\bin\Debug\net6.0-windows\hemer.runtimeconfig.json
+E:\Kinnect_CSharp\bin\Debug\net6.0-windows\hemer.dll
+E:\Kinnect_CSharp\bin\Debug\net6.0-windows\ref\hemer.dll
+E:\Kinnect_CSharp\bin\Debug\net6.0-windows\hemer.pdb
+E:\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.csproj.AssemblyReference.cache
+E:\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.GeneratedMSBuildEditorConfig.editorconfig
+E:\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.AssemblyInfoInputs.cache
+E:\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.AssemblyInfo.cs
+E:\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.csproj.CoreCompileInputs.cache
+E:\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.dll
+E:\Kinnect_CSharp\obj\Debug\net6.0-windows\ref\hemer.dll
+E:\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.pdb
+E:\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.genruntimeconfig.cache
