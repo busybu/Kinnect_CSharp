@@ -10,37 +10,38 @@ form.FormBorderStyle = FormBorderStyle.None;
 PictureBox pb = new PictureBox();
 pb.Dock = DockStyle.Fill;
 form.Controls.Add(pb);
- 
+
+Bitmap bg = Image.FromFile("imagem3.jpeg") as Bitmap;
+
 List<Bitmap> imagens = new List<Bitmap>();
-imagens.Add(Image.FromFile("imagem.jpeg") as Bitmap);
 imagens.Add(Image.FromFile("imagem2.jpeg") as Bitmap);
-imagens.Add(Image.FromFile("imagem3.jpeg") as Bitmap);
+
+imagens.Add(Binarization.ApplyBin(imagens[0], bg))
+
 
 System.Windows.Forms.Timer tm = new System.Windows.Forms.Timer();
-tm.Interval = 25;
+tm.Interval = 2500;
 
-form.KeyDown += (o,e)=>
+form.KeyDown += (o, e) =>
 {
-    if (e.KeyCode==Keys.Escape)
+    if (e.KeyCode == Keys.Escape)
         Application.Exit();
 };
-
-form.Load += (o,e) =>
-{   
-    
-    foreach (var item in imagens)
-    {
-        pb.Image = item;
-        pb.Refresh();
-    }
+int i = 0;
+form.Load += (o, e) =>
+{
+    tm.Start();
 };
 
-int i = 0;
-tm.Tick += (o,e) =>
+tm.Tick += (o, e) =>
 {
     i++;
-    if(i >= imagens.Count)
-        tm.Stop();
-}
+    if (i >= imagens.Count)
+        i = 0;
+    pb.Image = imagens[i];
+    pb.Refresh();
+};
+
+
 
 Application.Run(form);

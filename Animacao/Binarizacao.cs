@@ -1,17 +1,28 @@
-// public static class Binary{
-//     public static Bitmap ApplyBin(Bitmap bmp, Bitmap bmp2)
-//     {
-//         Bitmap returnBmp = new Bitmap(bmp.Width, bmp.Height);
+public static class Binarization
+{
+    public static Bitmap ApplyBin(Bitmap img, Bitmap bg, int treshold = 5000)
+    {   
+        Bitmap returnBmp = new Bitmap(img.Width, img.Height);
 
-//         Color pixel = bmp.GetPixel(0,0);
-//         Color pixel2 = bmp2.GetPixel(0,0);
+        for (int i = 0; i < img.Width; i++)
+        {
+            for (int j = 0; j < img.Height; j++)
+            {
+                Color pixel = img.GetPixel(i,j);
+                Color pixel2 = bg.GetPixel(i,j);
 
-//         int newR = pixel.R - pixel2.R;
-//         int newG = pixel.G - pixel2.G;
-//         int newB = pixel.B - pixel2.B;
-//         returnBmp.SetPixel(0,0, Color.White);
+                int dr = pixel.R - pixel2.R;
+                int dg = pixel.G - pixel2.G;
+                int db = pixel.B - pixel2.B;
+                int diff = dr * dr + dg * dg + db * db;
 
-//         return returnBmp;
-//     }
-    
-// }
+                if (diff <= treshold)
+                    returnBmp.SetPixel(i, j, Color.Black);
+                else
+                    returnBmp.SetPixel(i, j, Color.White);
+            }
+            
+        }
+        return returnBmp;       
+    }    
+}
