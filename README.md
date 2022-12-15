@@ -7,7 +7,7 @@ Equipe Bravo - Murilo, Hemerson, **Falango**
 
 ### Hand - Reconhecimento da mão
 
-Equipe Hotel - Fortunato, Peter, Nycollas
+Equipe Hotel - Fortunato, Peter, Nycollas.
 
 ### Integration - Integrar todas as partes do projeto/administração
 
@@ -15,11 +15,11 @@ Equipe India - Gabrielle, **André**, Freire
 
 ### Front - Parte visual do projeto
 
-Equipe Foxtrot - Kaiky, Iago
+Equipe Foxtrot - Kaiky, Iago.
 
 ### Recognize - Reconhecimento de imagem pela IA
 
-Equipe Romeu - João Ramirez, João Pedro, Maitê
+Equipe Romeu - João Ramirez, João Pedro, Maitê.
 
 ### Parse - Transformar string em int no sistema
 
