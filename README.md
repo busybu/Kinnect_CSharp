@@ -2,7 +2,7 @@
 
 # Datas de Entregas
 
-- [x]  Início do Projeto 14/12
+- [x]  Início do Projeto 14/12.
     
     Registro diário: Conhecimentos bases sobre windows form para dar início a aplicação,
     
