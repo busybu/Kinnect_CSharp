@@ -1,6 +1,6 @@
 public static class Binarization
 {
-    public static Bitmap ApplyBin(Bitmap img, Bitmap bg, int treshold = 5000)
+    public static Bitmap ApplyBin(Bitmap img, Bitmap bg, int treshold = 80)
     {   
         Bitmap returnBmp = new Bitmap(img.Width, img.Height);
 
@@ -14,7 +14,7 @@ public static class Binarization
                 int dr = pixel.R - pixel2.R;
                 int dg = pixel.G - pixel2.G;
                 int db = pixel.B - pixel2.B;
-                int diff = dr * dr + dg * dg + db * db;
+                int diff = (dr * dr + dg * dg + db * db) / 3;
 
                 if (diff <= treshold)
                     returnBmp.SetPixel(i, j, Color.Black);
@@ -26,3 +26,4 @@ public static class Binarization
         return returnBmp;       
     }    
 }
+
