@@ -1,0 +1,15 @@
+E:\leonardo-falango\bin\Debug\net6.0-windows\leonardo-falango.exe
+E:\leonardo-falango\bin\Debug\net6.0-windows\leonardo-falango.deps.json
+E:\leonardo-falango\bin\Debug\net6.0-windows\leonardo-falango.runtimeconfig.json
+E:\leonardo-falango\bin\Debug\net6.0-windows\leonardo-falango.dll
+E:\leonardo-falango\bin\Debug\net6.0-windows\ref\leonardo-falango.dll
+E:\leonardo-falango\bin\Debug\net6.0-windows\leonardo-falango.pdb
+E:\leonardo-falango\obj\Debug\net6.0-windows\leonardo-falango.csproj.AssemblyReference.cache
+E:\leonardo-falango\obj\Debug\net6.0-windows\leonardo-falango.GeneratedMSBuildEditorConfig.editorconfig
+E:\leonardo-falango\obj\Debug\net6.0-windows\leonardo-falango.AssemblyInfoInputs.cache
+E:\leonardo-falango\obj\Debug\net6.0-windows\leonardo-falango.AssemblyInfo.cs
+E:\leonardo-falango\obj\Debug\net6.0-windows\leonardo-falango.csproj.CoreCompileInputs.cache
+E:\leonardo-falango\obj\Debug\net6.0-windows\leonardo-falango.dll
+E:\leonardo-falango\obj\Debug\net6.0-windows\ref\leonardo-falango.dll
+E:\leonardo-falango\obj\Debug\net6.0-windows\leonardo-falango.pdb
+E:\leonardo-falango\obj\Debug\net6.0-windows\leonardo-falango.genruntimeconfig.cache
