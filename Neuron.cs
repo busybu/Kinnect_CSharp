@@ -1,20 +1,40 @@
 using System;
 public class Neuron
 {
-    public Neuron(float b, float[] weights)
+    public Neuron(int weightsSize)
     {
-        this.B = b;
-        this.weights = weights;
+        this.B = gaussianDist();
+        this.Ws = new float[weightsSize];
+        for (int i = 0; i < weightsSize; i++)
+            this.Ws[i] = gaussianDist();
+    }
+    
+    public Neuron(float bias, float[] weights)
+    {
+        this.B = bias;
+        this.Ws = weights;
     }
 
-    private float B { get; set; }
-    private float[] weights { get; set; }
-    public float Output(float[] inputs)
+    public float B { get; private set; }
+    public float[] Ws { get; private set; }
+    public float Output(float[] xs)
     {
-        float output = this.B;
-        for (int i = 0; i < inputs.Length; i++)
-            output += inputs[i] * this.weights[i];
+        float y = this.B;
+        for (int i = 0; i < xs.Length; i++)
+            y += xs[i] * this.Ws[i];
         
-        return 1 / (1 + MathF.Pow(MathF.E, -output));
+        return sigma(y);
     }
+
+    private float gaussianDist()
+    {
+        float sum = 0;
+        for (int i = 0; i < 5; i++)
+            sum += 2 * Random.Shared.NextSingle() - 1;
+        
+        return sum / 5;
+    }
+
+    private float sigma(float x)
+        => 1f / (1f + MathF.Exp(-x));
 }
