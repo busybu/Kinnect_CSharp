@@ -16,21 +16,18 @@ PictureBox pb = new PictureBox();
 pb.Dock = DockStyle.Fill;
 form.Controls.Add(pb);
 
-Bitmap bg = Blur.ApplyBlur(Image.FromFile("./images/imagem3.jpeg") as Bitmap);
+Bitmap bg = Blur.NormalBlur(Image.FromFile("./images/wp1.jpeg") as Bitmap);
 
 List<Bitmap> imagens = new List<Bitmap>();
-imagens.Add(Blur.ApplyBlur(Image.FromFile("./images/imagem2.jpeg") as Bitmap));
+imagens.Add(Blur.NormalBlur(Image.FromFile("./images/wp2.jpeg") as Bitmap));
 
-
-
-var sla = Binarization.ApplyBin(imagens[0], bg);
-imagens.Add(sla);
-
-
+var binar = Binarization.ApplyBin2(imagens[0], bg, 0.005f);
+imagens.Add(binar);
 
 
 System.Windows.Forms.Timer tm = new System.Windows.Forms.Timer();
 tm.Interval = 1000;
+
 
 form.KeyDown += (o, e) =>
 {
@@ -44,8 +41,8 @@ form.Load += (o, e) =>
 };
 
 
-
 tm.Tick += (o, e) =>
+
 {
     i++;
     if (i >= imagens.Count)
