@@ -9,9 +9,10 @@ public class DataSet
     public float[][] Y { get; private set; }
     private int start { get; set; } = 0;
     private int end { get; set; }
-    public void Load_CSV(string path)
+    public void Load_CSV(string path, string label)
     {
-        var data = Open(path).Skip(1);
+        var data = Open(path);
+        int labelIndex = data.Select((item, index) => (item, index)).First(i => i.item == label).index;
         this.X = new float[data.Count()][];
         this.Y = new float[data.Count()][];
         int index = 0;

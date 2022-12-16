@@ -2,7 +2,6 @@
 
 DataSet data = new DataSet();
 
-data.Load_CSV("train.csv");
 
 float[][] X = {
     new float[] { 0f, 0f },
