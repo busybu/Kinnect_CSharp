@@ -16,7 +16,7 @@ public class DataSet
         this.Y = new float[data.Count()][];
         int index = 0;
 
-        fo      reach (var item in data)
+        foreach (var item in data)
         {
             string[] line = item.Split(',');
             var x = new float[line.Length - 1];
@@ -45,25 +45,6 @@ public class DataSet
             index++;
             System.Console.WriteLine(X);
         }
-        // using (StreamReader sr = new StreamReader(path))
-        // {
-        //     string[] line = sr.ReadLine().Split(',');
-        //     int length = line.Length - 1;
-        //     this.X = new float[length];
-        //     this.Y = new float[length];
-        //     int indice = line.Select((item, index) => (item, index)).First(i => i.item == label).index;
-        //     System.Console.WriteLine(indice);
-        //     while (!sr.EndOfStream)
-        //     {
-        //         line = sr.ReadLine().Split(',');
-        //         for (int i = 0; i < length; i++)
-        //         {
-        //             if(i == indice) 
-        //                 this.Y = i;
-        //         }
-        //         break;
-        //     }
-        // }
     }
     private IEnumerable<string> Open(string file)
     {

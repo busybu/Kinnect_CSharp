@@ -15,7 +15,14 @@ public class NeuralNetwork
 
     public Layer[] Layers { get; private set; }
 
-    public (int, float) Output(params float[] inputs)
+    public float[] N(params float[] inputs)
+    {
+        for (int i = 0; i < this.Layers.Length; i++)
+            inputs = this.Layers[i].Output(inputs);
+
+        return inputs;
+    }
+    public (int, float) Choose(params float[] inputs)
     {
         for (int i = 0; i < this.Layers.Length; i++)
             inputs = this.Layers[i].Output(inputs);
@@ -23,5 +30,26 @@ public class NeuralNetwork
         return inputs
             .Select((input, index) => (index, input))
             .MaxBy(i => i.input);
+    }
+
+    public float Score(float[][] X, float[][] Y)
+    {
+        float E = 0;
+        for (int i = 0; i < X.Length; i++)
+        {
+            var nx = N(X[i]); 
+            for (int j = 0; j < X[0].Length; j++)
+            {
+                float value = nx[j] - Y[i][j];
+                value = value * value;
+                E += value;
+            }
+        }
+        return E / (0.5f * X.Length * X[0].Length);
+    }
+
+    public float Fit()
+    {
+        return 1f;
     }
 }
