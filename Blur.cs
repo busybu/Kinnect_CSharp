@@ -190,6 +190,8 @@ public static class Blur
                 
                 int b = (int)(pixelSomaB + pixelSomaB - pixelSub1B - pixelSub2B) / A;
 
+                if (b > 255)
+                    b = 255;
                 blurred.SetPixel(i, j, Color.FromArgb(r,g,b));
             }
         }
