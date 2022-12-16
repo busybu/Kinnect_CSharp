@@ -1,6 +1,6 @@
 public static class Blur
 {
-    public static Bitmap ApplyBlur(Bitmap bmp, int radius = 5)
+    public static Bitmap SlowBlur(Bitmap bmp, int radius = 5)
     {
         Bitmap blurred = new Bitmap(bmp.Width, bmp.Height);
         int N = radius * 2 + 1;
@@ -34,7 +34,7 @@ public static class Blur
         return blurred;
     }
 
-    public static Bitmap ApplyFastBlurGray(Bitmap bmp, int radius = 5)
+    public static Bitmap NormalBlurGray(Bitmap bmp, int radius = 5)
     {
         Bitmap blurred = new Bitmap(bmp.Width, bmp.Height);
         long[] integralImage = new long[bmp.Width * bmp.Height];
@@ -79,20 +79,19 @@ public static class Blur
             }
         }
             // Calculate blurred image
-            for (int j = radius; j < bmp.Height; j++)
+            for (int j = radius + 1; j < bmp.Height - radius; j++)
             {
-                for (int i = radius; i < bmp.Width; i++)
+                for (int i = radius + 1; i < bmp.Width - radius; i++)
                 {
+                    long pixelSoma = integralImage[i + radius + ((j + radius) * bmp.Width)];
+                    long pixelSub1 = integralImage[i + radius + ((j - radius - 1) * bmp.Width)];
+                    long pixelSub2 = integralImage[i - radius - 1 + ((j + radius) * bmp.Width)];
+                    long pixelSoma2 = integralImage[i - radius - 1 + ((j - radius - 1) * bmp.Width)];
                     
-                    long pixelAtual = integralImage[i + (j * bmp.Width)];
-                    long pixelSub1 = integralImage[i - radius + (j * bmp.Width)];
-                    long pixelSub2 = integralImage[i + ((j - radius)* bmp.Width)];
-                    long pixelSoma = integralImage[i - radius + ((j - radius) * bmp.Width)];
-                    
-                    int r = (int)(pixelAtual + pixelSoma - pixelSub1 - pixelSub2) / A;
+                    int r = (int)(pixelSoma2 + pixelSoma - pixelSub1 - pixelSub2) / A;
                     
 
-                        blurred.SetPixel(i, j, Color.FromArgb(r,r,r));
+                    blurred.SetPixel(i, j, Color.FromArgb(r,r,r));
                 }
             }
 
@@ -104,7 +103,7 @@ public static class Blur
         
     }
 
-    public static Bitmap ApplyFastBlur(Bitmap bmp, int radius = 5)
+    public static Bitmap NormalBlur(Bitmap bmp, int radius = 5)
     {
         Bitmap blurred = new Bitmap(bmp.Width, bmp.Height);
         long[] integralImageR = new long[bmp.Width * bmp.Height];
@@ -164,31 +163,32 @@ public static class Blur
         }
         
         // Calculate blurred image
-        for (int j = radius; j < bmp.Height; j++)
+        for (int j = radius + 1; j < bmp.Height - radius; j++)
         {
-            for (int i = radius; i < bmp.Width; i++)
+            for (int i = radius + 1; i < bmp.Width - radius; i++)
             {
                 
-                long pixelAtualR = integralImageR[i + (j * bmp.Width)];
-                long pixelSub1R = integralImageR[i - radius + (j * bmp.Width)];
-                long pixelSub2R = integralImageR[i + ((j - radius)* bmp.Width)];
-                long pixelSomaR = integralImageR[i - radius + ((j - radius) * bmp.Width)];
+                long pixelSomaR = integralImageR[i + radius + ((j + radius) * bmp.Width)];
+                long pixelSub1R = integralImageR[i + radius + ((j - radius - 1) * bmp.Width)];
+                long pixelSub2R = integralImageR[i - radius - 1 + ((j + radius) * bmp.Width)];
+                long pixelSoma2R = integralImageR[i - radius - 1 + ((j - radius - 1) * bmp.Width)];
                 
-                int r = (int)(pixelAtualR + pixelSomaR - pixelSub1R - pixelSub2R) / A;
+                
+                int r = (int)(pixelSoma2R + pixelSomaR - pixelSub1R - pixelSub2R) / A;
                
-                long pixelAtualG = integralImageG[i + (j * bmp.Width)];
-                long pixelSub1G = integralImageG[i - radius + (j * bmp.Width)];
-                long pixelSub2G = integralImageG[i + ((j - radius)* bmp.Width)];
-                long pixelSomaG = integralImageG[i - radius + ((j - radius) * bmp.Width)];
+                long pixelSomaG = integralImageG[i + radius + ((j + radius) * bmp.Width)];
+                long pixelSub1G = integralImageG[i + radius + ((j - radius - 1) * bmp.Width)];
+                long pixelSub2G = integralImageG[i - radius - 1 + ((j + radius) * bmp.Width)];
+                long pixelSoma2G = integralImageG[i - radius - 1 + ((j - radius - 1) * bmp.Width)];
                 
-                int g = (int)(pixelAtualG + pixelSomaG - pixelSub1G - pixelSub2G) / A;
+                int g = (int)(pixelSoma2G + pixelSomaG - pixelSub1G - pixelSub2G) / A;
                 
-                long pixelAtualB = integralImageB[i + (j * bmp.Width)];
-                long pixelSub1B = integralImageB[i - radius + (j * bmp.Width)];
-                long pixelSub2B = integralImageB[i + ((j - radius)* bmp.Width)];
-                long pixelSomaB = integralImageB[i - radius + ((j - radius) * bmp.Width)];
+                long pixelSomaB = integralImageB[i + radius + ((j + radius) * bmp.Width)];
+                long pixelSub1B = integralImageB[i + radius + ((j - radius - 1) * bmp.Width)];
+                long pixelSub2B = integralImageB[i - radius - 1 + ((j + radius) * bmp.Width)];
+                long pixelSoma2B = integralImageB[i - radius - 1 + ((j - radius - 1) * bmp.Width)];
                 
-                int b = (int)(pixelAtualB + pixelSomaB - pixelSub1B - pixelSub2B) / A;
+                int b = (int)(pixelSomaB + pixelSomaB - pixelSub1B - pixelSub2B) / A;
 
                 blurred.SetPixel(i, j, Color.FromArgb(r,g,b));
             }
@@ -199,5 +199,25 @@ public static class Blur
                 blurred.SetPixel(i,j, Color.White);
 
         return blurred;
+    }
+
+    public static Bitmap QuickBlurGray(Bitmap bmp, int radius = 5)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static Bitmap QuickBlur(Bitmap bmp, int radius = 5)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static Bitmap QuickParallelBlurGray(Bitmap bmp, int radius = 5)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static Bitmap QuickParallelBlur(Bitmap bmp, int radius = 5)
+    {
+        throw new NotImplementedException();
     }
 }

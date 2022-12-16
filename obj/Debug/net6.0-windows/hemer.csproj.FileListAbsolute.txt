@@ -13,3 +13,18 @@ E:\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.dll
 E:\Kinnect_CSharp\obj\Debug\net6.0-windows\ref\hemer.dll
 E:\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.pdb
 E:\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.genruntimeconfig.cache
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\bin\Debug\net6.0-windows\hemer.exe
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\bin\Debug\net6.0-windows\hemer.deps.json
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\bin\Debug\net6.0-windows\hemer.runtimeconfig.json
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\bin\Debug\net6.0-windows\hemer.dll
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\bin\Debug\net6.0-windows\hemer.pdb
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.csproj.AssemblyReference.cache
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.AssemblyInfoInputs.cache
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.AssemblyInfo.cs
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.csproj.CoreCompileInputs.cache
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.dll
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\obj\Debug\net6.0-windows\refint\hemer.dll
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.pdb
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\obj\Debug\net6.0-windows\hemer.genruntimeconfig.cache
+C:\Users\hemer\OneDrive\Área de Trabalho\New folder (3)\Kinnect_CSharp\obj\Debug\net6.0-windows\ref\hemer.dll

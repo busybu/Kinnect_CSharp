@@ -20,7 +20,7 @@ form.KeyDown += (o, e) =>
 form.Load += (o, e) =>
 {
     Bitmap bmp = (Bitmap)Image.FromFile(path);
-    bmp = Blur.ApplyFastBlur(bmp);
+    bmp = Blur.NormalBlur(bmp);
 
     pb.Image = bmp;
     pb.Refresh();
