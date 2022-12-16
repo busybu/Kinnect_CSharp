@@ -15,7 +15,7 @@ public class Neuron
         this.Ws = weights;
     }
 
-    public float B { get; private set; }
+    public float B { get; set; }
     public float[] Ws { get; private set; }
     public float Output(float[] xs)
     {
