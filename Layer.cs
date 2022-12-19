@@ -1,3 +1,6 @@
+using System;
+
+[Serializable]
 public class Layer
 {
     public Layer(Neuron[] neurons)
@@ -12,6 +15,7 @@ public class Layer
     }
 
     public Neuron[] Neurons { get; private set; }
+    public int Lenght ;
     public float[] Output(float[] xs)
     {
         float[] ys = new float[this.Neurons.Length];

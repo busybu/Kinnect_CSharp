@@ -1,5 +1,6 @@
+using System;
 using System.Linq;
-
+[Serializable]
 public class NeuralNetwork
 {
     public NeuralNetwork(Layer[] layer) =>
@@ -15,7 +16,7 @@ public class NeuralNetwork
 
     public Layer[] Layers { get; private set; }
 
-    public float[] N(params float[] inputs)
+    public float[] Output(params float[] inputs)
     {
         for (int i = 0; i < this.Layers.Length; i++)
             inputs = this.Layers[i].Output(inputs);
@@ -37,10 +38,10 @@ public class NeuralNetwork
         float E = 0;
         for (int i = 0; i < X.Length; i++)
         {
-            var nx = N(X[i]); 
+            var outputX = Output(X[i]); 
             for (int j = 0; j < X[0].Length; j++)
             {
-                float value = nx[j] - Y[i][j];
+                float value = outputX[j] - Y[i][j];
                 value = value * value;
                 E += value;
             }
@@ -48,8 +49,24 @@ public class NeuralNetwork
         return E / (0.5f * X.Length * X[0].Length);
     }
 
-    public float Fit()
+    public float Fit(float[] X, float[] Y)
     {
+        for (int i = 0; i < 5; i++)
+            this.epoch(X, Y);
+        
+        return 1f;
+    }
+
+    private float epoch(float[] X, float[] Y)
+    {
+        var lastLayer = this.Layers.Last();
+        var Z = this.Output(X);
+        float soma = 0f;
+
+        for (int i = 0; i < Z.Length; i++)
+            soma += (Z[i] - Y[i]) * Z[i] * (1 - Z[i]);
+        
+        
         return 1f;
     }
 }
