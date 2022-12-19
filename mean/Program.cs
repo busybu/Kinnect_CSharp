@@ -37,7 +37,7 @@ form.KeyDown += (o, e) =>
 int i = 0;
 form.Load += (o, e) =>
 {
-    var binar = Binarization.ApplyBin2(imagens[0], bg, 0.5f);
+    var binar = Binarization.ApplyBin(imagens[0], bg, 0.5f);
     imagens.Add(binar);
     tm.Start();
 };

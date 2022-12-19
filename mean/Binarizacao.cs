@@ -4,34 +4,9 @@ using System.Drawing.Imaging;
 
 public static class Binarization
 {
-    public static Bitmap ApplyBin(Bitmap img, Bitmap bg, int treshold = 300)
-    {   
-        Bitmap returnBmp = new Bitmap(img.Width, img.Height);
 
-        for (int i = 0; i < img.Width; i++)
-        {
-            for (int j = 0; j < img.Height; j++)
-            {
-                Color pixel = img.GetPixel(i,j);
-                Color pixel2 = bg.GetPixel(i,j);
-
-                int dr = pixel.R - pixel2.R;
-                int dg = pixel.G - pixel2.G;
-                int db = pixel.B - pixel2.B;
-                int diff = (dr * dr + dg * dg + db * db) / 3;
-
-                if (diff <= treshold)
-                    returnBmp.SetPixel(i, j, Color.Black);
-                else
-                    returnBmp.SetPixel(i, j, Color.White);
-            }
-
-        }
-        return returnBmp;       
-    }    
-
-
-    public static Bitmap ApplyBin2(Bitmap bmp, Bitmap bg, float treshold = .001f)
+// Função para inverter as cores
+    public static Bitmap ApplyBin(Bitmap bmp, Bitmap bg, float treshold = .001f)
     {
         
         var data_bmp = bmp.LockBits(
@@ -44,12 +19,12 @@ public static class Binarization
             ImageLockMode.ReadWrite,
             PixelFormat.Format24bppRgb);
 
-
         var returnBmp = new Bitmap(bmp.Width, bmp.Height); 
         var data_rt = returnBmp.LockBits(
             new Rectangle(0, 0, returnBmp.Width, returnBmp.Height),
             ImageLockMode.ReadWrite,
             PixelFormat.Format24bppRgb);
+
         unsafe
         {
             byte* pDataBmp = (byte*)data_bmp.Scan0.ToPointer();
@@ -85,13 +60,10 @@ public static class Binarization
                 }
             }
         }
-
-        
         bmp.UnlockBits(data_bmp);
         bg.UnlockBits(data_bg);
         returnBmp.UnlockBits(data_rt);
-        
-        
+
         return returnBmp;
     }
 }
