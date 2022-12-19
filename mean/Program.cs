@@ -5,6 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using AForge.Video.DirectShow;
+
+
 ApplicationConfiguration.Initialize();
 Application.EnableVisualStyles();
 
@@ -16,13 +19,10 @@ PictureBox pb = new PictureBox();
 pb.Dock = DockStyle.Fill;
 form.Controls.Add(pb);
 
-Bitmap bg = Blur.NormalBlur(Image.FromFile("./images/wp1.jpeg") as Bitmap);
+Bitmap bg = Blur.QuickBlurGray(Image.FromFile("./images/bgHemer.jpeg") as Bitmap);
 
 List<Bitmap> imagens = new List<Bitmap>();
-imagens.Add(Blur.NormalBlur(Image.FromFile("./images/wp2.jpeg") as Bitmap));
-
-var binar = Binarization.ApplyBin2(imagens[0], bg, 0.005f);
-imagens.Add(binar);
+imagens.Add(Blur.QuickBlurGray(Image.FromFile("./images/Hemer.jpeg") as Bitmap));
 
 
 System.Windows.Forms.Timer tm = new System.Windows.Forms.Timer();
@@ -37,12 +37,13 @@ form.KeyDown += (o, e) =>
 int i = 0;
 form.Load += (o, e) =>
 {
+    var binar = Binarization.ApplyBin2(imagens[0], bg, 0.5f);
+    imagens.Add(binar);
     tm.Start();
 };
 
 
 tm.Tick += (o, e) =>
-
 {
     i++;
     if (i >= imagens.Count)
@@ -51,5 +52,19 @@ tm.Tick += (o, e) =>
     pb.Image = imagens[i];
     pb.Refresh();
 };
+
+
+// VideoCaptureDevice videoSource;
+// var videoSources = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+// if (videoSources != null && videoSources.Count > 0)
+// {
+//     videoSource = new VideoCaptureDevice(videoSources[0].MonikerString);
+//     videoSource.NewFrame += delegate(object sender, AForge.Video.NewFrameEventArgs eventArgs)
+//     {
+//         var bmp = (Bitmap)eventArgs.Frame.Clone();
+//         pb.Image = bmp;
+//     };
+//     videoSource.Start();
+// }
 
 Application.Run(form);

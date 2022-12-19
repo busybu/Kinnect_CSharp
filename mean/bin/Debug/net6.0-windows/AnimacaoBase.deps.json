@@ -7,8 +7,36 @@
   "targets": {
     ".NETCoreApp,Version=v6.0": {
       "AnimacaoBase/1.0.0": {
+        "dependencies": {
+          "AForge.Video.DirectShow": "2.2.5.0",
+          "AForge.Video": "2.2.5.0"
+        },
         "runtime": {
           "AnimacaoBase.dll": {}
+        }
+      },
+      "AForge.Video.DirectShow/2.2.5.0": {
+        "runtime": {
+          "AForge.Video.DirectShow.dll": {
+            "assemblyVersion": "2.2.5.0",
+            "fileVersion": "2.2.5.0"
+          }
+        }
+      },
+      "AForge.Video/2.2.5.0": {
+        "runtime": {
+          "AForge.Video.dll": {
+            "assemblyVersion": "2.2.5.0",
+            "fileVersion": "2.2.5.0"
+          }
+        }
+      },
+      "AForge/2.2.5.0": {
+        "runtime": {
+          "AForge.dll": {
+            "assemblyVersion": "2.2.5.0",
+            "fileVersion": "2.2.5.0"
+          }
         }
       }
     }
@@ -16,6 +44,21 @@
   "libraries": {
     "AnimacaoBase/1.0.0": {
       "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AForge.Video.DirectShow/2.2.5.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AForge.Video/2.2.5.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AForge/2.2.5.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }
