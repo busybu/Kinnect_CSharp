@@ -2,61 +2,98 @@ using System.IO;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections;
 
-public class DataSet
+public class DataSet : IEnumerable<(float[], float[])>
 {
     public float[][] X { get; private set; }
     public float[][] Y { get; private set; }
-    private int start { get; set; } = 0;
-    private int end { get; set; }
-    public void Load_CSV(string path, string label)
+    public int Length => end - start;
+    public int DataLength => X[0].Length;
+    private int start;
+    private int end;
+
+    private DataSet() { }
+    public DataSet(float[][] X, float[][] Y)
     {
+        this.X = X;
+        this.Y = Y;
+        this.start = 0;
+        this.end = this.X.Length;
+    }
+    
+    public static DataSet Load(string path, string label)
+    {
+        var ds = new DataSet();
+
         var data = Open(path);
-        int labelIndex = data.Select((item, index) => (item, index)).First(i => i.item == label).index;
-        this.X = new float[data.Count()][];
-        this.Y = new float[data.Count()][];
+        int labelIndex = data.First().Split(',')
+            .Select((item, index) => (item, index))
+            .First(i => i.item == label).index;
+        
+        ds.start = 0;
+        ds.end = data.Count();
+
+        ds.X = new float[ds.Length][];
+        ds.Y = new float[ds.Length][];
         int index = 0;
 
-        foreach (var item in data)
+        foreach (var item in data.Skip(1))
         {
             string[] line = item.Split(',');
             var x = new float[line.Length - 1];
             var y = new float[10];
+            int sla = 0;
 
             for (int i = 0; i < line.Length; i++)
             {
                 int num = int.Parse(line[i]);
 
-                if (i == 0)
+                if (i == labelIndex)
                 {
-                    for (int j = 0; j < y.Length; j++)
-                    {
-                        if (j == num)
-                            y[j] = 1;
-                        else
-                            y[j] = 0;
-                    }
+                    y[num] = 1;
+                    sla = 1;
                 }
                 else
-                    x[i - 1] = num;
+                    x[i - sla] = num;
             }
 
-            this.X[index] = x;
-            this.Y[index] = y;
+            ds.X[index] = x;
+            ds.Y[index] = y;
             index++;
-            System.Console.WriteLine(X);
         }
-    }
-    private IEnumerable<string> Open(string file)
-    {
-        var stream = new StreamReader(file);
 
-        while (!stream.EndOfStream)
+        return ds;
+
+        IEnumerable<string> Open(string file)
         {
-            var line = stream.ReadLine();
-            yield return line;
-        }
+            var stream = new StreamReader(file);
 
-        stream.Close();
+            while (!stream.EndOfStream)
+                yield return stream.ReadLine();
+
+            stream.Close();
+        }
     }
+
+    public (DataSet, DataSet) Split(float pct)
+    {
+        DataSet ds1 = new DataSet(X, Y);
+        DataSet ds2 = new DataSet(X, Y);
+        
+        int div = (int)(pct * X.Length);
+        ds1.end = div;
+        ds2.start = div;
+
+        return (ds1, ds2);
+    }
+    
+    public IEnumerator<(float[], float[])> GetEnumerator()
+    {
+        for (int i = start; i < end; i++)
+            yield return (X[i], Y[i]);
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+        => GetEnumerator();
 }

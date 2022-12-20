@@ -1,4 +1,6 @@
 using System;
+
+[Serializable]
 public class Neuron
 {
     public Neuron(int weightsSize)
@@ -15,8 +17,15 @@ public class Neuron
         this.Ws = weights;
     }
 
+    public Neuron()
+    {
+        this.B = B;    
+        this.Ws = Ws;
+    }
+
     public float B { get; set; }
     public float[] Ws { get; private set; }
+    public float Heta { get; private set; } = 0.5f;
     public float Output(float[] xs)
     {
         float y = this.B;
