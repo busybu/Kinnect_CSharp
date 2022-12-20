@@ -21,8 +21,8 @@ form.Load += (o, e) =>
 {
     Bitmap bmp = (Bitmap)Image.FromFile(path);
     DateTime n = DateTime.Now;
-    bmp = Blur.QuickParallelBlurGray(bmp);
-    throw new System.Exception((DateTime.Now - n).TotalMilliseconds.ToString());
+    bmp = Blur.QuickParallelBlur(bmp);
+    // throw new System.Exception((DateTime.Now - n).TotalMilliseconds.ToString());
 
     pb.Image = bmp;
     pb.Refresh();
