@@ -11,6 +11,9 @@ public static class Blur
 
     public static Bitmap QuickParallelBlurGray(Bitmap bmp, int radius = 5) // Mais rápido
     {
+        if (integralImage == null)
+            SetBuffer(bmp);
+
         int N = radius * 2 + 1;
         int A = N * N;
 
@@ -89,6 +92,9 @@ public static class Blur
 
     public static Bitmap QuickParallelBlur(Bitmap bmp, int radius = 5)
     {
+        if (integralImage == null)
+            SetBuffer(bmp);
+        
         int N = radius * 2 + 1;
         int A = N * N;
 

@@ -52,8 +52,14 @@ tm.Tick += (o, e) =>
 {
     if (bmp == null || crr == null)
         return;
+
+    var bin = bg != null ? 
+        Binarization.ApplyBin(
+        Blur.QuickParallelBlur((Bitmap)crr.Clone(), 40),
+        bg, .2f) :
+        crr;
     
-    Front.Desenhar(crr, bmp, g);
+    Front.Desenhar(bin, bmp, g);
     pb.Refresh();
 };
 
@@ -76,7 +82,6 @@ form.KeyDown += (o, e) =>
     if (e.KeyCode == Keys.Space)
     {
         var img = (Bitmap)crr.Clone();
-        Blur.SetBuffer(img);
         bg = Blur.QuickParallelBlur(img, 20);
     }
 };
