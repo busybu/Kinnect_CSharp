@@ -43,7 +43,7 @@ public class DataSet : IEnumerable<(float[], float[])>
             string[] line = item.Split(',');
             var x = new float[line.Length - 1];
             var y = new float[10];
-            int sla = 0;
+            int flag = 0;
 
             for (int i = 0; i < line.Length; i++)
             {
@@ -52,10 +52,10 @@ public class DataSet : IEnumerable<(float[], float[])>
                 if (i == labelIndex)
                 {
                     y[num] = 1;
-                    sla = 1;
+                    flag = 1;
                 }
                 else
-                    x[i - sla] = num;
+                    x[i - flag] = num;
             }
 
             ds.X[index] = x;
