@@ -63,21 +63,28 @@ public class NeuralNetwork
 
     public void Fit(DataSet ds, int epochs = 100, float eta = 0.05f)
     {
+        var sla = DateTime.Now;
         for (int i = 0; i < epochs; i++)
+        {
             this.epoch(ds, eta);
+            Console.WriteLine(DateTime.Now - sla);
+            sla = DateTime.Now;
+        }
     }
 
     private void epoch(DataSet ds, float eta)
     {
         for (int l = 0; l < this.Layers.Length; l++)
         {
+            Console.WriteLine($"Layer {l}");
             for (int n = 0; n < this.Layers[l].Neurons.Length; n++)
             {
+                Console.WriteLine($"Neuron {n}");
                 var neuron = this.Layers[l].Neurons[n];
 
-                var error = Score(ds);
+                var error = Score(ds.Split(0.001f).Item1);
                 neuron.B += eta;
-                var newError = Score(ds);
+                var newError = Score(ds.Split(0.001f).Item1);
 
                 if (newError > error)
                     neuron.B -= 2 * eta;
@@ -86,7 +93,7 @@ public class NeuralNetwork
                 for (int w = 0; w < neuron.Ws.Length; w++)
                 {
                     neuron.Ws[w] += eta;
-                    newError = Score(ds);
+                    newError = Score(ds.Split(0.001f).Item1);
 
                     if (newError > error)
                         neuron.Ws[w] -= 2 * eta;
