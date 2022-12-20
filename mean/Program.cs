@@ -42,7 +42,7 @@ form.Load += (o, e) =>
     bmp = new Bitmap(pb.Width, pb.Height);
     pb.Image = bmp;
     g = Graphics.FromImage(bmp);
-    videoSource.Start();
+    videoSource?.Start();
     tm.Start();
 };
 
@@ -50,10 +50,10 @@ form.Load += (o, e) =>
 
 tm.Tick += (o, e) =>
 {
-    if (bmp == null || crr == null)
+    if (bmp == null)
         return;
     
-    Front.Desenhar(crr, bmp, g);
+    Front.Desenhar(crr ?? new Bitmap(640, 480), bmp, g);
     pb.Refresh();
 };
 
