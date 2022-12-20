@@ -36,6 +36,9 @@ public static class ParseCalculo
     {
         while (tokens.Count > 1)
         {
+            
+            var clone = tokens.Select(t => t);
+            
             for (int i = 0; i < tokens.Count - 2; i++)
                 if (highExpCondition.SequenceEqual(tokens.Select(t => t.Token).Skip(i).Take(3)))
                     changeList(tokens, i, Token.highExp);
@@ -56,6 +59,9 @@ public static class ParseCalculo
                     pt.NodeList.Add(tokens[i]);
                     tokens[i] = pt;
                 }
+            
+            if(tokens.SequenceEqual(clone))
+                throw new Exception("Sintaxe incorreta");
         }
 
         return tokens[0];
