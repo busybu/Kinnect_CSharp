@@ -63,3 +63,5 @@ S:\COM\Human_Resources\01.Engineering_Tech_School\02.Internal\10 - Aprendizes\14
 S:\COM\Human_Resources\01.Engineering_Tech_School\02.Internal\10 - Aprendizes\14 - Desenvolvimento de sistemas 2022\Lucas Freire\Kinnect_CSharp\mean\bin\Debug\net6.0-windows\AForge.dll
 S:\COM\Human_Resources\01.Engineering_Tech_School\02.Internal\10 - Aprendizes\14 - Desenvolvimento de sistemas 2022\Lucas Freire\Kinnect_CSharp\mean\bin\Debug\net6.0-windows\AForge.Video.DirectShow.xml
 S:\COM\Human_Resources\01.Engineering_Tech_School\02.Internal\10 - Aprendizes\14 - Desenvolvimento de sistemas 2022\Lucas Freire\Kinnect_CSharp\mean\bin\Debug\net6.0-windows\AForge.Video.xml
+S:\COM\Human_Resources\01.Engineering_Tech_School\02.Internal\10 - Aprendizes\14 - Desenvolvimento de sistemas 2022\Lucas Freire\Kinnect_CSharp\mean\bin\Debug\net6.0-windows\AForge.Video.DirectShow.dll
+S:\COM\Human_Resources\01.Engineering_Tech_School\02.Internal\10 - Aprendizes\14 - Desenvolvimento de sistemas 2022\Lucas Freire\Kinnect_CSharp\mean\bin\Debug\net6.0-windows\AForge.Video.dll

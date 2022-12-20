@@ -11,13 +11,13 @@
 
   <ItemGroup>
   <Reference Include="AForge.Video.DirectShow">
-    <HintPath>bin\Debug\net6.0-windows\AForge.Video.DirectShow.dll</HintPath>
+    <HintPath>AForge\AForge.Video.DirectShow.dll</HintPath>
   </Reference>
 </ItemGroup>
 
   <ItemGroup>
   <Reference Include="AForge.Video">
-    <HintPath>bin\Debug\net6.0-windows\AForge.Video.dll</HintPath>
+    <HintPath>AForge\AForge.Video.dll</HintPath>
   </Reference>
 </ItemGroup>
 </Project>
