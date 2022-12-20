@@ -45,17 +45,17 @@ public static class Binarization
 
                     float diff = (diffRed * diffRed + diffBlue * diffBlue + diffGreen * diffGreen) / (3f * 255 * 255);
 
-                    if (diff <= treshold)
-                    {
-                        lRet[0] = 255;
-                        lRet[1] = 255;
-                        lRet[2] = 255;
-                    }
-                    else
+                    if (diff > treshold)
                     {
                         lRet[0] = 0;
                         lRet[1] = 0;
                         lRet[2] = 0;
+                    }
+                    else
+                    {
+                        lRet[0] = 255;
+                        lRet[1] = 255;
+                        lRet[2] = 255;
                     }
                 }
             }

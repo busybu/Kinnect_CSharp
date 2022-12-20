@@ -28,7 +28,8 @@ public class HandRecognizer
                 }
             }
         }
-        throw new Exception();
+        bmp.UnlockBits(data);
+        return Point.Empty;
     }
 
     private Point getTopPixel(Bitmap bmp)
@@ -57,13 +58,18 @@ public class HandRecognizer
                 }
             }
         }
-        throw new Exception();
-
+        bmp.UnlockBits(data);
+        return Point.Empty;
     }
 
     public Point GetCenterPixel(Bitmap bmp)
     {
         Point topPixel = getTopPixel(bmp);
+        if (topPixel.X < 100 || topPixel.Y < 100 || 
+            topPixel.Y > bmp.Height - 100 ||
+            topPixel.X  > bmp.Width - 100)
+            return Point.Empty;
+
         var centerPixel = new Point();
 
         var data = bmp.LockBits(
