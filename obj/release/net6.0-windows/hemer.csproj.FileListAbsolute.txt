@@ -13,3 +13,18 @@ S:\COM\Human_Resources\01.Engineering_Tech_School\02.Internal\10 - Aprendizes\14
 S:\COM\Human_Resources\01.Engineering_Tech_School\02.Internal\10 - Aprendizes\14 - Desenvolvimento de sistemas 2022\Leonardo Falango\Outros\kinect\obj\release\net6.0-windows\hemer.pdb
 S:\COM\Human_Resources\01.Engineering_Tech_School\02.Internal\10 - Aprendizes\14 - Desenvolvimento de sistemas 2022\Leonardo Falango\Outros\kinect\obj\release\net6.0-windows\hemer.genruntimeconfig.cache
 S:\COM\Human_Resources\01.Engineering_Tech_School\02.Internal\10 - Aprendizes\14 - Desenvolvimento de sistemas 2022\Leonardo Falango\Outros\kinect\obj\release\net6.0-windows\ref\hemer.dll
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\bin\release\net6.0-windows\hemer.exe
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\bin\release\net6.0-windows\hemer.deps.json
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\bin\release\net6.0-windows\hemer.runtimeconfig.json
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\bin\release\net6.0-windows\hemer.dll
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\bin\release\net6.0-windows\hemer.pdb
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release\net6.0-windows\hemer.csproj.AssemblyReference.cache
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release\net6.0-windows\hemer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release\net6.0-windows\hemer.AssemblyInfoInputs.cache
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release\net6.0-windows\hemer.AssemblyInfo.cs
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release\net6.0-windows\hemer.csproj.CoreCompileInputs.cache
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release\net6.0-windows\hemer.dll
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release\net6.0-windows\refint\hemer.dll
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release\net6.0-windows\hemer.pdb
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release\net6.0-windows\hemer.genruntimeconfig.cache
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release\net6.0-windows\ref\hemer.dll

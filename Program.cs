@@ -20,9 +20,10 @@ form.KeyDown += (o, e) =>
 form.Load += (o, e) =>
 {
     Bitmap bmp = (Bitmap)Image.FromFile(path);
+    Blur.SetBuffer(bmp);
     DateTime n = DateTime.Now;
     bmp = Blur.QuickParallelBlur(bmp);
-    // throw new System.Exception((DateTime.Now - n).TotalMilliseconds.ToString());
+    throw new System.Exception((DateTime.Now - n).TotalMilliseconds.ToString());
 
     pb.Image = bmp;
     pb.Refresh();

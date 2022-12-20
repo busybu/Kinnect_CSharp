@@ -3,9 +3,11 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Drawing.Imaging;
+using System.Runtime.CompilerServices;
 
 public static class Blur
 {
+    private static long[] integralImage = null;
     public static Bitmap SlowBlur(Bitmap bmp, int radius = 5)
     {
         Bitmap blurred = new Bitmap(bmp.Width, bmp.Height);
@@ -401,7 +403,6 @@ public static class Blur
 
     public static Bitmap QuickParallelBlurGray(Bitmap bmp, int radius = 5)
     {
-        long[] integralImage = new long[bmp.Width * bmp.Height];
         int N = radius * 2 + 1;
         int A = N * N;
 
@@ -413,58 +414,51 @@ public static class Blur
         unsafe
         {
             byte* p = (byte*)data.Scan0.ToPointer();
-            //bmp[0,0]
-            byte* l = p;
-            integralImage[0] = (long)((l[2] * 0.3 + l[1] * 0.59 + l[0] * 0.11));
-            
-            //bmp[0,1]
-            l = p + 3;
-            integralImage[1] = (long)((l[2] * 0.3 + l[1] * 0.59 + l[0] * 0.11)) + integralImage[0];
-            
-            // data[1,0]
-            l = p + data.Stride;
-            integralImage[bmp.Width + 1] = (long)((((l[2]) * 0.3 + (l[1]) * 0.59 +  (l[0]) * 0.11 )) + integralImage[1]);
 
-            // for
+            Parallel.For(0, data.Height, j =>
+            {
+                byte* l = p + j * data.Stride;
+                for (int i = 0; i < data.Width; i++, l += 3)
+                {
+                    byte r = (byte)((30 * l[2] + 59 * l[1] + 11 * l[0]) / 100);
+                    l[0] = r;
+                    l[1] = r;
+                    l[2] = r;
+                }
+            });
+
+            int width = bmp.Width;
+            
+            integralImage[0] = p[0];
+
+            for (int i = 1; i < width; i++)
+            {
+                byte* l = p + 3 * i;
+                integralImage[i] = l[0] + integralImage[i - 1];
+            }
+
             for (int j = 1; j < data.Height; j++)
             {
-                l = p + j * data.Stride;
-                for (int i = 1; i < data.Width; i++, l+=3)
+                byte* l = p + j * data.Stride;
+                integralImage[j * width] = l[0] + integralImage[(j - 1) * width];
+            }
+
+            for (int j = 1; j < data.Height; j++)
+            {
+                byte* l = p + j * data.Stride;
+                for (int i = 1; i < width; i++, l+=3)
                 {
-                    long b = l[0];
-                    long g = l[1];
-                    long r = l[2];
-                    
-                    if (i > 0)
-                    {
-                        r += integralImage[i - 1 + j * bmp.Width];
-                        g += integralImage[i - 1 + j * bmp.Width];
-                        b += integralImage[i - 1 + j * bmp.Width];
-                    }
-                    if (j > 0)
-                    {
-                        r += integralImage[i + (j - 1) * bmp.Width];
-                        g += integralImage[i + (j - 1) * bmp.Width];
-                        b += integralImage[i + (j - 1) * bmp.Width];
-                    }
-                    if (i > 0 && j > 0)
-                    {
-                        r -= integralImage[i - 1 + (j - 1) * bmp.Width];
-                        g -= integralImage[i - 1 + (j - 1) * bmp.Width];
-                        b -= integralImage[i - 1 + (j - 1) * bmp.Width];
-                    }
-                
-                    integralImage[i + j * bmp.Width] = (long)((r * 0.3 + g * 0.59 + b * 0.11));
+                    integralImage[i + j * width] = l[0] 
+                        + integralImage[i + (j - 1) * width]
+                        + integralImage[i - 1 + j * width]
+                        - integralImage[i - 1 + (j - 1) * width];
                 }
             }
 
-            // for (int j = radius + 1; j < data.Height - radius; j++)
-
-            int width = bmp.Width;
             Parallel.For(radius + 1, data.Height - radius, j =>
             {
-                byte* l = p + j * data.Stride;
-                for (int i = radius + 1; i < data.Width - radius; i++, l+=3)
+                byte* l = p + j * data.Stride + 3 * radius;
+                for (int i = radius + 1; i < data.Width - radius; i++, l += 3)
                 {
                     long pixelSoma = integralImage[i + radius + ((j + radius) * width)];
                     long pixelSub1 = integralImage[i + radius + ((j - radius - 1) * width)];
@@ -480,16 +474,13 @@ public static class Blur
             });
 
             bmp.UnlockBits(data);
+
             return bmp;
         }
     }
 
     public static Bitmap QuickParallelBlur(Bitmap bmp, int radius = 5)
     {
-        long[] integralImageR = new long[bmp.Width * bmp.Height];
-        long[] integralImageG = new long[bmp.Width * bmp.Height];
-        long[] integralImageB = new long[bmp.Width * bmp.Height];
-
         int N = radius * 2 + 1;
         int A = N * N;
 
@@ -501,86 +492,62 @@ public static class Blur
         unsafe
         {
             byte* p = (byte*)data.Scan0.ToPointer();
-            //bmp[0,0]
-            byte* l = p;
-            integralImageR[0] = (long)((l[2]));
-            integralImageG[0] = (long)((l[1]));
-            integralImageB[0] = (long)((l[0]));
-            
-            //bmp[0,1]
-            l = p + 3;
-            integralImageR[1] = (long)(l[2]) + integralImageR[0];
-            integralImageG[1] = (long)(l[1]) + integralImageG[0];
-            integralImageB[1] = (long)(l[0]) + integralImageB[0];
-            
-            // data[1,0]
-            l = p + data.Stride;
-            integralImageR[bmp.Width + 1] = (long)(l[2])+ integralImageR[1];
-            integralImageG[bmp.Width + 1] = (long)(l[1])+ integralImageG[1];
-            integralImageB[bmp.Width + 1] = (long)(l[0])+ integralImageB[1];
 
-            // for
-            for (int j = 1; j < data.Height; j++)
-            {
-                l = p + j * data.Stride;
-                for (int i = 1; i < data.Width; i++, l+=3)
-                {
-                    long b = l[0];
-                    long g = l[1];
-                    long r = l[2];
-                    
-                    if (i > 0)
-                    {
-                        r += integralImageR[i - 1 + j * bmp.Width];
-                        g += integralImageG[i - 1 + j * bmp.Width];
-                        b += integralImageB[i - 1 + j * bmp.Width];
-                    }
-                    if (j > 0)
-                    {
-                        r += integralImageR[i + (j - 1) * bmp.Width];
-                        g += integralImageG[i + (j - 1) * bmp.Width];
-                        b += integralImageB[i + (j - 1) * bmp.Width];
-                    }
-                    if (i > 0 && j > 0)
-                    {
-                        r -= integralImageR[i - 1 + (j - 1) * bmp.Width];
-                        g -= integralImageG[i - 1 + (j - 1) * bmp.Width];
-                        b -= integralImageB[i - 1 + (j - 1) * bmp.Width];
-                    }
-                
-                    integralImageR[i + j * bmp.Width] = (long)(r);
-                    integralImageG[i + j * bmp.Width] = (long)(g);
-                    integralImageB[i + j * bmp.Width] = (long)(b);
-                }
-            }
-
-
+            int start = bmp.Width * bmp.Height;
             int width = bmp.Width;
+
+            Parallel.For(0, 3, c =>
+            {
+                integralImage[c * start + 0] = p[c];
+
+                for (int i = 1; i < width; i++)
+                {
+                    byte* l = p + 3 * i;
+                    integralImage[c * start + i] = l[c] + integralImage[c * start + i - 1];
+                }
+
+                for (int j = 1; j < data.Height; j++)
+                {
+                    byte* l = p + j * data.Stride;
+                    integralImage[c * start + j * width] = l[c] + integralImage[c * start + (j - 1) * width];
+                }
+
+                for (int j = 1; j < data.Height; j++)
+                {
+                    byte* l = p + j * data.Stride;
+                    for (int i = 1; i < width; i++, l+=3)
+                    {
+                        integralImage[c * start + i + j * width] = l[c] 
+                            + integralImage[c * start + i + (j - 1) * width]
+                            + integralImage[c * start + i - 1 + j * width]
+                            - integralImage[c * start + i - 1 + (j - 1) * width];
+                    }
+                }
+            });
+
             Parallel.For(radius + 1, data.Height - radius, j =>
             {
-                byte* l = p + j * data.Stride;
+                byte* l = p + j * data.Stride + 3 * radius;
                 for (int i = radius + 1; i < data.Width - radius; i++, l+=3)
                 {
-                    long pixelSomaR = integralImageR[i + radius + ((j + radius) * width)];
-                    long pixelSub1R = integralImageR[i + radius + ((j - radius - 1) * width)];
-                    long pixelSub2R = integralImageR[i - radius - 1 + ((j + radius) * width)];
-                    long pixelSoma2R = integralImageR[i - radius - 1 + ((j - radius - 1) * width)];
+                    long pixelSomaB = integralImage[i + radius + ((j + radius) * width)];
+                    long pixelSub1B = integralImage[i + radius + ((j - radius - 1) * width)];
+                    long pixelSub2B = integralImage[i - radius - 1 + ((j + radius) * width)];
+                    long pixelSoma2B = integralImage[i - radius - 1 + ((j - radius - 1) * width)];
 
-                    long pixelSomaB = integralImageB[i + radius + ((j + radius) * width)];
-                    long pixelSub1B = integralImageB[i + radius + ((j - radius - 1) * width)];
-                    long pixelSub2B = integralImageB[i - radius - 1 + ((j + radius) * width)];
-                    long pixelSoma2B = integralImageB[i - radius - 1 + ((j - radius - 1) * width)];
+                    long pixelSomaG = integralImage[start + i + radius + ((j + radius) * width)];
+                    long pixelSub1G = integralImage[start + i + radius + ((j - radius - 1) * width)];
+                    long pixelSub2G = integralImage[start + i - radius - 1 + ((j + radius) * width)];
+                    long pixelSoma2G = integralImage[start + i - radius - 1 + ((j - radius - 1) * width)];
 
-                    long pixelSomaG = integralImageG[i + radius + ((j + radius) * width)];
-                    long pixelSub1G = integralImageG[i + radius + ((j - radius - 1) * width)];
-                    long pixelSub2G = integralImageG[i - radius - 1 + ((j + radius) * width)];
-                    long pixelSoma2G = integralImageG[i - radius - 1 + ((j - radius - 1) * width)];
+                    long pixelSomaR = integralImage[2 * start + i + radius + ((j + radius) * width)];
+                    long pixelSub1R = integralImage[2 * start + i + radius + ((j - radius - 1) * width)];
+                    long pixelSub2R = integralImage[2 * start + i - radius - 1 + ((j + radius) * width)];
+                    long pixelSoma2R = integralImage[2 * start + i - radius - 1 + ((j - radius - 1) * width)];
 
                     byte r = (byte)((pixelSoma2R + pixelSomaR - pixelSub1R - pixelSub2R) / A);
                     byte g = (byte)((pixelSoma2G + pixelSomaG - pixelSub1G - pixelSub2G) / A);
                     byte b = (byte)((pixelSoma2B + pixelSomaB - pixelSub1B - pixelSub2B) / A);
-
-
 
                     l[0] = b;
                     l[1] = g;
@@ -591,5 +558,10 @@ public static class Blur
             bmp.UnlockBits(data);
             return bmp;
         }
+    }
+
+    public static void SetBuffer(Bitmap bmp)
+    {
+        integralImage = new long[3 * bmp.Width * bmp.Height];
     }
 }

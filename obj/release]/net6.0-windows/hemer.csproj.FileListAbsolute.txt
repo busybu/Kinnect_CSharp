@@ -1,0 +1,15 @@
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\bin\release]\net6.0-windows\hemer.exe
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\bin\release]\net6.0-windows\hemer.deps.json
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\bin\release]\net6.0-windows\hemer.runtimeconfig.json
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\bin\release]\net6.0-windows\hemer.dll
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\bin\release]\net6.0-windows\hemer.pdb
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release]\net6.0-windows\hemer.csproj.AssemblyReference.cache
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release]\net6.0-windows\hemer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release]\net6.0-windows\hemer.AssemblyInfoInputs.cache
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release]\net6.0-windows\hemer.AssemblyInfo.cs
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release]\net6.0-windows\hemer.csproj.CoreCompileInputs.cache
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release]\net6.0-windows\hemer.dll
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release]\net6.0-windows\refint\hemer.dll
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release]\net6.0-windows\hemer.pdb
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release]\net6.0-windows\hemer.genruntimeconfig.cache
+C:\Users\disrct\Desktop\kinect\Kinnect_CSharp\obj\release]\net6.0-windows\ref\hemer.dll
