@@ -18,10 +18,11 @@ PictureBox pb = new PictureBox();
 pb.Dock = DockStyle.Fill;
 form.Controls.Add(pb);
 
-Bitmap bg = Blur.QuickBlurGray(Image.FromFile("./images/bgHemer.jpeg") as Bitmap);
+Blur.SetBuffer(Image.FromFile("./images/bgHemer.jpeg") as Bitmap);
+Bitmap bg = Blur.QuickParallelBlurGray(Image.FromFile("./images/bgHemer.jpeg") as Bitmap);
 
 List<Bitmap> imagens = new List<Bitmap>();
-imagens.Add(Blur.QuickBlurGray(Image.FromFile("./images/Hemer.jpeg") as Bitmap));
+imagens.Add(Blur.QuickParallelBlurGray(Image.FromFile("./images/Hemer.jpeg") as Bitmap));
 
 
 System.Windows.Forms.Timer tm = new System.Windows.Forms.Timer();
