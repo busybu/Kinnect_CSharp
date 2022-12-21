@@ -25,7 +25,6 @@ public class Neuron
 
     public float B { get; set; }
     public float[] Ws { get; private set; }
-    public float Heta { get; private set; } = 0.5f;
     public float Output(float[] xs)
     {
         float y = this.B;

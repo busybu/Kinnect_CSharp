@@ -25,15 +25,15 @@ public class DataSet : IEnumerable<(float[], float[])>
     public static DataSet Load(string path, string label)
     {
         var ds = new DataSet();
-
+        
         var data = Open(path);
         int labelIndex = data.First().Split(',')
             .Select((item, index) => (item, index))
             .First(i => i.item == label).index;
         
         ds.start = 0;
-        ds.end = data.Count();
-
+        ds.end = data.Count() - 1;
+        
         ds.X = new float[ds.Length][];
         ds.Y = new float[ds.Length][];
         int index = 0;
@@ -78,14 +78,29 @@ public class DataSet : IEnumerable<(float[], float[])>
 
     public (DataSet, DataSet) Split(float pct)
     {
-        DataSet ds1 = new DataSet(X, Y);
-        DataSet ds2 = new DataSet(X, Y);
+        DataSet ds1 = new DataSet(this.X, this.Y);
+        DataSet ds2 = new DataSet(this.X, this.Y);
         
-        int div = (int)(pct * X.Length);
+        int div = (int)(pct * this.DataLength);
         ds1.end = div;
         ds2.start = div;
 
         return (ds1, ds2);
+    }
+
+    public DataSet RandSplit(float pct)
+    {
+        Random rand = new Random();
+        DataSet dataset = new DataSet(X, Y);
+        int div = (int)(pct * this.DataLength);
+
+        var start = rand.Next(0, this.DataLength - div);
+        var end = rand.Next(start + div, this.DataLength);
+
+        dataset.start = start;
+        dataset.end = end;
+
+        return dataset;
     }
     
     public IEnumerator<(float[], float[])> GetEnumerator()

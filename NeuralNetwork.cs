@@ -19,28 +19,28 @@ public class NeuralNetwork
 
     public Layer[] Layers { get; private set; }
 
-    public float[] Output(params float[] inputs)
+    public float[] Output(params float[] xs)
     {
         for (int i = 0; i < this.Layers.Length; i++)
-            inputs = this.Layers[i].Output(inputs);
+            xs = this.Layers[i].Output(xs);
 
-        return inputs;
+        return xs;
     }
 
-    public float[] OutputBefore(int before, params float[] inputs)
+    public float[] PreviusOutput(int previus, params float[] xs)
     {
-        for (int i = 0; i < this.Layers.Length - before; i++)
-            inputs = this.Layers[i].Output(inputs);
+        for (int i = 0; i < this.Layers.Length - previus; i++)
+            xs = this.Layers[i].Output(xs);
 
-        return inputs;
+        return xs;
     }
 
-    public (int, float) Choose(params float[] inputs)
+    public (int, float) Choose(params float[] xs)
     {
         for (int i = 0; i < this.Layers.Length; i++)
-            inputs = this.Layers[i].Output(inputs);
+            xs = this.Layers[i].Output(xs);
 
-        return inputs
+        return xs
             .Select((input, index) => (index, input))
             .MaxBy(i => i.input);
     }
@@ -63,28 +63,21 @@ public class NeuralNetwork
 
     public void Fit(DataSet ds, int epochs = 100, float eta = 0.05f)
     {
-        var sla = DateTime.Now;
         for (int i = 0; i < epochs; i++)
-        {
             this.epoch(ds, eta);
-            Console.WriteLine(DateTime.Now - sla);
-            sla = DateTime.Now;
-        }
     }
 
     private void epoch(DataSet ds, float eta)
     {
         for (int l = 0; l < this.Layers.Length; l++)
         {
-            Console.WriteLine($"Layer {l}");
             for (int n = 0; n < this.Layers[l].Neurons.Length; n++)
             {
-                Console.WriteLine($"Neuron {n}");
                 var neuron = this.Layers[l].Neurons[n];
 
-                var error = Score(ds.Split(0.001f).Item1);
+                var error = Score(ds.RandSplit(0.001f));
                 neuron.B += eta;
-                var newError = Score(ds.Split(0.001f).Item1);
+                var newError = Score(ds.RandSplit(0.001f));
 
                 if (newError > error)
                     neuron.B -= 2 * eta;
@@ -93,7 +86,7 @@ public class NeuralNetwork
                 for (int w = 0; w < neuron.Ws.Length; w++)
                 {
                     neuron.Ws[w] += eta;
-                    newError = Score(ds.Split(0.001f).Item1);
+                    newError = Score(ds.RandSplit(0.001f));
 
                     if (newError > error)
                         neuron.Ws[w] -= 2 * eta;
@@ -120,7 +113,7 @@ public class NeuralNetwork
             neuron.B -= eta * delta[i];
         }
 
-        int wcount = lastLayer.Neurons.First().Ws.Length;
+        int wcount = lastLayer.Neurons[0].Ws.Length;
         for (int i = 0; i < lastLayer.Neurons.Length; i++)
         {
             Neuron neuron = lastLayer.Neurons[i];
@@ -129,7 +122,7 @@ public class NeuralNetwork
                 float wderiv = 0;
                 for (int x = 0; x < ds.Length; x++)
                 {
-                    float[] Z = this.OutputBefore(1, ds.X[x]);
+                    float[] Z = this.PreviusOutput(1, ds.X[x]);
                     wderiv += Z[w] * delta[i];
                 }
                 neuron.Ws[w] -= eta * wderiv;
