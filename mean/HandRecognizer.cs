@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using System.Drawing.Imaging;
 
 public class HandRecognizer
-{
+{   
     private Point getRightPixel(Bitmap bmp)
     {
         var data = bmp.LockBits(
@@ -108,5 +108,29 @@ public class HandRecognizer
         }
         
         return centerPixel;
+    }
+
+    public Boolean IsOpenHand(Bitmap bmp)
+    {
+        Point topPixel = getTopPixel(bmp);
+        int calibration = 70;
+        double whites = 0;
+        double count = 0;
+        for (int j = topPixel.Y; j < (topPixel.Y + 50) ; j++)
+            for (int i = (topPixel.X - 50); i < (topPixel.X + 50); i++)
+            {
+                Color pixel = bmp.GetPixel(i, j);
+
+                if (pixel.G != 0)
+                    whites++;
+                count++;
+            }
+
+        double temp = whites/count*100.0;
+
+        if (temp>calibration)
+            return false;
+        
+        return true;
     }
 }
