@@ -17,6 +17,8 @@ Bitmap bmp = null; // Tela
 Graphics g = null; // Graphics da Tela
 Bitmap crr = null; // Frame atual da WebCam
 Bitmap bg = null; // Background Salvo
+Point cursor = Point.Empty;
+bool isDown = false;
 VideoCaptureDevice videoSource = null;
 
 PictureBox pb = new PictureBox();
@@ -30,11 +32,25 @@ form.KeyDown += (o, e) =>
 {
     if (e.KeyCode == Keys.Escape)
     {
-        videoSource.Stop();
+        videoSource?.Stop();
         Application.Exit();
     }
 };
 
+pb.MouseMove += (o, e) =>
+{
+    cursor = e.Location;
+};
+
+pb.MouseDown += (o, e) =>
+{
+    isDown = true;
+};
+
+pb.MouseUp += (o, e) =>
+{
+    isDown = false;
+};
 
 int i = 0;
 form.Load += (o, e) =>
@@ -53,7 +69,8 @@ tm.Tick += (o, e) =>
     if (bmp == null)
         return;
     
-    Front.Desenhar(crr ?? new Bitmap(640, 480), bmp, g);
+    Front.Desenhar(crr ?? new Bitmap(640, 480), bmp, g,
+        cursor, isDown);
     pb.Refresh();
 };
 
