@@ -55,7 +55,7 @@ public class DataSet : IEnumerable<(float[], float[])>
                     flag = 1;
                 }
                 else
-                    x[i - flag] = num;
+                    x[i - flag] = num / 255f;
             }
 
             ds.X[index] = x;

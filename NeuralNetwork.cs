@@ -69,32 +69,39 @@ public class NeuralNetwork
 
     private void epoch(DataSet ds, float eta)
     {
-        for (int l = 0; l < this.Layers.Length; l++)
+        for (int n = 0; n < 1000; n++)
         {
-            for (int n = 0; n < this.Layers[l].Neurons.Length; n++)
-            {
-                var neuron = this.Layers[l].Neurons[n];
-
-                var error = Score(ds.RandSplit(0.001f));
-                neuron.B += eta;
-                var newError = Score(ds.RandSplit(0.001f));
-
-                if (newError > error)
-                    neuron.B -= 2 * eta;
-                error = newError;
-
-                for (int w = 0; w < neuron.Ws.Length; w++)
-                {
-                    neuron.Ws[w] += eta;
-                    newError = Score(ds.RandSplit(0.001f));
-
-                    if (newError > error)
-                        neuron.Ws[w] -= 2 * eta;
-
-                    error = newError;
-                }
-            }
+            var splitedData = ds.RandSplit(0.0025f);
+            int layer = Random.Shared.Next(Layers.Length);
+            int neruonIndex = Random.Shared.Next(Layers[layer].Neurons.Length);
+            var neuron = this.Layers[layer].Neurons[neruonIndex];
+            Console.WriteLine(updateNeuron(splitedData, neuron));
         }
+    }
+
+    private float updateNeuron(DataSet ds, Neuron neuron, float eta = 0.1f)
+    {
+        var error = Score(ds);
+        neuron.B += 0.1f;
+        var newError = Score(ds);
+        neuron.B -= 0.1f;
+
+        float dE = (newError - error) / 0.1f;
+        neuron.B -= eta * dE;
+        error = newError;
+
+        for (int w = Random.Shared.Next(3); w < neuron.Ws.Length; w += Random.Shared.Next(3))
+        {
+            neuron.Ws[w] += 0.1f;
+            newError = Score(ds);
+            neuron.Ws[w] -= 0.1f;
+
+            dE = (newError - error) / 0.1f;
+            neuron.Ws[w] -= eta * dE;
+            error = newError;
+        }
+
+        return error;
     }
 
     private void f_epoch(DataSet ds, float eta = 0.01f)
