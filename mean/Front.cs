@@ -141,19 +141,43 @@ public static class Front
 
             g.DrawRectangle(CanetaPreta, Desfazer);
             if (PreenchimentoDesfazer.Contains(cursor))
+            {
                 g.FillRectangle(Brushes.Red, PreenchimentoDesfazer);
+                if(PreenchimentoDesfazer.Contains(cursor) && isDown == true)
+                    g.FillRectangle(Brushes.DarkRed, PreenchimentoDesfazer);
+            }
+
             g.DrawRectangle(CanetaPreta, Refazer);
             if (PreenchimentoRefazer.Contains(cursor))
+            {
                 g.FillRectangle(Brushes.Red, PreenchimentoRefazer);
+                if(PreenchimentoRefazer.Contains(cursor) && isDown == true)
+                    g.FillRectangle(Brushes.DarkRed, PreenchimentoRefazer);
+            }
+
             g.DrawRectangle(CanetaPreta, Resetar);
             if (PreenchimentoResetar.Contains(cursor))
+            {
                 g.FillRectangle(Brushes.Red, PreenchimentoResetar);
+                if(PreenchimentoResetar.Contains(cursor) && isDown == true)
+                    g.FillRectangle(Brushes.DarkRed, PreenchimentoResetar);
+            }
+
             g.DrawRectangle(CanetaPreta, Enviar);
             if (PreenchimentoEnviar.Contains(cursor))
+            {
                 g.FillRectangle(Brushes.Red, PreenchimentoEnviar);
+                if(PreenchimentoEnviar.Contains(cursor) && isDown == true)
+                    g.FillRectangle(Brushes.DarkRed, PreenchimentoEnviar);
+            }
+
             g.DrawRectangle(CanetaPreta, TirarFoto);
             if (PreenchimentoTirarFoto.Contains(cursor))
+            {
                 g.FillRectangle(Brushes.Red, PreenchimentoTirarFoto);
+                if(PreenchimentoTirarFoto.Contains(cursor) && isDown == true)
+                    g.FillRectangle(Brushes.DarkRed, PreenchimentoTirarFoto);
+            }
 
             g.DrawRectangle(CanetaPreta,EspaçoCamera);
 
