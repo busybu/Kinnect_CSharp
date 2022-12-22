@@ -53,12 +53,14 @@ public class NeuralNetwork
             var Z = this.Output(X);
             for (int i = 0; i < Z.Length; i++)
             {
+                if (Y[i] < 0.5f)
+                    continue;
                 float value = Z[i] - Y[i];
                 value = value * value;
                 E += value;
             }
         }
-        return E / (0.5f * ds.Length * ds.DataLength);
+        return E / ds.Length;
     }
 
     public void Fit(DataSet ds, int epochs = 100, float eta = 0.05f)
@@ -69,9 +71,9 @@ public class NeuralNetwork
 
     private void epoch(DataSet ds, float eta)
     {
-        for (int n = 0; n < 1000; n++)
+        for (int n = 0; n < 50; n++)
         {
-            var splitedData = ds.RandSplit(0.0025f);
+            var splitedData = ds.RandSplit(0.002f);
             int layer = Random.Shared.Next(Layers.Length);
             int neruonIndex = Random.Shared.Next(Layers[layer].Neurons.Length);
             var neuron = this.Layers[layer].Neurons[neruonIndex];
@@ -79,7 +81,7 @@ public class NeuralNetwork
         }
     }
 
-    private float updateNeuron(DataSet ds, Neuron neuron, float eta = 0.1f)
+    private float updateNeuron(DataSet ds, Neuron neuron, float eta = 0.25f)
     {
         var error = Score(ds);
         neuron.B += 0.1f;
@@ -88,7 +90,7 @@ public class NeuralNetwork
 
         float dE = (newError - error) / 0.1f;
         neuron.B -= eta * dE;
-        error = newError;
+        error = Score(ds);
 
         for (int w = Random.Shared.Next(3); w < neuron.Ws.Length; w += Random.Shared.Next(3))
         {
@@ -98,7 +100,7 @@ public class NeuralNetwork
 
             dE = (newError - error) / 0.1f;
             neuron.Ws[w] -= eta * dE;
-            error = newError;
+            error = Score(ds);
         }
 
         return error;
