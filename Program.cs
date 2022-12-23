@@ -1,18 +1,25 @@
 ﻿using System;
-
-NeuralNetwork net = NeuralNetwork.Load("Data/IA_Pronta.sla"); //NeuralNetwork.Load("Data/IA_Pronta_1.sla");
+using System.Linq;
 
 DataSet data = DataSet.Load("Data/train.csv", "label");
 
-net.Fit(data, 25);
-net.Store("Data/IA_Pronta.sla");
-Console.WriteLine(net.Score(data));
-// Console.WriteLine(net.Score(data));
-
-// int nicekkk = 0;
-// foreach (var (x, y) in data)
+// for (int i = 0; i <= 16; i++)
 // {
-//     if(y[net.Choose(x).Item1] > 0.5f)
-//         nicekkk++;
+//     NeuralNetwork net = NeuralNetwork.Load($"Data/IA_Pronta_{i}.sla"); //NeuralNetwork.Load("Data/IA_Pronta_1.sla");
+    // net.Fit(data, 1);
+    // net.Store($"Data/IA_Pronta_{7 + i}.sla");
+//     Console.WriteLine($"IA_Pronta_{i}: {net.Score(data)}");
 // }
-// Console.WriteLine(nicekkk);
+
+
+NeuralNetwork net = NeuralNetwork.Load("Data/IA_Pronta_16.sla");
+int count = 0;
+foreach (var (x, y) in data)
+{
+    var output = net.Output(x);
+    var result = net.Choose(x);
+    // Console.Write(y.Zip(output).Aggregate("", (s, z) => s + z.ToString() + ", "));
+    if (result.Item1 == y.First(i => i == 1))
+        count++;
+}
+Console.WriteLine(1f * count / data.Length);

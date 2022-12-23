@@ -42,7 +42,7 @@ public class NeuralNetwork
 
         return xs
             .Select((input, index) => (index, input))
-            .MaxBy(i => i.input);
+            .MinBy(i => i.input);
     }
 
     public float Score(DataSet ds)
@@ -53,8 +53,6 @@ public class NeuralNetwork
             var Z = this.Output(X);
             for (int i = 0; i < Z.Length; i++)
             {
-                if (Y[i] < 0.5f)
-                    continue;
                 float value = Z[i] - Y[i];
                 value = value * value;
                 E += value;
