@@ -77,7 +77,8 @@ public class NeuralNetwork
             int layer = Random.Shared.Next(Layers.Length);
             int neruonIndex = Random.Shared.Next(Layers[layer].Neurons.Length);
             var neuron = this.Layers[layer].Neurons[neruonIndex];
-            Console.WriteLine(updateNeuron(splitedData, neuron));
+            updateNeuron(splitedData, neuron);
+            // Console.WriteLine(updateNeuron(splitedData, neuron));
         }
     }
 
