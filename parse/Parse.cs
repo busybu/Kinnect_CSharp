@@ -34,22 +34,21 @@ public static class ParseCalculo
 
     private static ParseTree Decompose(List<ParseTree> tokens)
     {
+        int limit = tokens.Count;
+        int count = 0;
         while (tokens.Count > 1)
-        {
-            
-            var clone = tokens.Select(t => t);
-            
+        {   
             for (int i = 0; i < tokens.Count - 2; i++)
                 if (highExpCondition.SequenceEqual(tokens.Select(t => t.Token).Skip(i).Take(3)))
-                    changeList(tokens, i, Token.highExp);
+                    reduceList(tokens, i, Token.highExp);
 
             for (int i = 0; i < tokens.Count - 2; i++)
                 if (medExpCondition.Any(c => c.SequenceEqual(tokens.Select(t => t.Token).Skip(i).Take(3))))
-                    changeList(tokens, i, Token.medExp);
+                    reduceList(tokens, i, Token.medExp);
 
             for (int i = 0; i < tokens.Count - 2; i++)
                 if (lowExpCondition.Any(c => c.SequenceEqual(tokens.Select(t => t.Token).Skip(i).Take(3))))
-                    changeList(tokens, i, Token.lowExp);
+                    reduceList(tokens, i, Token.lowExp);
 
             for (int i = 0; i < tokens.Count; i++)
                 if (expCondition.Contains(tokens[i].Token))
@@ -59,18 +58,19 @@ public static class ParseCalculo
                     pt.NodeList.Add(tokens[i]);
                     tokens[i] = pt;
                 }
-            
-            if(tokens.SequenceEqual(clone))
-                throw new Exception("Sintaxe incorreta");
+
+            count++;
+            if (count > limit)
+                throw new Exception("Sintaxe Inválida");
         }
 
         return tokens[0];
     }
 
-    private static void changeList(List<ParseTree> tokens, int i, Token TOKEN)
+    private static void reduceList(List<ParseTree> tokens, int i, Token token)
     {
         var pt = new ParseTree();
-        pt.Token = TOKEN;
+        pt.Token = token;
 
         pt.NodeList.Add(tokens[i]);
         pt.NodeList.Add(tokens[i + 1]);
