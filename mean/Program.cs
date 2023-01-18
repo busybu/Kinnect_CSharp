@@ -20,6 +20,8 @@ Bitmap bmp = null; // Tela
 Graphics g = null; // Graphics da Tela
 Bitmap crr = null; // Frame atual da WebCam
 Bitmap bg = null; // Background Salvo
+Point cursor = Point.Empty;
+bool isDown = false;
 VideoCaptureDevice videoSource = null;
 HandRecognizer hand = new HandRecognizer();
 
@@ -68,7 +70,7 @@ tm.Tick += (o, e) =>
     // g.DrawImage(crr, new Rectangle(0, 0, 1600, 1200),
     //     new Rectangle(0, 0, 1600, 1200), GraphicsUnit.Pixel);
 
-    Front.Desenhar(bin, bmp, g); 
+    Front.Desenhar(bin, bmp, g, cursor, isDown); 
     g.FillRectangle(Brushes.Red, center.X -5, center.Y - 5, 10, 10);
     
     pb.Refresh();
@@ -87,6 +89,23 @@ if (videoSources != null && videoSources.Count > 0)
         old.Dispose();
     };
 }
+
+
+
+pb.MouseMove += (o, e) =>
+{
+    cursor = e.Location;
+};
+
+pb.MouseDown += (o, e) =>
+{
+    isDown = true;
+};
+
+pb.MouseUp += (o, e) =>
+{
+    isDown = false;
+};
 
 form.KeyDown += (o, e) =>
 {
