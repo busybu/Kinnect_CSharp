@@ -69,8 +69,12 @@ tm.Tick += (o, e) =>
     if (bmp == null)
         return;
     
-    Front.Desenhar(crr ?? new Bitmap(640, 480), bmp, g,
+    BancoQuestoes.DesenharBanco(crr ?? new Bitmap(640, 480), bmp, g,
         cursor, isDown);
+    // Front.Desenhar(crr ?? new Bitmap(640, 480), bmp, g,
+    //     cursor, isDown);
+    // ProfessorHome.DesenharHome(crr ?? new Bitmap(640, 480), bmp, g,
+    //     cursor, isDown);
     pb.Refresh();
 };
 
