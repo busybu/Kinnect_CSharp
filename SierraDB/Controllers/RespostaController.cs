@@ -5,7 +5,7 @@ using System.Text;
 namespace SierraDB.Controllers;
 
 using Model;
-using Crypto;
+using SierraDB.DTO;
 
 [ApiController]
 [Route("resposta")]
@@ -16,9 +16,9 @@ public class RespostaController : ControllerBase
     {
         using KinnectContext context = new KinnectContext();
 
-        if(resposta == null)
+        if (resposta == null)
             return BadRequest("Inválido");
-    
+
         context.Respostas.Add(resposta);
         context.SaveChanges();
 
@@ -26,14 +26,21 @@ public class RespostaController : ControllerBase
     }
 
     [HttpPost("procurarResposta")]
-    public ActionResult ProcurarResposta([FromBody] Resposta resposta)
+    public ActionResult ProcurarResposta([FromBody] AlunoQuestao alunoQuestao)
     {
         using KinnectContext context = new KinnectContext();
 
-        var queryQuestao = context.Questoes.FirstOrDefault(q => q.Id == resposta.Idquestoes);
+        var queryAluno = context.Alunos.FirstOrDefault(a => a.Id == alunoQuestao.Aluno);
+        var queryQuestao = context.Questoes.FirstOrDefault(q => q.Id == alunoQuestao.Questao);
         
-        if (queryQuestao.Resposta != resposta.Resposta1)
-            return BadRequest("Resposta incorreta");
+        if(queryAluno == null || queryQuestao == null)
+            return BadRequest("Aluno ou questão inexistente");
+
+        var resposta = context.Respostas.FirstOrDefault(r => r.Idaluno == alunoQuestao.Aluno && r.Idquestoes == alunoQuestao.Questao);
+        var resposta1 = resposta.Resposta1;
+
+        if (queryQuestao.Resposta != resposta1)
+            return Ok("Resposta Incorreta");
 
         return Ok("Resposta Correta");
 

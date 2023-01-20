@@ -25,9 +25,6 @@ public class ProfessorController : ControllerBase
         if (context.Professor.Count(a => a.Nome == professor.Nome) > 0)
             return BadRequest("Já existe um professor com esse nome");
 
-        if (professor.Senha.Length < 8)
-            return BadRequest("Senha muito curta");
-
 
         professor.Senha = Crypto.Password(professor.Senha);
         context.Professor.Add(professor);

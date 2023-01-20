@@ -25,10 +25,6 @@ public class AlunoController : ControllerBase
         if (context.Alunos.Count(a => a.Nome == aluno.Nome) > 0)
             return BadRequest("Já existe um aluno com esse nome");
 
-        if (aluno.Senha.Length < 8)
-            return BadRequest("Senha muito curta");
-
-
         aluno.Senha = Crypto.Password(aluno.Senha);
         context.Alunos.Add(aluno);
         context.SaveChanges();

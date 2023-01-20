@@ -6,6 +6,7 @@ namespace SierraDB.Controllers;
 
 using Model;
 using Crypto;
+using Parse;
 
 [ApiController]
 [Route("questoes")]
@@ -19,9 +20,9 @@ public class QuestoesController : ControllerBase
         if(questao == null)
             return BadRequest("Inválido");
 
-        // if (context.Alunos.Count(a => a.Nome == aluno.Nome) > 0)
-        //     return BadRequest("Já existe um aluno com esse nome");
-    
+        var resposta = Parse.CalculateString(questao.Descricao);
+        questao.Resposta = resposta.ToString();
+
         context.Questoes.Add(questao);
         context.SaveChanges();
 

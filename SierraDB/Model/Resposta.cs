@@ -11,7 +11,7 @@ public partial class Resposta
 
     public int Idquestoes { get; set; }
 
-    public string Resposta1 { get; set; }
+    public string? Resposta1 { get; set; }
 
     public virtual Aluno? IdalunoNavigation { get; set; } = null!;
 
