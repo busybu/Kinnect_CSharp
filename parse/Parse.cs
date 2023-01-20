@@ -1,4 +1,4 @@
-namespace Code.Parse;
+namespace Parse;
 
 using System;
 using System.Collections.Generic;
@@ -45,7 +45,7 @@ public static class Parse
         {
             var startIndex = tokens.TakeWhile(t => t.Token != Token.OPENPARENTHESIS).Count();
             startIndex = startIndex == tokens.Count ? 0 : startIndex;
-            
+
             shouldContinue = false;
             for (int i = startIndex; i < tokens.Count; i++)
                 if (highExpCondition.SequenceEqual(tokens.Select(t => t.Token).Skip(i).Take(3)))
@@ -117,7 +117,7 @@ public static class Parse
         tokens.RemoveAt(i + 1);
     }
 
-    private static List<ParseTree> Tokenizer(List<object> list)
+    private static List<ParseTree> Tokenizer(List<string> list)
     {
         List<ParseTree> tokenList = new List<ParseTree>();
 
@@ -154,23 +154,19 @@ public static class Parse
         return tokenList;
     }
 
-    private static bool isOperator(object obj)
+    private static bool isOperator(string str)
     {
-        char c;
-        try
-        {
-            c = Convert.ToChar(obj);
-        }
-        catch
-        {
-            return false;
-        }
-
-        char[] symbols = new char[] { '+', '-', '/', '*' };
-        return symbols.Contains(c);
+        string[] symbols = new string[] { "+", "-", "/", "*" };
+        return symbols.Contains(str);
     }
 
-    private static List<object> SplitExpression(string expr)
+    private static bool isDelimiter(string str)
+    {
+        string[] delimiters = new string[] { "(", "+", "-", "/", "*", ")" };
+        return delimiters.Contains(str);
+    }
+
+    private static List<string> SplitExpression(string expr)
     {
         if (expr.Count(c => c == '(') != expr.Count(c => c == ')'))
             throw new Exception("Parentêses não fecham!");
@@ -178,7 +174,7 @@ public static class Parse
         // TODO Add all your delimiters here
         var delimiters = new[] { '(', '+', '-', '*', '/', ')' };
         var buffer = string.Empty;
-        var ret = new List<object>();
+        var ret = new List<string>();
         expr = expr.Replace(" ", "");
         expr = expr.Replace(".", ",");
         foreach (var c in expr)
@@ -187,7 +183,7 @@ public static class Parse
             {
                 if (buffer.Length > 0)
                 {
-                    ret.Add(float.Parse(buffer));
+                    ret.Add(buffer.ToString());
                     buffer = string.Empty;
                 }
                 ret.Add(c.ToString());
@@ -196,12 +192,40 @@ public static class Parse
                 buffer += c;
         }
         if (buffer.Length > 0)
-            ret.Add(float.Parse(buffer));
+            ret.Add(buffer.ToString());
+
+
+        int retLength = ret.Count();
+        for (int i = 0; i < retLength; i++)
+        {
+            if (ret[i] != "-")
+                continue;
+
+            if (i == retLength - 1)
+                throw new Exception("Expressão Inválida");
+
+            if (i == 0)
+                if (Double.TryParse(ret[i + 1], out _))
+                {
+                    ret[i] += ret[i + 1];
+                    ret.RemoveAt(i + 1);
+                    retLength--;
+                }
+
+            if (Double.TryParse(ret[i + 1], out _) && isDelimiter(ret[i - 1]))
+            {
+                ret[i] += ret[i + 1];
+                ret.RemoveAt(i + 1);
+                retLength--;
+            }
+        }
 
         if (ret.Count() == 1)
             return ret;
 
-        var checkOp = ret.Count(obj => obj.IsNumber()) - ret.Count(obj => isOperator(obj)); 
+
+        var checkOp = ret.Count(obj => Double.TryParse(obj, out _)) - ret.Count(obj => isOperator(obj));
+        Console.WriteLine(checkOp);
         if (checkOp != 1)
             throw new Exception("Expressão Inválida");
 
@@ -256,31 +280,5 @@ public enum Token
     lowExp,
     medExp,
     highExp,
-}
-
-
-
-public static class ExtensionMethods
-{
-    public static bool IsNumber(this object obj)
-    {
-        if (Equals(obj, null))
-        {
-            return false;
-        }
-
-        Type objType = obj.GetType();
-        objType = Nullable.GetUnderlyingType(objType) ?? objType;
-
-        if (objType.IsPrimitive)
-        {
-            return objType != typeof(bool) &&
-                objType != typeof(char) &&
-                objType != typeof(IntPtr) &&
-                objType != typeof(UIntPtr);
-        }
-
-        return objType == typeof(decimal);
-    }
 }
 
