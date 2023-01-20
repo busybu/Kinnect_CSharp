@@ -62,7 +62,10 @@ tm.Tick += (o, e) =>
 
     if (bg != null)
     {
-        Bitmap blur_ = Blur.QuickParallelBlur((Bitmap)crr.Clone(), N);
+        var clone = (Bitmap)crr.Clone();
+        param = Equalization.GetParam(clone);
+        Equalization.Normalize(clone, param, bgParam);
+        Bitmap blur_ = Blur.QuickParallelBlurGray(clone, N);
         bin = Binarization.ApplyBin(blur_, bg, treshold);
     }
     else
@@ -72,9 +75,9 @@ tm.Tick += (o, e) =>
 
     var center = hand.GetCenterPixel(bin);
 
-     Pen pen = new Pen(Color.Red, 2);
-     g.DrawImage(crr, new Rectangle(0, 0, 1600, 1200),
-     new Rectangle(0, 0, 1600, 1200), GraphicsUnit.Pixel);
+    // Pen pen = new Pen(Color.Red, 2);
+    // g.DrawImage(crr, new Rectangle(0, 0, 1600, 1200),
+    //     new Rectangle(0, 0, 1600, 1200), GraphicsUnit.Pixel);
 
     Front.Desenhar(bin, bmp, g, cursor, isDown);
 
@@ -83,7 +86,7 @@ tm.Tick += (o, e) =>
 
     g.DrawString(bgParam.ToString(), SystemFonts.CaptionFont,
         Brushes.White, new PointF(20, 20));
-    g.FillRectangle(Brushes.Red, center.X -5, center.Y - 5, 10, 10);
+    // g.FillRectangle(Brushes.Red, center.X -5, center.Y - 5, 10, 10);
     
     pb.Refresh();
 };
@@ -96,7 +99,6 @@ if (videoSources != null && videoSources.Count > 0)
         var old = crr;
 
         crr = (Bitmap)eventArgs.Frame.Clone();
-        
 
         old?.Dispose();
     };
@@ -122,10 +124,10 @@ form.KeyDown += (o, e) =>
 {
     if (e.KeyCode == Keys.Space)
     {
-        param = Equalization.GetParam(crr);
+        bgParam = Equalization.GetParam(crr);
         var img = (Bitmap)crr.Clone();
         Equalization.Normalize(img, param, bgParam);
-        bg = Blur.QuickParallelBlur(img, N);
+        bg = Blur.QuickParallelBlurGray(img, N);
     }
 
      if (e.KeyCode == Keys.O)
