@@ -13,23 +13,26 @@ var form = new Form();
 form.WindowState = FormWindowState.Maximized;
 form.FormBorderStyle = FormBorderStyle.None;
 
-int N = 15;
+int N = 5;
 float treshold = 0.15f;
 
+float param = 0;
+float bgParam = 0;
 Bitmap bmp = null; // Tela
 Graphics g = null; // Graphics da Tela
 Bitmap crr = null; // Frame atual da WebCam
 Bitmap bg = null; // Background Salvo
 Point cursor = Point.Empty;
 bool isDown = false;
+
 VideoCaptureDevice videoSource = null;
 HandRecognizer hand = new HandRecognizer();
-
 PictureBox pb = new PictureBox();
 pb.Dock = DockStyle.Fill;
-form.Controls.Add(pb);
-
 System.Windows.Forms.Timer tm = new System.Windows.Forms.Timer();
+var videoSources = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+
+form.Controls.Add(pb);
 tm.Interval = 20;
 
 form.KeyDown += (o, e) =>
@@ -41,8 +44,6 @@ form.KeyDown += (o, e) =>
     }
 };
 
-
-int i = 0;
 form.Load += (o, e) =>
 {
     bmp = new Bitmap(pb.Width, pb.Height);
@@ -52,31 +53,41 @@ form.Load += (o, e) =>
     tm.Start();
 };
 
-
-
 tm.Tick += (o, e) =>
 {
     if (bmp == null || crr == null)
         return;
 
-    var bin = bg != null ? 
-        Binarization.ApplyBin(
-            Blur.QuickParallelBlurGray((Bitmap)crr.Clone(), N),
-            bg, treshold) 
-        : crr;
+    Bitmap bin;
+
+    if (bg != null)
+    {
+        Bitmap blur_ = Blur.QuickParallelBlur((Bitmap)crr.Clone(), N);
+        bin = Binarization.ApplyBin(blur_, bg, treshold);
+    }
+    else
+    {
+        bin = crr;
+    }
+
     var center = hand.GetCenterPixel(bin);
 
-    Pen pen = new Pen(Color.Red, 2);
-    // g.DrawImage(crr, new Rectangle(0, 0, 1600, 1200),
-    //     new Rectangle(0, 0, 1600, 1200), GraphicsUnit.Pixel);
+     Pen pen = new Pen(Color.Red, 2);
+     g.DrawImage(crr, new Rectangle(0, 0, 1600, 1200),
+     new Rectangle(0, 0, 1600, 1200), GraphicsUnit.Pixel);
 
-    Front.Desenhar(bin, bmp, g, cursor, isDown); 
+    Front.Desenhar(bin, bmp, g, cursor, isDown);
+
+    g.DrawString(param.ToString(), SystemFonts.CaptionFont,
+        Brushes.White, new PointF(10, 10));
+
+    g.DrawString(bgParam.ToString(), SystemFonts.CaptionFont,
+        Brushes.White, new PointF(20, 20));
     g.FillRectangle(Brushes.Red, center.X -5, center.Y - 5, 10, 10);
     
     pb.Refresh();
 };
 
-var videoSources = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 if (videoSources != null && videoSources.Count > 0)
 {
     videoSource = new VideoCaptureDevice(videoSources[0].MonikerString);
@@ -85,12 +96,11 @@ if (videoSources != null && videoSources.Count > 0)
         var old = crr;
 
         crr = (Bitmap)eventArgs.Frame.Clone();
+        
 
-        old.Dispose();
+        old?.Dispose();
     };
 }
-
-
 
 pb.MouseMove += (o, e) =>
 {
@@ -107,20 +117,24 @@ pb.MouseUp += (o, e) =>
     isDown = false;
 };
 
+  
 form.KeyDown += (o, e) =>
 {
     if (e.KeyCode == Keys.Space)
     {
+        param = Equalization.GetParam(crr);
         var img = (Bitmap)crr.Clone();
-        bg = Blur.QuickParallelBlurGray(img, N);
+        Equalization.Normalize(img, param, bgParam);
+        bg = Blur.QuickParallelBlur(img, N);
     }
-    else if (e.KeyCode == Keys.O)
+
+     if (e.KeyCode == Keys.O)
     {
         treshold += 0.01f;
     }
     else if (e.KeyCode == Keys.P)
     {
-        treshold -= 0.01f;
+        treshold = treshold > 0 ? treshold -= 0.01f : treshold;
     }
     else if (e.KeyCode == Keys.K)
     {
@@ -128,7 +142,7 @@ form.KeyDown += (o, e) =>
     }
     else if (e.KeyCode == Keys.L)
     {
-        N--;
+        N = N > 0 ? N-- : N;
     }
 };
 

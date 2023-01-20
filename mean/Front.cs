@@ -6,6 +6,8 @@ public static class Front
 {
     public static List<Point> Points = new List<Point>();
 
+    public static bool aux1 {get; set;} = false;
+
     public static void Desenhar(Bitmap cam, Bitmap bmp, Graphics g,
         Point cursor, bool isDown)
     {
@@ -176,7 +178,11 @@ public static class Front
             {
                 g.FillRectangle(Brushes.Red, PreenchimentoTirarFoto);
                 if(PreenchimentoTirarFoto.Contains(cursor) && isDown == true)
+                {
+                    aux1 = true;
                     g.FillRectangle(Brushes.DarkRed, PreenchimentoTirarFoto);
+
+                }
             }
 
             g.DrawRectangle(CanetaPreta,EspaçoCamera);
