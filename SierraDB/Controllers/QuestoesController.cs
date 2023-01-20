@@ -6,7 +6,7 @@ namespace SierraDB.Controllers;
 
 using Model;
 using Crypto;
-using Parse;
+using static Parse.Parse;
 
 [ApiController]
 [Route("questoes")]
@@ -20,7 +20,7 @@ public class QuestoesController : ControllerBase
         if(questao == null)
             return BadRequest("Inválido");
 
-        var resposta = Parse.CalculateString(questao.Descricao);
+        var resposta = CalculateString(questao.Descricao);
         questao.Resposta = resposta.ToString();
 
         context.Questoes.Add(questao);

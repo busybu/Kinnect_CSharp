@@ -7,6 +7,7 @@ namespace SierraDB.Controllers;
 using Model;
 using SierraDB.DTO;
 
+
 [ApiController]
 [Route("resposta")]
 public class RespostaController : ControllerBase
@@ -39,10 +40,20 @@ public class RespostaController : ControllerBase
         var resposta = context.Respostas.FirstOrDefault(r => r.Idaluno == alunoQuestao.Aluno && r.Idquestoes == alunoQuestao.Questao);
         var resposta1 = resposta.Resposta1;
 
-        if (queryQuestao.Resposta != resposta1)
-            return Ok("Resposta Incorreta");
 
-        return Ok("Resposta Correta");
+        if (queryQuestao.Resposta != resposta1)
+        {
+            return Ok("Resposta Incorreta");
+        }
+        else 
+        {
+           
+            var nota = queryQuestao.Peso;
+            
+            return Ok("Resposta Correta");
+        }
+
+        
 
     }
 }
