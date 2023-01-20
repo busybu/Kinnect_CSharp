@@ -63,10 +63,8 @@ tm.Tick += (o, e) =>
     if (bg != null)
     {
         var clone = (Bitmap)crr.Clone();
-        param = Equalization.GetParam(clone);
-        Equalization.Normalize(clone, param, bgParam);
-        Bitmap blur_ = Blur.QuickParallelBlurGray(clone, N);
-        bin = Binarization.ApplyBin(blur_, bg, treshold);
+        clone = Abra.Kadabra(clone, bg, bgParam, treshold, N);
+        bin = clone;
     }
     else
     {
@@ -79,7 +77,14 @@ tm.Tick += (o, e) =>
     // g.DrawImage(crr, new Rectangle(0, 0, 1600, 1200),
     //     new Rectangle(0, 0, 1600, 1200), GraphicsUnit.Pixel);
 
-    Front.Desenhar(bin, bmp, g, cursor, isDown);
+    if (bg != null)
+        g.DrawImage(bg, new Rectangle(0, 0, bg.Width, bg.Height));
+    if (crr != null)
+        g.DrawImage(crr, new Rectangle(bg?.Width ?? 0, 0, crr.Width, crr.Height));
+    if (bin != null)
+        g.DrawImage(bin, new Rectangle((bg?.Width ?? 0) + (crr?.Width ?? 0), 0, bin.Width, bin.Height));
+
+    // Front.Desenhar(bg, bmp, g, cursor, isDown);
 
     g.DrawString(param.ToString(), SystemFonts.CaptionFont,
         Brushes.White, new PointF(10, 10));
@@ -124,9 +129,8 @@ form.KeyDown += (o, e) =>
 {
     if (e.KeyCode == Keys.Space)
     {
-        bgParam = Equalization.GetParam(crr);
         var img = (Bitmap)crr.Clone();
-        Equalization.Normalize(img, param, bgParam);
+        bgParam = Equalization.GetParam(img);
         bg = Blur.QuickParallelBlurGray(img, N);
     }
 
