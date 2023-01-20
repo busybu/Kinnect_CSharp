@@ -2,11 +2,11 @@
 // using System.Windows.Forms;
 // using System.Drawing.Drawing2D;
 
-// public static class Front
+// public static class TelaAluno
 // {
 //     public static List<Point> Points = new List<Point>();
 
-//     public static void Desenhar(Bitmap cam, Bitmap bmp, Graphics g,
+//     public static void DesenharTelaAluno(Bitmap cam, Bitmap bmp, Graphics g,
 //         Point cursor, bool isDown)
 //     {
 //         try

@@ -4,16 +4,21 @@ using System.Drawing.Drawing2D;
 
 public static class BancoQuestoes
 {
+    private static int question = 1;
+    private static bool botaoMaisClicked = false;
     public static List<Point> Points = new List<Point>();
 
     public static void DesenharBanco(Bitmap cam, Bitmap bmp, Graphics g,
         Point cursor, bool isDown)
     {
+        g.Clear(Color.Transparent);
         try
         {
             //Canetas
             Pen CanetaVermelhaTeste = new Pen(Brushes.Red, 10f);
             Pen CanetaPreta = new Pen(Brushes.Black, 10f);
+            Pen CanetaBranca = new Pen(Brushes.Transparent, 10f);
+
 
             //Pinceis
             Brush PreenchimentoPreto = Brushes.Black; 
@@ -35,18 +40,22 @@ public static class BancoQuestoes
             int larguraBotaoMaisEmenos = larguraBotoesNavbar / 2;
 
 
-
-
             //Molduras
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             Rectangle RetanguloPretoTela = new Rectangle(0, 0, bmp.Width, bmp.Height);
             Rectangle MolduraNavbar = new Rectangle(0, 0, larguraNavbar, alturaNavbar);
+
             Rectangle BotaoBancoQuestoes = new Rectangle(0, 0, larguraBotoesNavbar, alturaBotoesNavbar);
             Rectangle BotaoVisualizarNotas = new Rectangle(0, alturaBotoesNavbar, larguraBotoesNavbar, alturaBotoesNavbar);
             Rectangle BotaoSairX = new Rectangle(0, alturaBotoesNavbar * 2, larguraBotoesNavbar, alturaBotoesNavbar);
-            Rectangle BotaoMais = new Rectangle(larguraBotoesNavbar, 0, larguraBotaoMaisEmenos, alturaBotaoMaisEmenos);
-            Rectangle BotaoMenos = new Rectangle(larguraBotoesNavbar, alturaBotaoMaisEmenos, larguraBotaoMaisEmenos, alturaBotaoMaisEmenos);
-            Rectangle BotaoConfirmar = new Rectangle(larguraBotoesNavbar, alturaBotaoMaisEmenos * 5, larguraBotaoMaisEmenos, alturaBotaoMaisEmenos);
+
+            Rectangle BotaoMais = new Rectangle(bmp.Width - larguraBotaoMaisEmenos, 0, larguraBotaoMaisEmenos, alturaBotaoMaisEmenos);
+            Rectangle BotaoMenos = new Rectangle(bmp.Width - larguraBotaoMaisEmenos, alturaBotaoMaisEmenos, larguraBotaoMaisEmenos, alturaBotaoMaisEmenos);
+            Rectangle BotaoConfirmar = new Rectangle(bmp.Width - larguraBotaoMaisEmenos, alturaBotaoMaisEmenos * 5, larguraBotaoMaisEmenos, alturaBotaoMaisEmenos);
+
+            Rectangle BotaoCima = new Rectangle(bmp.Width - larguraBotaoMaisEmenos, alturaBotaoMaisEmenos * 2 + 90, larguraBotaoMaisEmenos, alturaBotaoMaisEmenos);
+            Rectangle BotaoBaixo = new Rectangle(bmp.Width - larguraBotaoMaisEmenos, alturaBotaoMaisEmenos * 3 + 90, larguraBotaoMaisEmenos, alturaBotaoMaisEmenos);
+
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             //Preenchimentos
@@ -55,42 +64,65 @@ public static class BancoQuestoes
             Rectangle PreeBotaoVisualizarNotas = new Rectangle(5, alturaBotoesNavbar + 5, larguraBotoesNavbar - 10, alturaBotoesNavbar - 10);
             Rectangle PreeBotaoSairX = new Rectangle(5, alturaBotoesNavbar * 2 + 5, larguraBotoesNavbar - 10, alturaBotoesNavbar - 10);
 
-            Rectangle PreeBotaoMais = new Rectangle(larguraBotoesNavbar + 5, 5, larguraBotaoMaisEmenos - 10, alturaBotaoMaisEmenos - 10);
-            Rectangle PreeBotaoMenos = new Rectangle(larguraBotoesNavbar + 5, alturaBotaoMaisEmenos + 5, larguraBotaoMaisEmenos - 10, alturaBotaoMaisEmenos - 10);
-            Rectangle PreeBotaoConfirmar = new Rectangle(larguraBotoesNavbar + 5, alturaBotaoMaisEmenos * 5 + 5, larguraBotaoMaisEmenos - 10, alturaBotaoMaisEmenos - 10);
-
-
+            Rectangle PreeBotaoCima = new Rectangle(bmp.Width - larguraBotaoMaisEmenos + 5, alturaBotaoMaisEmenos * 2 + 95, larguraBotaoMaisEmenos - 10, alturaBotaoMaisEmenos - 10);
+            Rectangle PreeBotaoBaixo = new Rectangle(bmp.Width - larguraBotaoMaisEmenos + 5, alturaBotaoMaisEmenos * 3 + 95, larguraBotaoMaisEmenos - 10, alturaBotaoMaisEmenos - 10);
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             //Gradient
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            Rectangle Gradient = new Rectangle(5, 5, larguraBotoesNavbar, alturaBotoesNavbar * 3 - 10);
+            Rectangle GradientBotaoEscolhido = new Rectangle(5, 5, larguraBotoesNavbar, alturaBotoesNavbar * 3 - 10);
             Brush GradientBotoes = new LinearGradientBrush(
                 new Point(0, alturaBotoesNavbar),
                 new Point(larguraBotoesNavbar, alturaBotoesNavbar),
                 Color.FromArgb(255,42,72,88),  
                 Color.FromArgb(255,8,159,143));
 
-            Rectangle GradientBanco = new Rectangle(5, 5, larguraBotoesNavbar, alturaBotoesNavbar - 10);
+            Rectangle GradientBancoeX = new Rectangle(5, 5, larguraBotoesNavbar, alturaBotoesNavbar - 10);
             Brush GradientBotaoBanco = new LinearGradientBrush(
                 new Point(0, alturaBotoesNavbar),
                 new Point(larguraBotoesNavbar, alturaBotoesNavbar),
                 Color.FromArgb(255,110,0,0),  
                 Color.FromArgb(255,220,0,0));
 
-                // Color.FromArgb(255,30,200,100),  
-                // Color.FromArgb(255,185,200,30));
 
 
-            g.FillRectangle(GradientBotoes, Gradient);
-            g.FillRectangle(GradientBotaoBanco, GradientBanco);
+            Rectangle GradientBotaoMais = new Rectangle(bmp.Width - larguraBotaoMaisEmenos + 5, 5, larguraBotaoMaisEmenos - 10, alturaBotaoMaisEmenos - 10);
+            Brush GradientBotaoAzul = new LinearGradientBrush(
+                new Point(bmp.Width - larguraBotaoMaisEmenos, alturaBotaoMaisEmenos),
+                new Point(larguraBotaoMaisEmenos, alturaBotaoMaisEmenos),
+                Color.FromArgb(255,42,72,88),  
+                Color.FromArgb(255,8,159,143));
+
+            Rectangle GradientBotaoMenos = new Rectangle(bmp.Width - larguraBotaoMaisEmenos + 5, alturaBotaoMaisEmenos + 5, larguraBotaoMaisEmenos - 10, alturaBotaoMaisEmenos - 10);
+            Brush GradientBotaoVermelho = new LinearGradientBrush(
+                new Point(bmp.Width - larguraBotaoMaisEmenos, alturaBotaoMaisEmenos),
+                new Point(larguraBotaoMaisEmenos, alturaBotaoMaisEmenos),
+                Color.FromArgb(255,110,0,0),  
+                Color.FromArgb(255,220,0,0));
+
+            Rectangle GradientBotaoConfirmar = new Rectangle(bmp.Width - larguraBotaoMaisEmenos + 5, alturaBotaoMaisEmenos * 5 + 5, larguraBotaoMaisEmenos - 10, alturaBotaoMaisEmenos - 10);
+            Brush GradientBotaoVerde = new LinearGradientBrush(
+                new Point(bmp.Width - larguraBotaoMaisEmenos, alturaBotaoMaisEmenos),
+                new Point(larguraBotaoMaisEmenos, alturaBotaoMaisEmenos),
+                Color.FromArgb(255,70,150,70),  
+                Color.FromArgb(255,100,200,100));
+
+
+            g.FillRectangle(GradientBotoes, GradientBotaoEscolhido);
+            g.FillRectangle(GradientBotaoBanco, GradientBancoeX);
+
+            g.FillRectangle(Brushes.DarkCyan, GradientBotaoMais);
+            g.FillRectangle(GradientBotaoVermelho, GradientBotaoMenos);
+            g.FillRectangle(Brushes.ForestGreen, GradientBotaoConfirmar);
+
+            g.FillRectangle(Brushes.White, PreeBotaoCima);
+            g.FillRectangle(Brushes.White, PreeBotaoBaixo);
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             //Pintando
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            g.FillRectangle(PreenchimentoAzul, PreeBotaoMais);
-            g.FillRectangle(PreenchimentoVermelho, PreeBotaoMenos);
-            g.FillRectangle(PreenchimentoVerde, PreeBotaoConfirmar);
+
+           
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             //Desenhando
@@ -120,7 +152,7 @@ public static class BancoQuestoes
             if (BotaoSairX.Contains(cursor))
             {
                 g.FillRectangle(GradientBotaoBanco, PreeBotaoSairX);
-                if(PreeBotaoSairX.Contains(cursor) && isDown == true)
+                if(PreeBotaoSairX.Contains(cursor) && isDown)
                     g.FillRectangle(Brushes.DarkRed, PreeBotaoSairX);
             }
 
@@ -128,62 +160,142 @@ public static class BancoQuestoes
             g.DrawRectangle(CanetaPreta, BotaoMais);
             if (BotaoMais.Contains(cursor))
             {
-                g.FillRectangle(Brushes.Gray, PreeBotaoMais);
-                if(PreeBotaoMais.Contains(cursor) && isDown == true)
-                    g.FillRectangle(Brushes.DimGray, PreeBotaoMais);
+                g.FillRectangle(GradientBotaoAzul, GradientBotaoMais);
+                if(GradientBotaoMais.Contains(cursor) && isDown)
+                {
+                    botaoMaisClicked = true;
+                    g.FillRectangle(Brushes.DarkCyan, GradientBotaoMais);
+                }
+
+                if (GradientBotaoMais.Contains(cursor) && !isDown && botaoMaisClicked)
+                {
+                    botaoMaisClicked = false;
+                    question++;
+                }
             }
 
             //Botão Menos
             g.DrawRectangle(CanetaPreta, BotaoMenos);
             if (BotaoMenos.Contains(cursor))
             {
-                g.FillRectangle(Brushes.Gray, PreeBotaoMenos);
-                if(PreeBotaoMenos.Contains(cursor) && isDown == true)
-                    g.FillRectangle(Brushes.DimGray, PreeBotaoMenos);
+                g.FillRectangle(Brushes.Red, GradientBotaoMenos);
+                if(GradientBotaoMenos.Contains(cursor) && isDown)
+                    g.FillRectangle(GradientBotaoVermelho, GradientBotaoMenos);
             }
 
             //Botão Confirmar
             g.DrawRectangle(CanetaPreta, BotaoConfirmar);
             if (BotaoConfirmar.Contains(cursor))
             {
-                g.FillRectangle(Brushes.Gray, PreeBotaoConfirmar);
-                if(PreeBotaoConfirmar.Contains(cursor) && isDown == true)
-                    g.FillRectangle(Brushes.DimGray, PreeBotaoConfirmar);
+                g.FillRectangle(GradientBotaoVerde, GradientBotaoConfirmar);
+                if(GradientBotaoConfirmar.Contains(cursor) && isDown)
+                    g.FillRectangle(Brushes.ForestGreen, GradientBotaoConfirmar);
+            }
+
+            //Botão Cima
+            g.DrawRectangle(CanetaPreta, BotaoCima);
+            if (BotaoCima.Contains(cursor))
+            {
+                g.FillRectangle(Brushes.LightGray, PreeBotaoCima);
+                if(PreeBotaoCima.Contains(cursor) && isDown)
+                    g.FillRectangle(Brushes.Gray, PreeBotaoCima);
+            }
+
+            //Botão Baixo
+            g.DrawRectangle(CanetaPreta, BotaoBaixo);
+            if (BotaoBaixo.Contains(cursor))
+            {
+                g.FillRectangle(Brushes.LightGray, PreeBotaoBaixo);
+                if(PreeBotaoBaixo.Contains(cursor) && isDown)
+                    g.FillRectangle(Brushes.Gray, PreeBotaoBaixo);
             }
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             //Escritas
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            SolidBrush LetraBranca = new SolidBrush(Color.AliceBlue);
             SolidBrush LetraPreta = new SolidBrush(Color.Black);
+
             StringFormat format = new StringFormat();
             format.Alignment = StringAlignment.Center;
             format.LineAlignment = StringAlignment.Center;
 
+            StringFormat formatQuestao = new StringFormat();
+            formatQuestao.Alignment = StringAlignment.Center;
+            formatQuestao.LineAlignment = StringAlignment.Near;
+
+            StringFormat formatValor = new StringFormat();
+            formatValor.Alignment = StringAlignment.Center;
+            formatValor.LineAlignment = StringAlignment.Far;
+
+
+
             String textoBanco = "Banco de Questões";
-            Font fontBanco = new Font(FontFamily.GetFamilies(g)[59], alturaBotoesNavbar - (int)(0.200 * bmp.Height));
+            Font fontBanco = new Font(FontFamily.GetFamilies(g)[59], (int)(0.048 * bmp.Height));
                     
             String textoVisualizar = "Visualizar Notas";
-            Font fontVisualizar = new Font(FontFamily.GetFamilies(g)[59], alturaBotoesNavbar - (int)(0.200 * bmp.Height));
+            Font fontVisualizar = new Font(FontFamily.GetFamilies(g)[59], (int)(0.048 * bmp.Height));
     
             String textoSair = "X";
-            Font fontSair = new Font("Arial", alturaBotoesNavbar - (int)(0.200 * bmp.Height));
+            Font fontSair = new Font("Arial", (int)(0.100 * bmp.Height));
           
             String textoMais = "+";
-            Font fontMais = new Font("Arial", alturaBotaoMaisEmenos - (int)(0.250 * bmp.Height));
+            Font fontMais = new Font("Arial", (int)(0.100 * bmp.Height));
             
             String textoMenos = "-";
-            Font fontMenos = new Font("Arial", alturaBotaoMaisEmenos - (int)(0.250 * bmp.Height));
+            Font fontMenos = new Font("Arial", (int)(0.100 * bmp.Height));
 
-            String textoConfirmar = "Ok";
-            Font fontConfirmar = new Font("Arial", 500f);
+            String textoConfirmar = "✓";
+            Font fontConfirmar = new Font("Arial", (int)(0.040 * bmp.Height));
 
-            g.DrawString(textoBanco, fontBanco, LetraPreta, BotaoBancoQuestoes, format);
-            g.DrawString(textoVisualizar, fontVisualizar, LetraPreta, BotaoVisualizarNotas, format);
-            g.DrawString(textoSair, fontSair, LetraPreta, BotaoSairX, format);
-            g.DrawString(textoMais, fontMais, LetraPreta, BotaoMais, format);
-            g.DrawString(textoMenos, fontMenos, LetraPreta, BotaoMenos, format);
-            g.DrawString(textoConfirmar, fontConfirmar, LetraPreta, BotaoConfirmar, format);
+            String textoCima = "↑";
+            Font fontCima = new Font("Arial", (int)(0.100 * bmp.Height));
+
+            String textoBaixo = "↓";
+            Font fontBaixo = new Font("Arial", (int)(0.100 * bmp.Height));
+
+            g.DrawString(textoBanco, fontBanco, LetraBranca, BotaoBancoQuestoes, format);
+            g.DrawString(textoVisualizar, fontVisualizar, LetraBranca, BotaoVisualizarNotas, format);
+            g.DrawString(textoSair, fontSair, LetraBranca, BotaoSairX, format);
+            g.DrawString(textoMais, fontMais, LetraBranca, BotaoMais, format);
+            g.DrawString(textoMenos, fontMenos, LetraBranca, BotaoMenos, format);
+            g.DrawString(textoConfirmar, fontConfirmar, LetraBranca, GradientBotaoConfirmar, format);
+
+            g.DrawString(textoCima, fontCima, LetraPreta, BotaoCima, format);
+            g.DrawString(textoBaixo, fontBaixo, LetraPreta, BotaoBaixo, format);
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            //Retangulo Referencia
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            int larguraEspacoParaQuestoes = bmp.Width - larguraBotaoMaisEmenos - larguraBotoesNavbar - 20;
+            int alturaEspacoParaQuestoes = bmp.Height - 20;
+
+            Rectangle EspacoParaQuestoes = new Rectangle(larguraBotoesNavbar + 10, 10, larguraEspacoParaQuestoes, alturaEspacoParaQuestoes);
+            g.DrawRectangle(CanetaBranca, EspacoParaQuestoes);
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            //Questões
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            String NumQuestao = $"Questão {question}";
+            Font fontNumQuestao = new Font("Arial", (int)(0.050 * bmp.Height));
+
+            String ValorQuestão = "Valor da Questão: ______";
+            Font fontValor = new Font("Arial", (int)(0.050 * bmp.Height));
+
+            String Questao = "(2 * 2) + 5 * 4";
+            Font fontQuestao = new Font("Arial", (int)(0.050 * bmp.Height));
+
+            g.DrawString(NumQuestao, fontNumQuestao, LetraPreta, EspacoParaQuestoes, formatQuestao);
+            g.DrawString(ValorQuestão, fontValor, LetraPreta, EspacoParaQuestoes, formatValor);
+
+            g.DrawString(Questao, fontQuestao, LetraPreta, EspacoParaQuestoes, format);
+            
+
+
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
         }

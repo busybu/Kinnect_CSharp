@@ -71,7 +71,7 @@ tm.Tick += (o, e) =>
     
     BancoQuestoes.DesenharBanco(crr ?? new Bitmap(640, 480), bmp, g,
         cursor, isDown);
-    // Front.Desenhar(crr ?? new Bitmap(640, 480), bmp, g,
+    // TelaAluno.DesenharTelaAluno(crr ?? new Bitmap(640, 480), bmp, g,
     //     cursor, isDown);
     // ProfessorHome.DesenharHome(crr ?? new Bitmap(640, 480), bmp, g,
     //     cursor, isDown);
