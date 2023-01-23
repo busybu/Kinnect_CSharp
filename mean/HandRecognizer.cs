@@ -15,9 +15,9 @@ public class HandRecognizer
         {
             byte* p = (byte*)data.Scan0.ToPointer();
             
-            for (int i = 1; i < bmp.Width; i++)
+            for (int i = 50; i < bmp.Width - 50; i++)
             {
-                for (int j = 0; j < bmp.Height; j += 3)
+                for (int j = 50; j < bmp.Height - 50; j += 3)
                 {
                     byte* l = p + ((j + 1) * data.Stride) - 3 * i;
                     if(l[0] > 1)
@@ -65,9 +65,9 @@ public class HandRecognizer
     public Point GetCenterPixel(Bitmap bmp)
     {
         Point topPixel = getTopPixel(bmp);
-        if (topPixel.X < 100 || topPixel.Y < 100 || 
-            topPixel.Y > bmp.Height - 100 ||
-            topPixel.X  > bmp.Width - 100)
+        if (topPixel.X < 25 || topPixel.Y < 25 || 
+            topPixel.Y > bmp.Height - 25 ||
+            topPixel.X  > bmp.Width - 25)
             return Point.Empty;
 
         var centerPixel = new Point();
@@ -87,11 +87,11 @@ public class HandRecognizer
                 long sY = 0;
                 int count = 0;
 
-                for (int j = topPixel.Y - 100; j < topPixel.Y + 100; j += 5)
+                for (int j = topPixel.Y - 25; j < topPixel.Y + 25; j += 5)
                 {
-                    byte* l = p + (topPixel.X - 100) * 3 + j * data.Stride;
+                    byte* l = p + (topPixel.X - 25) * 3 + j * data.Stride;
 
-                    for (int i = (topPixel.X - 100); i < (topPixel.X + 100); i += 5, l += (3*5))
+                    for (int i = (topPixel.X - 25); i < (topPixel.X + 25); i += 5, l += (3*5))
                     {
                         if (l[0] != 0)
                         {

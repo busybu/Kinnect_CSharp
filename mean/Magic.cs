@@ -2,7 +2,7 @@ using System.Drawing.Imaging;
 
 public static class Abra
 {
-    public static Bitmap Kadabra(Bitmap bmp, Bitmap bg, float bgParam, float treshold, int radius)
+    public static int[] Kadabra(Bitmap bmp, Bitmap bg, float bgParam, float treshold, int radius)
     {
         var data = bmp.LockBits(
             new Rectangle(0, 0, bmp.Width, bmp.Height),
@@ -19,12 +19,12 @@ public static class Abra
         float param = getParam(data);
         normalize(data, param, bgParam);
         blur(data, radius);
-        var newBmp = applyBin(data, bgData, treshold);
+        var hist = applyBin2(data, bgData);
 
         bmp.UnlockBits(data);
         bg.UnlockBits(bgData);
 
-        return newBmp;
+        return hist;
     }
     
     private static void normalize(BitmapData data, float param, float bgParam)
@@ -217,8 +217,9 @@ public static class Abra
     private static void setBuffer(BitmapData data)
         => integralImage = new long[3 * data.Width * data.Height];
 
-    private static void applyBin2(BitmapData data, BitmapData bgData, float hparam = 0.05f)
+    private static int[] applyBin2(BitmapData data, BitmapData bgData, float hparam = 0.05f)
     {
+        float D = 10000;
         int histogramLen = (int)(1 / hparam) + 1;
         int[] hist = new int[histogramLen];
         int len = bgData.Height * bgData.Width;
@@ -241,7 +242,10 @@ public static class Abra
                     int dg = lBkg[1] - lBmp[1];
                     int dr = lBkg[2] - lBmp[2];
 
-                    float d = (dr * dr + db * db + dg * dg) / (3f * 255f * 255f);
+                    float d = (dr * dr + db * db + dg * dg) / D;
+                    if (d > 1f)
+                        d = 1f;
+                    
                     medD += d;
                     sqSum += d * d;
 
@@ -267,11 +271,11 @@ public static class Abra
 
                 for (int i = 0; i < bgData.Width; i++, lBmp += 3, lBkg += 3)
                 {
-                    byte db = (byte)(lBkg[0] - lBmp[0]);
-                    byte dg = (byte)(lBkg[1] - lBmp[1]);
-                    byte dr = (byte)(lBkg[2] - lBmp[2]);
+                    int db = lBkg[0] - lBmp[0];
+                    int dg = lBkg[1] - lBmp[1];
+                    int dr = lBkg[2] - lBmp[2];
 
-                    float d = (dr * dr + db * db + dg * dg) / (3f * 255f * 255f);
+                    float d = (dr * dr + db * db + dg * dg) / D;
                     
                     if (d > threshold)
                     {
@@ -288,6 +292,8 @@ public static class Abra
                 }
             });
         }
+
+        return hist;
     }
 
     private static float otsu(int[] histogram, float med, float sqSum, int len, float hparam)

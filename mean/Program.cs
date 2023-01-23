@@ -59,11 +59,12 @@ tm.Tick += (o, e) =>
         return;
 
     Bitmap bin;
+    int[] hist = null;
 
     if (bg != null)
     {
         var clone = (Bitmap)crr.Clone();
-        clone = Abra.Kadabra(clone, bg, bgParam, treshold, N);
+        hist = Abra.Kadabra(clone, bg, bgParam, treshold, N);
         bin = clone;
     }
     else
@@ -72,17 +73,21 @@ tm.Tick += (o, e) =>
     }
 
     var center = hand.GetCenterPixel(bin);
+    var open = hand.IsOpenHand(bin);
 
     // Pen pen = new Pen(Color.Red, 2);
-    // g.DrawImage(crr, new Rectangle(0, 0, 1600, 1200),
-    //     new Rectangle(0, 0, 1600, 1200), GraphicsUnit.Pixel);
-
+    g.Clear(Color.White);
     if (bg != null)
         g.DrawImage(bg, new Rectangle(0, 0, bg.Width, bg.Height));
     if (crr != null)
         g.DrawImage(crr, new Rectangle(bg?.Width ?? 0, 0, crr.Width, crr.Height));
     if (bin != null)
         g.DrawImage(bin, new Rectangle((bg?.Width ?? 0) + (crr?.Width ?? 0), 0, bin.Width, bin.Height));
+    if (hist != null)
+    {
+        var histImg = drawHist(hist);
+        g.DrawImage(histImg, new Rectangle(0, (bg?.Height ?? 0), bin.Width, bin.Height));
+    }
 
     // Front.Desenhar(bg, bmp, g, cursor, isDown);
 
@@ -91,7 +96,7 @@ tm.Tick += (o, e) =>
 
     g.DrawString(bgParam.ToString(), SystemFonts.CaptionFont,
         Brushes.White, new PointF(20, 20));
-    // g.FillRectangle(Brushes.Red, center.X -5, center.Y - 5, 10, 10);
+    g.FillRectangle(open ? Brushes.Green : Brushes.Red, center.X -5, center.Y - 5, 10, 10);
     
     pb.Refresh();
 };
@@ -153,3 +158,31 @@ form.KeyDown += (o, e) =>
 };
 
 Application.Run(form);
+
+Image drawHist(int[] hist)
+{
+    var bmp = new Bitmap(512, 256);
+    var g = Graphics.FromImage(bmp);
+    float margin = 16;
+
+    int max = hist.Max();
+    float barlen = (bmp.Width - 2 * margin) / hist.Length;
+    float r = (bmp.Height - 2 * margin) / max;
+
+    for (int i = 0; i < hist.Length; i++)
+    {
+        float bar = hist[i] * r;
+        g.FillRectangle(Brushes.Black,
+            margin + i * barlen,
+            bmp.Height - margin - bar,
+            barlen,
+            bar);
+        g.DrawRectangle(Pens.DarkBlue,
+            margin + i * barlen,
+            bmp.Height - margin - bar,
+            barlen,
+            bar);
+    }
+
+    return bmp;
+}
