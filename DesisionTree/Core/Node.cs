@@ -9,13 +9,20 @@ public class Node
     public Node Left { get; private set; }
     public Node Right { get; private set; }
     public ComparisonSigns Comparison { get; private set; } = ComparisonSigns.Bigger;
-    public int Target { get; private set; }
+    public float Target { get; private set; }
     public int ColumnIndex { get; private set; }
+    public float Probability { get; private set; }
+    
+    public void Epoch(List<int[]> x, int[] y, int minSample, int maxDepth)
+        => this.Epoch(convertToMatrix(x), y, minSample, maxDepth);
     
     public void Epoch(int[,] x, int[] y, int minSample, int maxDepth)
     {
         if (maxDepth == 0 || x.GetLength(0) < minSample)
+        {
+            this.Probability = y.Count(i => i == 1) * 1f / (y.Length == 0 ? 1 : y.Length);
             return;
+        }
 
         float[] I = this.EntropiaDeInformacao(x, y),
                 C = this.EntropiaDeConteudo(x, y),
@@ -56,26 +63,28 @@ public class Node
 
         this.Left = new Node();
         this.Right = new Node();
-        
-        this.Left.Epoch(convertToMatrix(leftX), leftY.ToArray(), minSample, maxDepth - 1);
+
         this.Right.Epoch(convertToMatrix(rightX), rightY.ToArray(), minSample, maxDepth - 1);
+        this.Left.Epoch(convertToMatrix(leftX), leftY.ToArray(), minSample, maxDepth - 1);
     }
 
     private int[,] convertToMatrix(List<int[]> list)
     {
-        int[,] result = new int[list.Count, list[0].Length-1];
+        if (list.Count == 0)
+            return new int[0, 0];
+
+        int[,] result = new int[list.Count, list[0].Length];
         for (int i = 0; i < list.Count; i++)
         {
-            for (int j = 0; j < list[0].Length-1; j++)
-                result[i,j] = list[i][j];
+            for (int j = 0; j < list[0].Length - 1; j++)
+                result[i, j] = list[i][j];
         }
         return result;
     }
 
-    public int SelectTarget(int n, int[] col)
+    public float SelectTarget(int n, int[] col)
     {
-        int index = Random.Shared.Next(n/4, n - n/4);
-        return col[index];
+        return (col.Max() + col.Min()) / 2;
     }
 
     public float[] EntropiaDeInformacao(int[,] x, int[] y)
@@ -193,15 +202,17 @@ public class Node
 
     private int[] GetColumn(int[,] matrix, int columnNumber)
     {
-        return Enumerable.Range(0, matrix.GetLength(0))
-                .Select(x => matrix[x, columnNumber])
-                .ToArray();
+        return Enumerable
+            .Range(0, matrix.GetLength(0))
+            .Select(x => matrix[x, columnNumber])
+            .ToArray();
     }
 
     private int[] GetRow(int[,] matrix, int rowNumber)
     {
-        return Enumerable.Range(0, matrix.GetLength(1))
-                .Select(x => matrix[rowNumber, x])
-                .ToArray();
+        return Enumerable
+            .Range(0, matrix.GetLength(1))
+            .Select(x => matrix[rowNumber, x])
+            .ToArray();
     }
 }
