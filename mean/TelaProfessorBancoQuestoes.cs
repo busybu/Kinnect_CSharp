@@ -2,14 +2,19 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 
-public static class BancoQuestoes
+public class BancoQuestoes : Tela
 {
-    private static int question = 1;
-    private static bool botaoMaisClicked = false;
-    public static List<Point> Points = new List<Point>();
+    private int question = 1;
+    private bool botaoMaisClicked = false;
+    private bool botaoMenosClicked = false;
+    public List<Point> Points = new List<Point>();
+    public event Action OnClearRequest;
+    public event Action OnGradePageOpen;
 
-    public static void DesenharBanco(Bitmap cam, Bitmap bmp, Graphics g,
-        Point cursor, bool isDown)
+    public event Action HomeOpen;
+
+    public override void Desenhar(Bitmap cam, Bitmap bmp, Graphics g,
+        Point cursor, bool isDown, string text, string valor)
     {
         g.Clear(Color.Transparent);
         try
@@ -134,7 +139,7 @@ public static class BancoQuestoes
             g.DrawRectangle(CanetaPreta, BotaoBancoQuestoes);
             if (PreeBotaoBancoQuestoes.Contains(cursor))
             {
-                if(PreeBotaoBancoQuestoes.Contains(cursor) && isDown == true)
+                if(PreeBotaoBancoQuestoes.Contains(cursor) && isDown)
                     g.FillRectangle(Brushes.DarkRed, PreeBotaoBancoQuestoes);
             }
 
@@ -143,8 +148,11 @@ public static class BancoQuestoes
             if (PreeBotaoVisualizarNotas.Contains(cursor))
             {
                 g.FillRectangle(GradientBotaoBanco, PreeBotaoVisualizarNotas);
-                if(PreeBotaoVisualizarNotas.Contains(cursor) && isDown == true)
+                if(PreeBotaoVisualizarNotas.Contains(cursor) && isDown)
+                {
                     g.FillRectangle(Brushes.DarkRed, PreeBotaoVisualizarNotas);
+                    OnGradePageOpen();
+                }
             }
 
             //Botão Sair
@@ -153,7 +161,10 @@ public static class BancoQuestoes
             {
                 g.FillRectangle(GradientBotaoBanco, PreeBotaoSairX);
                 if(PreeBotaoSairX.Contains(cursor) && isDown)
+                {
                     g.FillRectangle(Brushes.DarkRed, PreeBotaoSairX);
+                    OnGradePageOpen();
+                }
             }
 
             //Botão Mais
@@ -171,6 +182,7 @@ public static class BancoQuestoes
                 {
                     botaoMaisClicked = false;
                     question++;
+                    OnClearRequest();
                 }
             }
 
@@ -180,7 +192,19 @@ public static class BancoQuestoes
             {
                 g.FillRectangle(Brushes.Red, GradientBotaoMenos);
                 if(GradientBotaoMenos.Contains(cursor) && isDown)
+                {
+                    botaoMenosClicked = true;
                     g.FillRectangle(GradientBotaoVermelho, GradientBotaoMenos);
+                }
+
+                if (GradientBotaoMenos.Contains(cursor) && !isDown && botaoMenosClicked)
+                {
+                    botaoMenosClicked = false;
+                    question--;
+
+                    if(question <= 0)
+                        question = 1;
+                }
             }
 
             //Botão Confirmar
@@ -236,7 +260,7 @@ public static class BancoQuestoes
             String textoVisualizar = "Visualizar Notas";
             Font fontVisualizar = new Font(FontFamily.GetFamilies(g)[59], (int)(0.048 * bmp.Height));
     
-            String textoSair = "X";
+            String textoSair = "←";
             Font fontSair = new Font("Arial", (int)(0.100 * bmp.Height));
           
             String textoMais = "+";
@@ -279,10 +303,10 @@ public static class BancoQuestoes
             String NumQuestao = $"Questão {question}";
             Font fontNumQuestao = new Font("Arial", (int)(0.050 * bmp.Height));
 
-            String ValorQuestão = "Valor da Questão: ______";
+            String ValorQuestão = "Valor da Questão: {valor}";
             Font fontValor = new Font("Arial", (int)(0.050 * bmp.Height));
 
-            String Questao = "(2 * 2) + 5 * 4";
+            String Questao = text;
             Font fontQuestao = new Font("Arial", (int)(0.050 * bmp.Height));
 
             g.DrawString(NumQuestao, fontNumQuestao, LetraPreta, EspacoParaQuestoes, formatQuestao);

@@ -6,6 +6,57 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AForge.Video.DirectShow;
 
+TextBox tb = null;
+TextBox valor = null;
+Tela telaAtual = null;
+
+ProfessorHome professorHome = new ProfessorHome();
+
+BancoQuestoes bancoQuestoes = new BancoQuestoes();
+
+VisualizarNotas visualizarNotas = new VisualizarNotas();
+
+/////////////////////////////////////////////
+professorHome.QuestionsDatabaseOpen += delegate
+{
+    telaAtual = bancoQuestoes;
+};
+
+professorHome.OnGradePageOpen += delegate
+{
+    telaAtual = visualizarNotas;
+};
+
+/////////////////////////////////////////////
+bancoQuestoes.OnClearRequest += delegate
+{
+    tb.Clear();
+};
+
+bancoQuestoes.OnGradePageOpen += delegate
+{
+    telaAtual = visualizarNotas;
+};
+
+bancoQuestoes.HomeOpen += delegate
+{
+    telaAtual = professorHome;
+};
+/////////////////////////////////////////////
+visualizarNotas.QuestionsDatabaseOpen += delegate
+{
+    telaAtual = bancoQuestoes;
+};
+
+visualizarNotas.HomeOpen += delegate
+{
+    telaAtual = professorHome;
+};
+
+
+telaAtual = professorHome;
+
+
 ApplicationConfiguration.Initialize();
 Application.EnableVisualStyles();
 
@@ -20,6 +71,14 @@ Bitmap bg = null; // Background Salvo
 Point cursor = Point.Empty;
 bool isDown = false;
 VideoCaptureDevice videoSource = null;
+
+tb = new TextBox();
+form.Controls.Add(tb);
+tb.Location = new Point(-100, -100);
+
+valor = new TextBox();
+form.Controls.Add(valor);
+valor.Location = new Point(-200, -200);
 
 PictureBox pb = new PictureBox();
 pb.Dock = DockStyle.Fill;
@@ -62,19 +121,15 @@ form.Load += (o, e) =>
     tm.Start();
 };
 
-
-
 tm.Tick += (o, e) =>
 {
+    tb.Focus();
+    // valor.Focus();
     if (bmp == null)
         return;
     
-    BancoQuestoes.DesenharBanco(crr ?? new Bitmap(640, 480), bmp, g,
-        cursor, isDown);
-    // TelaAluno.DesenharTelaAluno(crr ?? new Bitmap(640, 480), bmp, g,
-    //     cursor, isDown);
-    // ProfessorHome.DesenharHome(crr ?? new Bitmap(640, 480), bmp, g,
-    //     cursor, isDown);
+    telaAtual.Desenhar(crr ?? new Bitmap(640, 480), bmp, g, cursor, isDown, tb.Text, valor.Text);
+
     pb.Refresh();
 };
 
@@ -101,5 +156,6 @@ form.KeyDown += (o, e) =>
         bg = Blur.QuickParallelBlur(img, 20);
     }
 };
+
 
 Application.Run(form);
