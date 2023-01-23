@@ -18,6 +18,12 @@ float treshold = 0.15f;
 
 float param = 0;
 float bgParam = 0;
+
+//Parametros de calibração temporários enquanto arrumamos a função de mão aberta/fechada
+int handthreshold = 70;
+int area = 50;
+
+double handvalue = 0;
 Bitmap bmp = null; // Tela
 Graphics g = null; // Graphics da Tela
 Bitmap crr = null; // Frame atual da WebCam
@@ -72,8 +78,6 @@ tm.Tick += (o, e) =>
         bin = crr;
     }
 
-    var center = hand.GetCenterPixel(bin);
-    var open = hand.IsOpenHand(bin);
 
     // Pen pen = new Pen(Color.Red, 2);
     g.Clear(Color.White);
@@ -96,7 +100,28 @@ tm.Tick += (o, e) =>
 
     g.DrawString(bgParam.ToString(), SystemFonts.CaptionFont,
         Brushes.White, new PointF(20, 20));
-    g.FillRectangle(open ? Brushes.Green : Brushes.Red, center.X -5, center.Y - 5, 10, 10);
+
+    g.DrawString(handthreshold.ToString(), SystemFonts.CaptionFont,
+        Brushes.White, new PointF(40, 40));
+
+    g.DrawString(area.ToString(), SystemFonts.CaptionFont,
+        Brushes.White, new PointF(60, 60));
+
+    g.DrawString(handvalue.ToString(), SystemFonts.CaptionFont,
+        Brushes.White, new PointF(10, 80));
+
+    if(bin != null){
+        var center = hand.GetCenterPixel(bin);
+        var tophand = hand.getTopPixel(bin);
+        var righthand = hand.getRightPixel(bin);
+        var open = (hand.SlowOpenHand(bin, handthreshold, area));
+        g.FillRectangle(open.Item1 ? Brushes.Green : Brushes.Red, center.X -5, center.Y - 5, 10, 10);
+        handvalue = open.Item2;
+        //g.FillRectangle(Brushes.Blue, center.X -5, center.Y - 5, 10, 10);
+        g.FillRectangle(Brushes.Red, righthand.X -5, righthand.Y - 5, 10, 10);
+        g.FillRectangle(Brushes.Green, tophand.X -5, tophand.Y - 5, 10, 10);
+        g.FillRectangle(Brushes.Pink, tophand.X - area/4, tophand.Y-area, (area/4) + area, area);
+    }
     
     pb.Refresh();
 };
@@ -154,6 +179,28 @@ form.KeyDown += (o, e) =>
     else if (e.KeyCode == Keys.L)
     {
         N = N > 0 ? N-- : N;
+    }
+    else if (e.KeyCode == Keys.W)
+    {
+        handthreshold++;
+    }
+    else if (e.KeyCode == Keys.S)
+    {
+        if (handthreshold > 0)
+        {
+            handthreshold--;
+        }
+    }
+    else if (e.KeyCode == Keys.E)
+    {
+        area++;
+    }
+    else if (e.KeyCode == Keys.D)
+    {
+        if (area > 0)
+        {
+            area--;
+        }
     }
 };
 
