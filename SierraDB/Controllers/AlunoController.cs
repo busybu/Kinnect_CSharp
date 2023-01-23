@@ -50,51 +50,111 @@ public class AlunoController : ControllerBase
         return Ok("Login válido");
 
     }
-    [HttpPost("notaAluno")]
-    public ActionResult GetNota([FromBody] AlunoNota aluno)
+    
+    [HttpGet("notaAluno/{aluno}")]
+    public ActionResult GetNota(int aluno)
     {
         using KinnectContext context = new KinnectContext();
 
-        var queryAluno = context.Alunos.FirstOrDefault(a => a.Id == aluno.Aluno);
+        var queryAluno = context.Alunos.FirstOrDefault(a => a.Id == aluno);
+        if (queryAluno == null)
+            return BadRequest("Usuário inválido");
 
-        var queryModulo = context.Questoes.Join(context.Modulos,
-                                            questao => questao.Idmodulo,
-                                            modulo => modulo.Id,
-                                            (questao, modulo) => new
-                                            {
-                                                idQ = questao.Id,
-                                                pesoQ = questao.Peso,
-                                                nomeModulo = modulo.Nome
-                                            });
+        var query = context.Alunos
+            .Join(context.Respostas,
+                aluno => aluno.Id,
+                resp => resp.Idaluno,
+                (aluno, resp) => new
+                {
+                    idQ = resp.Idquestoes,
+                    respostaA = resp.Resposta1,
+                    nome = aluno.Nome,
+                })
+            .Join(context.Questoes,
+                obj => obj.idQ,
+                quest => quest.Id,
+                (obj, quest) => new
+                {
+                    idM = quest.Idmodulo,
+                    respostaQ = quest.Resposta,
+                    respostaA = obj.respostaA,
+                    nome = obj.nome,
+                    peso = quest.Peso,
+                    idQ = obj.idQ
+                })
+            .Join(context.Modulos,
+                obj => obj.idM,
+                modulo => modulo.Id,
+                (obj, modulo) => new
+                {
+                    modulo = modulo.Nome,
+                    respostaA = obj.respostaA,
+                    respostaQ = obj.respostaQ,
+                    aluno = obj.nome,
+                    peso = obj.peso,
+                    idQ = obj.idQ
+                })
+                .Where(obj => obj.respostaQ == obj.respostaA)
+                .GroupBy(a => a.aluno)
+                // new { a.TextData, a.DataBaseName }
+                .Select(n => new
+                {
+                    aluno = n.Key,
+                    nota = n.Sum(p => p.peso)
+                })
+            .ToArray();
 
-        var queryResposta = queryModulo.Join(context.Respostas,
-                                                questao => questao.idQ,
-                                                resposta => resposta.Idquestoes,
-                                                (questao, resposta) => new
-                                                {
-                                                    pesoQ = questao.pesoQ,
-                                                    resposta = resposta.Resposta1,
-                                                    idAluno = resposta.Idaluno,
-                                                    nmModulo = questao.nomeModulo
-                                                });
+        return Ok(query);
+    }
 
-        var queryNota = queryResposta.Join(context.Alunos,
-                                        alunoR => alunoR.idAluno,
-                                        aluno => aluno.Id,
-                                        (alunoR, aluno) => new
-                                        {
-                                            nomeAluno = aluno.Nome,
-                                            notaQ = alunoR.pesoQ,
-                                            nomeModulo = alunoR.nmModulo
-                                        })
-                                        .GroupBy(modulo => modulo.nomeModulo)
-                                        .Select(m => new
-                                        {
-                                            nomeModulo = m.Key
-                                        });
+    [HttpGet("aluno")]
+    public ActionResult GetAlunos()
+    {
+        using KinnectContext context = new KinnectContext();
+         
+        var alunos = context.Alunos;
 
+        if (alunos == null)
+            return BadRequest("Não há alunos cadastrados");
 
+        return Ok(alunos);
+    }
 
-        return Ok();
+    [HttpGet("modulo")]
+    public ActionResult GetModulos()
+    {
+        using KinnectContext context = new KinnectContext();
+         
+        var modulos = context.Modulos;
+
+        if (modulos == null)
+            return BadRequest("Não há modulos cadastrados");
+
+        return Ok(modulos);
+    }
+
+    [HttpGet("professor")]
+    public ActionResult GetProfessores()
+    {
+        using KinnectContext context = new KinnectContext();
+         
+        var professores = context.Professor;
+
+        if (professores == null)
+            return BadRequest("Não há professores cadastrados");
+
+        return Ok(professores);
     }
 }
+    [HttpGet("questoes")]
+    public ActionResult GetQuestoes()
+    {
+        using KinnectContext context = new KinnectContext();
+         
+        var questoes = context.Questoes;
+
+        if (questoes == null)
+            return BadRequest("Não há questões cadastradas");
+
+        return Ok(questoes);
+    }
