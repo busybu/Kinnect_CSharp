@@ -40,6 +40,28 @@ public class PointsHandler
     rg.DrawImage(crr, new Rectangle(0, 0, 28, 28),
       ret, GraphicsUnit.Pixel);
     
+    var sla = result.LockBits(
+      new Rectangle(0,0,result.Width,result.Height),
+      System.Drawing.Imaging.ImageLockMode.ReadOnly,
+      System.Drawing.Imaging.PixelFormat.Format24bppRgb
+    );
+
+    int index = 0;
+
+    unsafe
+    {
+      byte* p = (byte*)(sla.Scan0.ToPointer());
+      for(int j = 0; j < result.Height; j++)
+      {
+        byte* linha = p + j * sla.Stride;
+        for(int i = 0; i < result.Width; i++, linha+=3)
+        {
+          data[index] = (byte)(255 - linha[0]);
+          index++;
+        }
+      }
+    }
+    MessageBox.Show(data.ToString());
     return data;
   }
   public void Clear()
