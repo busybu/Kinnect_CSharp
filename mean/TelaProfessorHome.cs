@@ -8,10 +8,14 @@ public class ProfessorHome : Tela
 
     public event Action OnGradePageOpen;
 
+    private bool botaoSairClicked = false;
+
     public event Action QuestionsDatabaseOpen;
 
+    public event Action Exit;
+
     public override void Desenhar(Bitmap cam, Bitmap bmp, Graphics g,
-        Point cursor, bool isDown, string text, string valor)
+        Point cursor, bool isDown, string text)
     {
         g.Clear(Color.Transparent);
         try
@@ -83,7 +87,7 @@ public class ProfessorHome : Tela
                 if(PreeBotaoBancoQuestoes.Contains(cursor) && isDown)
                 {
                     g.FillRectangle(Brushes.DarkRed, PreeBotaoBancoQuestoes);
-                    OnGradePageOpen();
+                    QuestionsDatabaseOpen();
                 }
             }
 
@@ -105,7 +109,16 @@ public class ProfessorHome : Tela
             {
                 g.FillRectangle(GradientBotaoBanco, PreeBotaoSairX);
                 if(PreeBotaoSairX.Contains(cursor) && isDown)
+                {
+                    botaoSairClicked = true;
                     g.FillRectangle(Brushes.DarkRed, PreeBotaoSairX);
+                }
+
+                if (PreeBotaoSairX.Contains(cursor) && !isDown && botaoSairClicked)
+                {
+                    botaoSairClicked = false;
+                    Exit();
+                } 
             }
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

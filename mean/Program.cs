@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using AForge.Video.DirectShow;
 
 TextBox tb = null;
-TextBox valor = null;
 Tela telaAtual = null;
 
 ProfessorHome professorHome = new ProfessorHome();
@@ -25,6 +24,11 @@ professorHome.QuestionsDatabaseOpen += delegate
 professorHome.OnGradePageOpen += delegate
 {
     telaAtual = visualizarNotas;
+};
+
+professorHome.Exit += delegate
+{
+    Application.Exit();
 };
 
 /////////////////////////////////////////////
@@ -54,7 +58,7 @@ visualizarNotas.HomeOpen += delegate
 };
 
 
-telaAtual = professorHome;
+telaAtual = visualizarNotas;
 
 
 ApplicationConfiguration.Initialize();
@@ -75,10 +79,6 @@ VideoCaptureDevice videoSource = null;
 tb = new TextBox();
 form.Controls.Add(tb);
 tb.Location = new Point(-100, -100);
-
-valor = new TextBox();
-form.Controls.Add(valor);
-valor.Location = new Point(-200, -200);
 
 PictureBox pb = new PictureBox();
 pb.Dock = DockStyle.Fill;
@@ -128,7 +128,7 @@ tm.Tick += (o, e) =>
     if (bmp == null)
         return;
     
-    telaAtual.Desenhar(crr ?? new Bitmap(640, 480), bmp, g, cursor, isDown, tb.Text, valor.Text);
+    telaAtual.Desenhar(crr ?? new Bitmap(640, 480), bmp, g, cursor, isDown, tb.Text);
 
     pb.Refresh();
 };

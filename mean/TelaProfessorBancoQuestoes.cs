@@ -7,14 +7,28 @@ public class BancoQuestoes : Tela
     private int question = 1;
     private bool botaoMaisClicked = false;
     private bool botaoMenosClicked = false;
+
+    private bool botaoSairClicked = false;
     public List<Point> Points = new List<Point>();
     public event Action OnClearRequest;
     public event Action OnGradePageOpen;
 
     public event Action HomeOpen;
 
+    public partial class Questao
+    {
+        public int NQuestao { get; set; }
+        public string? Descricao { get; set; }
+        // public int Idmodulo { get; set; }
+        public int? Peso { get; set; }
+  
+
+    }
+
+    public static List<Questao> questoes = new List<Questao>();
+
     public override void Desenhar(Bitmap cam, Bitmap bmp, Graphics g,
-        Point cursor, bool isDown, string text, string valor)
+        Point cursor, bool isDown, string text)
     {
         g.Clear(Color.Transparent);
         try
@@ -182,6 +196,12 @@ public class BancoQuestoes : Tela
                 {
                     botaoMaisClicked = false;
                     question++;
+
+                    Questao q = new Questao();
+                    q.Descricao = text;
+                    q.NQuestao = question;
+
+                    questoes.Add(q);
                     OnClearRequest();
                 }
             }
@@ -201,6 +221,7 @@ public class BancoQuestoes : Tela
                 {
                     botaoMenosClicked = false;
                     question--;
+            
 
                     if(question <= 0)
                         question = 1;
@@ -222,7 +243,10 @@ public class BancoQuestoes : Tela
             {
                 g.FillRectangle(Brushes.LightGray, PreeBotaoCima);
                 if(PreeBotaoCima.Contains(cursor) && isDown)
+                {
                     g.FillRectangle(Brushes.Gray, PreeBotaoCima);
+                
+                }
             }
 
             //Botão Baixo
