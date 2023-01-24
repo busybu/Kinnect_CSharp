@@ -6,7 +6,7 @@ namespace SierraDB.Controllers;
 
 using Model;
 using Crypto;
-using static Parse.Parse;
+using static Parse.ParseCalculo;
 
 [ApiController]
 [Route("questoes")]
@@ -19,6 +19,8 @@ public class QuestoesController : ControllerBase
 
         if(questao == null)
             return BadRequest("Inválido");
+
+        Console.WriteLine(questao.Descricao);
 
         var resposta = CalculateString(questao.Descricao);
         questao.Resposta = resposta.ToString();
@@ -42,3 +44,10 @@ public class QuestoesController : ControllerBase
 
     }
 }
+
+// {
+//   "descricao": "5 / 2 + 15 - (2 * 5)",
+//   "idmodulo": 5,
+//   "peso": 5,
+//   "resposta": "7.5"
+// }

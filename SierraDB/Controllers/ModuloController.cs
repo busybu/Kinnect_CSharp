@@ -45,4 +45,51 @@ public class ModuloController : ControllerBase
         return Ok("Modulo encontrado");
 
     }
+
+    [HttpGet]
+    public ActionResult GetModulos()
+    {
+        using KinnectContext context = new KinnectContext();
+
+        var modulos = context.Modulos;
+
+        if (modulos == null)
+            return BadRequest("Não há modulos cadastrados");
+
+        return Ok(modulos);
+    }
+
+    [HttpGet("getAlunos/{modulo}")]
+    public ActionResult GetAlunos(string modulo)
+    {
+        using KinnectContext context = new KinnectContext();
+
+        var queryModulo = context.Modulos.FirstOrDefault(m => m.Nome == modulo);
+        if (queryModulo == null)
+            return BadRequest("Modulo inválido");
+
+
+        var query = context.Modulos
+                    .Where(m => m.Nome == modulo)
+                    .Join(context.Questoes,
+                        idModulo => idModulo.Id,
+                        q => q.Idmodulo,
+                        (idModulo, q) => new
+                        {
+                            modulo = modulo,
+                            idQ = q.Id,
+                            // respQ = q.Resposta
+                        })
+                        .Join(context.Respostas,
+                            obj => obj.idQ,
+                            resp => resp.Idquestoes,
+                            (obj, resp) => new
+                            {
+                                modulo = modulo,
+                                
+                            })
+
+        return Ok(modulos);
+    }
+
 }

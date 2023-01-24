@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public static class Parse
+public static class ParseCalculo
 {
     private static List<Token>
         expCondition = new List<Token> { Token.highExp, Token.medExp, Token.lowExp, Token.NUM };
@@ -36,50 +36,19 @@ public static class Parse
     {
         int limit = tokens.Count;
         int count = 0;
-        bool shouldContinue = false;
-
-        foreach (var t in tokens)
-            Console.Write(t.Token + " ");
-        Console.WriteLine("");
         while (tokens.Count > 1)
-        {
-            var startIndex = tokens.TakeWhile(t => t.Token != Token.OPENPARENTHESIS).Count();
-            startIndex = startIndex == tokens.Count ? 0 : startIndex;
-
-            shouldContinue = false;
-            for (int i = startIndex; i < tokens.Count; i++)
+        {   
+            for (int i = 0; i < tokens.Count - 2; i++)
                 if (highExpCondition.SequenceEqual(tokens.Select(t => t.Token).Skip(i).Take(3)))
-                {
                     reduceList(tokens, i, Token.highExp);
-                    shouldContinue = true;
-                    break;
-                }
 
-            if (shouldContinue)
-                continue;
-
-            for (int i = startIndex; i < tokens.Count; i++)
+            for (int i = 0; i < tokens.Count - 2; i++)
                 if (medExpCondition.Any(c => c.SequenceEqual(tokens.Select(t => t.Token).Skip(i).Take(3))))
-                {
                     reduceList(tokens, i, Token.medExp);
-                    shouldContinue = true;
-                    break;
-                }
 
-            if (shouldContinue)
-                continue;
-
-
-            for (int i = startIndex; i < tokens.Count; i++)
+            for (int i = 0; i < tokens.Count - 2; i++)
                 if (lowExpCondition.Any(c => c.SequenceEqual(tokens.Select(t => t.Token).Skip(i).Take(3))))
-                {
                     reduceList(tokens, i, Token.lowExp);
-                    shouldContinue = true;
-                    break;
-                }
-
-            if (shouldContinue)
-                continue;
 
             for (int i = 0; i < tokens.Count; i++)
                 if (expCondition.Contains(tokens[i].Token))
@@ -100,11 +69,6 @@ public static class Parse
 
     private static void reduceList(List<ParseTree> tokens, int i, Token token)
     {
-        foreach (var t in tokens)
-            Console.Write(t.Token + " ");
-        Console.WriteLine("");
-
-
         var pt = new ParseTree();
         pt.Token = token;
 
@@ -121,7 +85,7 @@ public static class Parse
     {
         List<ParseTree> tokenList = new List<ParseTree>();
 
-        foreach (var obj in list) 
+        foreach (var obj in list)
         {
             ParseTree tk = new ParseTree();
             tk.Value = obj;
@@ -154,27 +118,9 @@ public static class Parse
         return tokenList;
     }
 
-    private static bool isOperator(object obj)
-    {
-        char c;
-        try
-        {
-            c = Convert.ToChar(obj);
-        }
-        catch
-        {
-            return false;
-        }
-
-        char[] symbols = new char[] { '+', '-', '/', '*' };
-        return symbols.Contains(c);
-    }
 
     private static List<object> SplitExpression(string expr)
     {
-        if (expr.Count(c => c == '(') != expr.Count(c => c == ')'))
-            throw new Exception("Parentêses não fecham!");
-
         // TODO Add all your delimiters here
         var delimiters = new[] { '(', '+', '-', '*', '/', ')' };
         var buffer = string.Empty;
@@ -197,13 +143,6 @@ public static class Parse
         }
         if (buffer.Length > 0)
             ret.Add(float.Parse(buffer));
-
-        if (ret.Count() == 1)
-            return ret;
-
-        var checkOp = ret.Count(obj => obj.IsNumber()) - ret.Count(obj => isOperator(obj));
-        if (checkOp != 1)
-            throw new Exception("Expressão Inválida");
 
         return ret;
     }
@@ -252,34 +191,9 @@ public enum Token
     OPDIV,
     OPENPARENTHESIS,
     CLOSEPARENTHESIS,
+
     exp,
     lowExp,
     medExp,
     highExp,
-}
-
-
-
-public static class ExtensionMethods
-{
-    public static bool IsNumber(this object obj)
-    {
-        if (Equals(obj, null))
-        {
-            return false;
-        }
-
-        Type objType = obj.GetType();
-        objType = Nullable.GetUnderlyingType(objType) ?? objType;
-
-        if (objType.IsPrimitive)
-        {
-            return objType != typeof(bool) &&
-                objType != typeof(char) &&
-                objType != typeof(IntPtr) &&
-                objType != typeof(UIntPtr);
-        }
-
-        return objType == typeof(decimal);
-    }
 }

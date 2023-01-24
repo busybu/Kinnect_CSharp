@@ -50,17 +50,18 @@ public class AlunoController : ControllerBase
         return Ok("Login válido");
 
     }
-    
+
     [HttpGet("notaAluno/{aluno}")]
-    public ActionResult GetNota(int aluno)
+    public ActionResult GetNota(string aluno)
     {
         using KinnectContext context = new KinnectContext();
 
-        var queryAluno = context.Alunos.FirstOrDefault(a => a.Id == aluno);
+        var queryAluno = context.Alunos.FirstOrDefault(a => a.Nome == aluno);
         if (queryAluno == null)
             return BadRequest("Usuário inválido");
 
         var query = context.Alunos
+            .Where(a => a.Nome == aluno)
             .Join(context.Respostas,
                 aluno => aluno.Id,
                 resp => resp.Idaluno,
@@ -94,24 +95,25 @@ public class AlunoController : ControllerBase
                     peso = obj.peso,
                     idQ = obj.idQ
                 })
-                .Where(obj => obj.respostaQ == obj.respostaA)
-                .GroupBy(a => a.aluno)
-                // new { a.TextData, a.DataBaseName }
-                .Select(n => new
-                {
-                    aluno = n.Key,
-                    nota = n.Sum(p => p.peso)
-                })
-            .ToArray();
+            .ToArray()
+            .Where(x => x.respostaA.Replace(',', '.') == x.respostaQ.Replace(',', '.'))
+            .GroupBy(x => x.modulo)
+            .Select(g => new
+            {
+                modulo = g.Key,
+                aluno = g.First().aluno,
+                nota = g.Sum(p => p.peso)
+            });
+
 
         return Ok(query);
     }
 
-    [HttpGet("aluno")]
+    [HttpGet]
     public ActionResult GetAlunos()
     {
         using KinnectContext context = new KinnectContext();
-         
+
         var alunos = context.Alunos;
 
         if (alunos == null)
@@ -120,41 +122,30 @@ public class AlunoController : ControllerBase
         return Ok(alunos);
     }
 
-    [HttpGet("modulo")]
-    public ActionResult GetModulos()
-    {
-        using KinnectContext context = new KinnectContext();
-         
-        var modulos = context.Modulos;
 
-        if (modulos == null)
-            return BadRequest("Não há modulos cadastrados");
+    // [HttpGet("professor")]
+    // public ActionResult GetProfessores()
+    // {
+    //     using KinnectContext context = new KinnectContext();
 
-        return Ok(modulos);
-    }
+    //     var professores = context.Professor;
 
-    [HttpGet("professor")]
-    public ActionResult GetProfessores()
-    {
-        using KinnectContext context = new KinnectContext();
-         
-        var professores = context.Professor;
+    //     if (professores == null)
+    //         return BadRequest("Não há professores cadastrados");
 
-        if (professores == null)
-            return BadRequest("Não há professores cadastrados");
+    //     return Ok(professores);
+    // }
 
-        return Ok(professores);
-    }
+    // [HttpGet("questoes")]
+    // public ActionResult GetQuestoes()
+    // {
+    //     using KinnectContext context = new KinnectContext();
+
+    //     var questoes = context.Questoes;
+
+    //     if (questoes == null)
+    //         return BadRequest("Não há questões cadastradas");
+
+    //     return Ok(questoes);
+    // }
 }
-    [HttpGet("questoes")]
-    public ActionResult GetQuestoes()
-    {
-        using KinnectContext context = new KinnectContext();
-         
-        var questoes = context.Questoes;
-
-        if (questoes == null)
-            return BadRequest("Não há questões cadastradas");
-
-        return Ok(questoes);
-    }
