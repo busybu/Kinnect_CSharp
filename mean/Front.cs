@@ -7,6 +7,7 @@ public static class Front
     public static List<Point> Points = new List<Point>();
 
     public static bool aux1 {get; set;} = false;
+    public static List<Point> lista = new List<Point>();
 
     public static void Desenhar(Bitmap cam, Bitmap bmp, Graphics g,
         Point cursor, bool isDown)
@@ -122,6 +123,7 @@ public static class Front
             {
                 if (isDown)
                 {
+                    lista.Add(cursor);
                     Points.Add(cursor);
                 }
                 else
@@ -134,7 +136,7 @@ public static class Front
                 g.DrawLines(CanetaPreta, Points.ToArray());
 
             g.DrawRectangle(CanetaPreta, RetanguloPretoTela);
-            g.DrawRectangle(CanetaMarrom, MolduraQuadro);
+            g.DrawRectangle(CanetaMarrom, MolduraQuadro); 
             g.DrawRectangle(CanetaPreta, MolduraPretaMoldura);
             g.FillRectangle(FundoVerde, QuadroVerde);
 

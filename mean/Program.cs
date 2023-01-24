@@ -27,6 +27,7 @@ bool isDown = false;
 
 VideoCaptureDevice videoSource = null;
 HandRecognizer hand = new HandRecognizer();
+PointsHandler handler = new PointsHandler();
 PictureBox pb = new PictureBox();
 pb.Dock = DockStyle.Fill;
 System.Windows.Forms.Timer tm = new System.Windows.Forms.Timer();
@@ -49,12 +50,21 @@ form.Load += (o, e) =>
     bmp = new Bitmap(pb.Width, pb.Height);
     pb.Image = bmp;
     g = Graphics.FromImage(bmp);
-    videoSource.Start();
+    videoSource?.Start();
     tm.Start();
 };
 
 tm.Tick += (o, e) =>
-{
+{   
+    if (bmp == null)
+        return;
+    
+    // DrawResize.DrawCursor(bmp, g, cursor, isDown);
+    handler.GenerateMnist();
+    pb.Refresh();
+
+    return; // kk
+
     if (bmp == null || crr == null)
         return;
 
@@ -88,6 +98,7 @@ tm.Tick += (o, e) =>
         var histImg = drawHist(hist);
         g.DrawImage(histImg, new Rectangle(0, (bg?.Height ?? 0), bin.Width, bin.Height));
     }
+    Front.Desenhar(bg, bmp, g, center, open);
 
     // Front.Desenhar(bg, bmp, g, cursor, isDown);
 
