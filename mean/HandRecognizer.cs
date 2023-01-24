@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 
 public class HandRecognizer
 {   
-    private Point getRightPixel(Bitmap bmp)
+    public Point getRightPixel(Bitmap bmp)
     {
         var data = bmp.LockBits(
             new Rectangle(0, 0, bmp.Width, bmp.Height),
@@ -32,7 +32,7 @@ public class HandRecognizer
         return Point.Empty;
     }
 
-    private Point getTopPixel(Bitmap bmp)
+    public Point getTopPixel(Bitmap bmp)
     {
         Point rightPixel = getRightPixel(bmp);
 
@@ -116,6 +116,7 @@ public class HandRecognizer
         int calibration = 70;
         double whites = 0;
         double count = 0;
+        
         for (int j = topPixel.Y; j < (topPixel.Y + 50) ; j++)
             for (int i = (topPixel.X - 50); i < (topPixel.X + 50); i++)
             {
@@ -133,4 +134,123 @@ public class HandRecognizer
         
         return true;
     }
+
+    public Boolean FasterOpenHand(Bitmap bmp)
+    {
+
+        Point topPixel = getTopPixel(bmp);
+        int calibration = 70;
+        double whites = 0;
+        double count = 0;
+        var data = bmp.LockBits(
+            new Rectangle(0, 0, bmp.Width, bmp.Height),
+            ImageLockMode.ReadWrite,
+            PixelFormat.Format24bppRgb);
+
+
+        unsafe
+        {
+            byte* p = (byte*)data.Scan0.ToPointer();
+            
+            for (int i = (topPixel.X - 50); i < (topPixel.X + 50); i++)
+            {
+                for (int j = topPixel.Y; j < (topPixel.Y + 50) ; j++)
+                {
+                    byte* l = p + ((j + 1) * data.Stride) - 3 * i;
+                    if(l[0] > 1)
+                    {
+                        whites++;
+                    }
+                    count++;
+                }
+            }
+        }
+
+        bmp.UnlockBits(data);
+        double temp1 = whites / count * 100.0;
+
+        if (temp1 > calibration)
+            return false;
+
+        return true;
+
+    }
+
+    public (Boolean, double) FasterOpenHandV2(Bitmap bmp, int calibration, int area)
+    {
+
+        Point topPixel = getTopPixel(bmp);
+        //int calibration = 70;
+        double whites = 0;
+        double count = 0;
+        var data = bmp.LockBits(
+            new Rectangle(0, 0, bmp.Width, bmp.Height),
+            ImageLockMode.ReadWrite,
+            PixelFormat.Format24bppRgb);
+
+        if(topPixel.X > area+5 && topPixel.X < bmp.Width-(area+5))
+        {
+
+            unsafe
+            {
+                byte* p = (byte*)data.Scan0.ToPointer();
+                
+                for (int i = (topPixel.X - (int)area/4); i < (topPixel.X + area); i++)
+                {
+                    for (int j = topPixel.Y; j < (topPixel.Y + area) ; j++)
+                    {
+                        byte* l = p + ((j + 1) * data.Stride) - 3 * i;
+                        if(l[0] > 1)
+                        {
+                            whites++;
+                        }
+                        count++;
+                    }
+                }
+            }
+
+            bmp.UnlockBits(data);
+
+        }
+
+        double temp1 = whites / count * 100.0;
+
+        if (temp1 > calibration)
+            return (false,temp1);
+
+        return (true,temp1);
+
+    }
+
+    public (Boolean, double) SlowOpenHand(Bitmap bmp, int calibration, int area)
+    {
+        Point topPixel = getTopPixel(bmp);
+        //int calibration = 70;
+        double whites = 0;
+        double count = 0;
+        
+
+        if(topPixel.X > area+5 && topPixel.X < bmp.Width-(area+5))
+        {
+            for (int j = topPixel.Y; j < (topPixel.Y + area) ; j++)
+            {
+                for (int i = (topPixel.X - area); i < (topPixel.X + area); i++)
+                {
+                    Color pixel = bmp.GetPixel(i, j);
+
+                    if (pixel.G != 0)
+                        whites++;
+                    count++;
+                }
+            }
+        }
+
+        double temp = whites/count*100.0;
+
+        if (temp>calibration)
+            return (false,temp);
+        
+        return (true,temp);
+    }
+
 }
