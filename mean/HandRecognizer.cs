@@ -352,4 +352,33 @@ public class HandRecognizer
         return (true, whites);
     }
 
+    public int OptimalArea (Bitmap bmp)
+    {
+        Point center = GetCenterPixel(bmp);
+
+        int soma = 0;
+        if(center.X > 10 && center.X < bmp.Width-10)
+        {
+            for(int i = center.X-3; i <= center.X+3; i+=3)
+            {
+                int count = 0;
+
+                while(true)
+                {
+                    Color pixel = bmp.GetPixel(i, center.Y + count);
+                    count++;
+                    if (pixel.G == 0)
+                    {
+                        break;
+                    }
+                }
+
+                soma += count;
+
+            }
+        }
+
+        return (int)soma/3;
+    }
+
 }
