@@ -65,9 +65,9 @@ public class HandRecognizer
     public Point GetCenterPixel(Bitmap bmp)
     {
         Point topPixel = getTopPixel(bmp);
-        if (topPixel.X < 25 || topPixel.Y < 25 || 
-            topPixel.Y > bmp.Height - 25 ||
-            topPixel.X  > bmp.Width - 25)
+        if (topPixel.X < 45 || topPixel.Y < 45 || 
+            topPixel.Y > bmp.Height - 45 ||
+            topPixel.X  > bmp.Width - 45)
             return Point.Empty;
 
         var centerPixel = new Point();
@@ -87,11 +87,11 @@ public class HandRecognizer
                 long sY = 0;
                 int count = 0;
 
-                for (int j = topPixel.Y - 25; j < topPixel.Y + 25; j += 5)
+                for (int j = topPixel.Y - 45; j < topPixel.Y + 45; j += 5)
                 {
-                    byte* l = p + (topPixel.X - 25) * 3 + j * data.Stride;
+                    byte* l = p + (topPixel.X - 45) * 3 + j * data.Stride;
 
-                    for (int i = (topPixel.X - 25); i < (topPixel.X + 25); i += 5, l += (3*5))
+                    for (int i = (topPixel.X - 45); i < (topPixel.X + 45); i += 5, l += (3*5))
                     {
                         if (l[0] != 0)
                         {
@@ -222,35 +222,79 @@ public class HandRecognizer
 
     }
 
-    public (Boolean, double) SlowOpenHand(Bitmap bmp, int calibration, int area)
+    public (Boolean, double, double) SlowOpenHand(Bitmap bmp, int calibration, int area)
     {
         Point topPixel = getTopPixel(bmp);
         //int calibration = 70;
         double whites = 0;
+        double colgate = 0;
         double count = 0;
-        
 
         if(topPixel.X > area+5 && topPixel.X < bmp.Width-(area+5))
         {
-            for (int j = topPixel.Y; j < (topPixel.Y + area) ; j++)
+            for (int j = topPixel.Y; j < (topPixel.Y + area*3/4) ; j++)
             {
-                for (int i = (topPixel.X - area); i < (topPixel.X + area); i++)
+
+                double comp = (j - topPixel.Y + 1) * (((1/area*3/4)-0.5)/5);
+
+                for (int i = (topPixel.X - area/2); i < (topPixel.X + area*2/3); i++)
                 {
                     Color pixel = bmp.GetPixel(i, j);
 
                     if (pixel.G != 0)
-                        whites++;
+                    {
+                        whites += comp;
+                        colgate++;
+                    }
                     count++;
                 }
             }
         }
 
-        double temp = whites/count*100.0;
+        double temp = whites/count * 100.0;
 
-        if (temp>calibration)
-            return (false,temp);
+        if (colgate>calibration)
+            return (false,whites,colgate);
         
-        return (true,temp);
+        return (true,whites,colgate);
     }
 
+    public (Boolean, double) BetterOpenHand(Bitmap bmp, int calibration=3600, int area=40)
+    {
+        Point topPixel = getTopPixel(bmp);
+        double whites = 0;
+        byte last = 0;
+        int sequence = 1;
+
+        if(topPixel.X > area+5 && topPixel.X < bmp.Width-(area+5))
+        {
+            for (int j = topPixel.Y; j < (topPixel.Y + area*3/4) ; j++)
+            {
+                sequence = 1;
+                for (int i = (topPixel.X - area/2); i < (topPixel.X + area*2/3); i++)
+                {
+                    Color pixel = bmp.GetPixel(i, j);
+
+                    if (pixel.G != 0)
+                    {
+                        whites += Math.Pow(sequence*2, 2);
+                        if (last == 0)
+                        {
+                            sequence++;
+                        }
+                    }
+                    else
+                    {
+                        last = 1;
+                        sequence = 1;
+                    }
+                }
+            }
+        }
+
+        if (whites>calibration)
+            return (false, whites);
+        
+        return (true, whites);
+    }
 }
