@@ -297,4 +297,59 @@ public class HandRecognizer
         
         return (true, whites);
     }
+
+    public (Boolean, double) BetterOpenHandNew(Bitmap bmp, int calibration=3600, int area=40)
+    {
+        Point topPixel = getTopPixel(bmp);
+        double whites = 0;
+        byte last = 0;
+        int sequence = 1;
+        int flips = 1;
+        //area = OptimalArea(bmp);
+
+        if(topPixel.X > area+5 && topPixel.X < bmp.Width-(area+5))
+        {
+            for (int j = topPixel.Y; j < (topPixel.Y + area*3/4) ; j++)
+            {
+                sequence = 1;
+                whites += flips*area/10;
+                for (int i = (topPixel.X - area*1/3); i < (topPixel.X + area); i++)
+                {
+                    Color pixel = bmp.GetPixel(i, j);
+
+                    if (pixel.G != 0)
+                    {
+                        whites += Math.Pow(sequence*2, 3);
+                        if (last == 1)
+                        {
+                            sequence++;
+                        }
+                        else
+                        {
+                            flips++;
+                        }
+                        last = 1;
+                    }
+                    else
+                    {
+                        if (last == 1)
+                        {
+                            flips++;
+                        }
+                        last = 0;
+
+                        sequence = 1;
+                    }
+                }
+            }
+        }
+
+        whites = whites/2000;
+
+        if (whites>calibration)
+            return (false, whites);
+        
+        return (true, whites);
+    }
+
 }
