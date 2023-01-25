@@ -297,8 +297,4 @@ public class HandRecognizer
         
         return (true, whites);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 6c577692418a9d2b0660c4a1b9009183a2147626

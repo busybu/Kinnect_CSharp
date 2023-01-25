@@ -14,7 +14,13 @@ form.WindowState = FormWindowState.Maximized;
 form.FormBorderStyle = FormBorderStyle.None;
 
 int N = 5;
+int M = N;
 float treshold = 0.15f;
+
+//Parametros de calibração da identificação do estado da mão
+int handthreshold = 2900;
+int area = 40;
+double handvalue = 0;
 
 float param = 0;
 float bgParam = 0;
@@ -24,12 +30,6 @@ Bitmap crr = null; // Frame atual da WebCam
 Bitmap bg = null; // Background Salvo
 Point cursor = Point.Empty;
 bool isDown = false;
-
-
-// Function PointsHandler
-int handthreshold = 2900;
-int area = 40;
-double handvalue = 0;
 
 VideoCaptureDevice videoSource = null;
 HandRecognizer hand = new HandRecognizer();
@@ -152,9 +152,11 @@ form.KeyDown += (o, e) =>
 {
     if (e.KeyCode == Keys.Space)
     {
+        N = M;
         var img = (Bitmap)crr.Clone();
         bgParam = Equalization.GetParam(img);
         bg = Blur.QuickParallelBlurGray(img, N);
+        N = 0;
     }
 
      if (e.KeyCode == Keys.O)
@@ -171,8 +173,34 @@ form.KeyDown += (o, e) =>
     }
     else if (e.KeyCode == Keys.L)
     {
-        N = N > 0 ? N-- : N;
+        if (N > 0)
+            {
+                N--;
+            }
     }
+    else if (e.KeyCode == Keys.W)
+    {
+        handthreshold += 50;
+    }
+    else if (e.KeyCode == Keys.S)
+    {
+        if (handthreshold > 0)
+        {
+            handthreshold -= 50;
+        }
+    }
+    else if (e.KeyCode == Keys.E)
+    {
+        area++;
+    }
+    else if (e.KeyCode == Keys.D)
+    {
+        if (area > 0)
+        {
+            area--;
+        }
+    }
+    
 };
 
 Application.Run(form);
