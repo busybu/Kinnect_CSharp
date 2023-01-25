@@ -16,7 +16,7 @@ public class ProfessorController : ControllerBase
     {
         using KinnectContext context = new KinnectContext();
 
-        if(professor == null)
+        if (professor == null)
             return BadRequest("Usuário inválido");
 
         if (professor.Nome.Length < 5)
@@ -39,15 +39,59 @@ public class ProfessorController : ControllerBase
         using KinnectContext context = new KinnectContext();
 
         var queryProfessor = context.Professor.FirstOrDefault(a => a.Nome == professor.Nome);
-        if(queryProfessor == null)
+        if (queryProfessor == null)
             return BadRequest("Usuário inválido");
 
         var cryptoSenha = Crypto.Password(professor.Senha);
 
         if (queryProfessor.Senha != cryptoSenha)
             return BadRequest("Senha inválida");
-    
+
         return Ok("Login válido");
+
+    }
+    [HttpGet("{professor}")]
+    public ActionResult GetModulos(string professor)
+    {
+        using KinnectContext context = new KinnectContext();
+
+        var queryProfessor = context.Professor.FirstOrDefault(p => p.Nome == professor);
+        if (queryProfessor == null)
+            return BadRequest("Usuário inválido");
+
+        // var query = context.Professor
+        //             .Where(p => p.Nome == professor)
+        //             .Join(context.Modulos,
+        //                 p => p.Id,
+        //                 m => m.Idprofessor,
+        //                 (p, m) => new
+        //                 {
+        //                     modulo = m.Nome,
+        //                     professor = p.Nome
+        //                 })
+        //             .GroupBy(p => p.modulo)
+        //             .Select(m => new {
+        //                 modulo = m.Key,
+        //                 professor = professor
+        //             })
+        //         .ToArray();
+        var query =
+        context.Professor
+            .Where(p => p.Nome == professor)
+            .Join(context.Modulos,
+                p => p.Id,
+                m => m.Idprofessor,
+                (p, m) => m.Nome)
+            .ToList();
+
+        if(query.Count() < 1)
+            return NotFound();
+
+        return Ok(new
+        { 
+            professor = professor,
+            modulos = query,
+        });
 
     }
 }

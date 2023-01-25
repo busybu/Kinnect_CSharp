@@ -33,8 +33,8 @@ public class ModuloController : ControllerBase
         return Ok("Modulo cadastrado com sucesso!");
     }
 
-    [HttpPost("buscarModulo")]
-    public ActionResult buscarModulo([FromBody] Modulo modulo)
+    [HttpGet("buscarModulo")]
+    public ActionResult buscarModulo()
     {
         using KinnectContext context = new KinnectContext();
 
@@ -72,24 +72,38 @@ public class ModuloController : ControllerBase
         var query = context.Modulos
                     .Where(m => m.Nome == modulo)
                     .Join(context.Questoes,
-                        idModulo => idModulo.Id,
+                        idM => idM.Id,
                         q => q.Idmodulo,
-                        (idModulo, q) => new
+                        (idM, q) => new
                         {
                             modulo = modulo,
-                            idQ = q.Id,
-                            // respQ = q.Resposta
+                            idQ = q.Id
                         })
-                        .Join(context.Respostas,
-                            obj => obj.idQ,
-                            resp => resp.Idquestoes,
-                            (obj, resp) => new
-                            {
-                                modulo = modulo,
-                                
-                            })
+                    .Join(context.Respostas,
+                        obj => obj.idQ,
+                        r => r.Idquestoes,
+                        (obj, r) => new
+                        {
+                            modulo = modulo,
+                            idQ = r.Idquestoes,
+                            idA = r.Idaluno
+                        })
+                    .Join(context.Alunos,
+                        obj => obj.idA,
+                        a => a.Id,
+                        (obj, a) => new
+                        {
+                            modulo = modulo,
+                            nomeAluno = a.Nome
+                        })
+                        .GroupBy(a => a.nomeAluno)
+                        .Select( a => new {
+                            nome = a.Key,
+                            modulo = modulo
+                        })
+                    .ToArray();
 
-        return Ok(modulos);
+        return Ok(query);
     }
 
 }

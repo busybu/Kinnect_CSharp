@@ -109,43 +109,4 @@ public class AlunoController : ControllerBase
         return Ok(query);
     }
 
-    [HttpGet]
-    public ActionResult GetAlunos()
-    {
-        using KinnectContext context = new KinnectContext();
-
-        var alunos = context.Alunos;
-
-        if (alunos == null)
-            return BadRequest("Não há alunos cadastrados");
-
-        return Ok(alunos);
-    }
-
-
-    // [HttpGet("professor")]
-    // public ActionResult GetProfessores()
-    // {
-    //     using KinnectContext context = new KinnectContext();
-
-    //     var professores = context.Professor;
-
-    //     if (professores == null)
-    //         return BadRequest("Não há professores cadastrados");
-
-    //     return Ok(professores);
-    // }
-
-    // [HttpGet("questoes")]
-    // public ActionResult GetQuestoes()
-    // {
-    //     using KinnectContext context = new KinnectContext();
-
-    //     var questoes = context.Questoes;
-
-    //     if (questoes == null)
-    //         return BadRequest("Não há questões cadastradas");
-
-    //     return Ok(questoes);
-    // }
 }
