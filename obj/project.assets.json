@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "S:\\COM\\Human_Resources\\01.Engineering_Tech_School\\02.Internal\\10 - Aprendizes\\14 - Desenvolvimento de sistemas 2022\\Thiago S Marcelino\\CSharp\\DecisionTree\\DecisionTree.csproj",
+      "projectUniqueName": "S:\\COM\\Human_Resources\\01.Engineering_Tech_School\\02.Internal\\5 - Aprendizes\\14 - Desenvolvimento de sistemas 2022\\Thiago S Marcelino\\CSharp\\DecisionTree\\DecisionTree.csproj",
       "projectName": "DecisionTree",
-      "projectPath": "S:\\COM\\Human_Resources\\01.Engineering_Tech_School\\02.Internal\\10 - Aprendizes\\14 - Desenvolvimento de sistemas 2022\\Thiago S Marcelino\\CSharp\\DecisionTree\\DecisionTree.csproj",
+      "projectPath": "S:\\COM\\Human_Resources\\01.Engineering_Tech_School\\02.Internal\\5 - Aprendizes\\14 - Desenvolvimento de sistemas 2022\\Thiago S Marcelino\\CSharp\\DecisionTree\\DecisionTree.csproj",
       "packagesPath": "C:\\Users\\disrct\\.nuget\\packages\\",
-      "outputPath": "S:\\COM\\Human_Resources\\01.Engineering_Tech_School\\02.Internal\\10 - Aprendizes\\14 - Desenvolvimento de sistemas 2022\\Thiago S Marcelino\\CSharp\\DecisionTree\\obj\\",
+      "outputPath": "S:\\COM\\Human_Resources\\01.Engineering_Tech_School\\02.Internal\\5 - Aprendizes\\14 - Desenvolvimento de sistemas 2022\\Thiago S Marcelino\\CSharp\\DecisionTree\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\disrct\\AppData\\Roaming\\NuGet\\NuGet.Config",

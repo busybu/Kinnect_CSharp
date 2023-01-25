@@ -1,66 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using RandomFlorestLib;
 using DecisionTreeLib;
+using System;
 
-List<float[]> data = open()
-    .Select(s => 
-        s.Split(',')
-            .Select(s => float.Parse(s.Replace('.', ',')))
-            .Reverse()
-            .Skip(1)
-            .Reverse()
-            .ToArray()
-    ).ToList();
-
-float[] max = new float[data[0].Length];
-float[] min = new float[data[0].Length];
-
-for (int i = 0; i < data[0].Length; i++)
+for (int i = 0; i < 10; i++)
 {
-    max[i] = data.Select(a => a[0]).Max();
-    min[i] = data.Select(a => a[0]).Min();
+    var data = DataSet.ReadCSV($"Data/number{i}.csv");
+    // Naosei ns = new Naosei();
+    // ns.Choose(data.x[0]);
+    DecisionTree dt = new DecisionTree();
+    dt.Fit(data.x, data.y, 5, 60);
+    dt.Save($"Test/test{i}.cs");
+    // break;
 }
 
-var x = data
-    .Select(a => 
-        a.Select((x, i) => 
-            (int)(20 * (x - min[i]) / (max[i] - min[i])))
-            .ToArray())
-    .ToList();
-
-
-int[] y = open()
-    .Select(s => 
-        s.Split(',')
-        .Select(s => int.Parse(s))
-        .Last()
-    ).ToArray();
 
 
 
+// RandomFlorest rfr = new RandomFlorest();
+// rfr.Fit();
 
-DecisionTree dt = new DecisionTree();
-dt.Fit(x, y, 5, 60);
+// int count = 0;
+// for (int i = 0; i < x.Count; i++)
+// {
+//     if (rfr.Choose(x[i]) == y[i])
+//         count++;
+// }
 
-int count = 0;
-for (int i = 0; i < x.Count; i++)
-{
-    if (dt.Choose(x[i]).result == y[i])
-        count++;
-}
-Console.WriteLine(count);
-Console.WriteLine(count * 1f / x.Count);
-
-
-
-IEnumerable<string> open()
-{
-    StreamReader reader = new StreamReader("diabetes.csv");
-
-    while (!reader.EndOfStream)
-        yield return reader.ReadLine();
-
-    reader.Close();
-}
+// Console.WriteLine(count * 1f / x.Count);
