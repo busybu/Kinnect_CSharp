@@ -61,16 +61,14 @@ form.Load += (o, e) =>
     tm.Start();
 };
 
+PointsHandler ph = new PointsHandler();
+
 tm.Tick += (o, e) =>
 {   
-    if (bmp == null)
-        return;
-    
     // DrawResize.DrawCursor(bmp, g, cursor, isDown);
     handler.GenerateMnist();
     pb.Refresh();
 
-    // return; // kk
 
     if (bmp == null || crr == null)
         return;
@@ -92,30 +90,21 @@ tm.Tick += (o, e) =>
     var center = hand.GetCenterPixel(bin);
     var open = (hand.BetterOpenHand(bin, handthreshold, area)).Item1;
 
-    // Pen pen = new Pen(Color.Red, 2);
-    // g.Clear(Color.White);
-    // if (bg != null)
-    //     g.DrawImage(bg, new Rectangle(0, 0, bg.Width, bg.Height));
-    // if (crr != null)
-    //     g.DrawImage(crr, new Rectangle(bg?.Width ?? 0, 0, crr.Width, crr.Height));
-    // if (bin != null)
-    //     g.DrawImage(bin, new Rectangle((bg?.Width ?? 0) + (crr?.Width ?? 0), 0, bin.Width, bin.Height));
-    // if (hist != null)
-    // {
-    //     var histImg = Extensionz.drawHist(hist);
-    //     g.DrawImage(histImg, new Rectangle(0, (bg?.Height ?? 0), bin.Width, bin.Height));
-    // }
-    Front.Desenhar(crr, bg, g, center, open);
+    Front.Desenhar(crr, bmp, g, center, isDown); // estavamos aqui!!!!"  desenha com os pontos da mão se mouse clicado
 
-    // Front.Desenhar(bg, bmp, g, cursor, isDown);
+    // Front.Desenhar(crr, bmp, g, cursor, isDown);
 
+ 
     g.DrawString(param.ToString(), SystemFonts.CaptionFont,
         Brushes.White, new PointF(10, 10));
 
     g.DrawString(bgParam.ToString(), SystemFonts.CaptionFont,
         Brushes.White, new PointF(20, 20));
-    g.FillRectangle(open ? Brushes.Green : Brushes.Red, center.X -5, center.Y - 5, 10, 10);
+        
+    g.FillRectangle(open ? Brushes.Green : Brushes.Red, center.X * 3 - 5, center.Y * 3 - 5, 10, 10);
     
+    ph.RegisterCursor(center, !open, g, (bmp.Height*bmp.Height) + (bmp.Width*bmp.Width));
+
     pb.Refresh();
 };
 

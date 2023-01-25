@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\disrct\\Desktop\\Kinnect_CSharp\\mean\\AnimacaoBase.csproj": {}
+    "C:\\Users\\disrct\\Desktop\\Integration\\Kinnect_CSharp_aaaa\\mean\\AnimacaoBase.csproj": {}
   },
   "projects": {
-    "C:\\Users\\disrct\\Desktop\\Kinnect_CSharp\\mean\\AnimacaoBase.csproj": {
+    "C:\\Users\\disrct\\Desktop\\Integration\\Kinnect_CSharp_aaaa\\mean\\AnimacaoBase.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\disrct\\Desktop\\Kinnect_CSharp\\mean\\AnimacaoBase.csproj",
+        "projectUniqueName": "C:\\Users\\disrct\\Desktop\\Integration\\Kinnect_CSharp_aaaa\\mean\\AnimacaoBase.csproj",
         "projectName": "AnimacaoBase",
-        "projectPath": "C:\\Users\\disrct\\Desktop\\Kinnect_CSharp\\mean\\AnimacaoBase.csproj",
+        "projectPath": "C:\\Users\\disrct\\Desktop\\Integration\\Kinnect_CSharp_aaaa\\mean\\AnimacaoBase.csproj",
         "packagesPath": "C:\\Users\\disrct\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\disrct\\Desktop\\Kinnect_CSharp\\mean\\obj\\",
+        "outputPath": "C:\\Users\\disrct\\Desktop\\Integration\\Kinnect_CSharp_aaaa\\mean\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\disrct\\AppData\\Roaming\\NuGet\\NuGet.Config",

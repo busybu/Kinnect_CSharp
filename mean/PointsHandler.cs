@@ -3,15 +3,38 @@ public class PointsHandler
   private List<Point> list = new List<Point>();
   Bitmap crr = new Bitmap(1200, 1200);
   Graphics g = null;
+  TakePixel tp = new TakePixel();
+  Point last = new Point();
 
   public PointsHandler()
   {
     g = Graphics.FromImage(crr);
   }
-  public void RegisterCursor(Point cursor, bool isDown)
+  public void RegisterCursor(Point cursor, bool isClosed, Graphics g_aparente, int distanciaTela)
   {
-    if (isDown)
-      list.Add(cursor);
+    if (isClosed)
+    {
+      g_aparente.DrawString(cursor.ToString(), SystemFonts.CaptionFont,
+        Brushes.White, new PointF(10, 100));
+        g_aparente.DrawString(last.ToString(), SystemFonts.CaptionFont,
+        Brushes.White, new PointF(10, 110));
+      if(tp.Detect(cursor, last, 5, distanciaTela / 4))
+      {
+        list.Add(cursor);
+        last = cursor;
+        if (list.Count > 1)
+          g_aparente.DrawLines(new Pen(Brushes.Black, 10f), list.ToArray());
+      }
+      else
+      {
+        list.Add(last);
+      }
+    }
+    else
+    {
+      GenerateMnist();
+      Clear();
+    }
   }
   public byte[] GenerateMnist(int margin = 100)
   {
@@ -60,7 +83,6 @@ public class PointsHandler
         }
       }
     }
-    MessageBox.Show(data.ToString());
     return data;
   }
   public void Clear() => list.Clear();

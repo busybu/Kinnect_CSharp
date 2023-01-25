@@ -120,7 +120,6 @@ public static class Front
             {
                 if (isDown)
                 {
-                    lista.Add(cursor);
                     Points.Add(cursor);
                 }
                 else
@@ -177,11 +176,8 @@ public static class Front
             {
                 g.FillRectangle(Brushes.Red, PreenchimentoTirarFoto);
                 if(PreenchimentoTirarFoto.Contains(cursor) && isDown == true)
-                {
-                    aux1 = true;
                     g.FillRectangle(Brushes.DarkRed, PreenchimentoTirarFoto);
 
-                }
             }
 
             g.DrawRectangle(CanetaPreta,EspaçoCamera);
