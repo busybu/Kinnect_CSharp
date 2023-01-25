@@ -2,12 +2,12 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 
-public static class TelaAluno
+public class Aluno : Tela
 {
-    public static List<Point> Points = new List<Point>();
+    public List<Point> Points = new List<Point>();
 
-    public static void Desenhar(Bitmap cam, Bitmap bmp, Graphics g,
-        Point cursor, bool isDown)
+    public override void Desenhar(Bitmap cam, Bitmap bmp, Graphics g,
+        Point cursor, bool isDown, string text)
     {
         try
         {

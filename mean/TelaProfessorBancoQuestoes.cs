@@ -7,7 +7,6 @@ public class BancoQuestoes : Tela
     private int question = 1;
     private bool botaoMaisClicked = false;
     private bool botaoMenosClicked = false;
-
     private bool botaoSairClicked = false;
     public List<Point> Points = new List<Point>();
     public event Action OnClearRequest;
@@ -21,9 +20,9 @@ public class BancoQuestoes : Tela
         public string? Descricao { get; set; }
         // public int Idmodulo { get; set; }
         public int? Peso { get; set; }
-  
-
     }
+
+    Questao q = new Questao();
 
     public static List<Questao> questoes = new List<Questao>();
 
@@ -195,13 +194,13 @@ public class BancoQuestoes : Tela
                 if (GradientBotaoMais.Contains(cursor) && !isDown && botaoMaisClicked)
                 {
                     botaoMaisClicked = false;
-                    question++;
-
-                    Questao q = new Questao();
+                    
                     q.Descricao = text;
                     q.NQuestao = question;
+                    // q.Peso = valor;
 
                     questoes.Add(q);
+                    question++;
                     OnClearRequest();
                 }
             }
@@ -220,9 +219,10 @@ public class BancoQuestoes : Tela
                 if (GradientBotaoMenos.Contains(cursor) && !isDown && botaoMenosClicked)
                 {
                     botaoMenosClicked = false;
+
+                    questoes.Remove(q);
                     question--;
             
-
                     if(question <= 0)
                         question = 1;
                 }
@@ -245,6 +245,9 @@ public class BancoQuestoes : Tela
                 if(PreeBotaoCima.Contains(cursor) && isDown)
                 {
                     g.FillRectangle(Brushes.Gray, PreeBotaoCima);
+
+                    OnClearRequest();
+                    // questoes[]
                 
                 }
             }
