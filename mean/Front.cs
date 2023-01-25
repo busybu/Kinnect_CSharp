@@ -4,8 +4,8 @@ using System.Drawing.Drawing2D;
 
 public static class Front
 {
-    public static List<Point> lista = new List<Point>();
     public static List<Point> Points = new List<Point>();
+    public static List<Point> lista = new List<Point>();
     public static bool aux1 {get; set;} = false;
     public static void Desenhar(Bitmap cam, Bitmap bmp, Graphics g,Point cursor, bool isDown)
     {
