@@ -61,7 +61,6 @@ public static class Normalization
 
         return (R + G + B) / (float)C;
     }
-
     public static void Normalize(Bitmap bmp, float param, float bgParam)
     {
         var data = bmp.LockBits(

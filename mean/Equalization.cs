@@ -12,9 +12,7 @@ using System.Runtime.InteropServices;
 
 public static class Equalization
 {
-    public static void Equalize(Bitmap bmp,
-        float threshold = 0.05f,
-        float db = 0.05f)
+    public static void Equalize(Bitmap bmp,float threshold = 0.05f,float db = 0.05f)
     {
         (int[] R, int[] G, int[] B) histogram = hist(bmp, db);
         int len = bmp.Width * bmp.Height;
@@ -149,8 +147,7 @@ public static class Equalization
         bmp.UnlockBits(data);
 
     }
-   
-   public static void Normalize(Bitmap bmp, float param, float bgParam)
+    public static void Normalize(Bitmap bmp, float param, float bgParam)
     {
         var data = bmp.LockBits(
             new Rectangle(0, 0, bmp.Width, bmp.Height),
@@ -228,8 +225,6 @@ public static class Equalization
 
         return (R + G + B) / (float)C;
     }
-
-
     private static (int[] R, int[] G, int[] B) hist(Bitmap bmp, float db = 0.05f)
     {
         int histogramLen = (int)(1 / db) + 1;
@@ -269,60 +264,7 @@ public static class Equalization
 
         bmp.UnlockBits(data);
 
-        // foreach (var pixel in img)
-        //     histR[(int)(pixel / db)]++;
-
         return (histR, histG, histB);
     }
 
-    // private static void otsu((Bitmap bmp, float[] img) t, float db = 0.05f)
-    // {
-    //     var histogram = hist(t.bmp, db);
-    //     int treshold = 0;
-
-
-    //     float Ex0 = 0;
-    //     float Ex1 = t.img.Average();
-    //     float Dx0 = 0;
-    //     float Dx1 = t.img.Sum(x => x * x);
-    //     int N0 = 0;
-    //     int N1 = t.img.Length;
-
-    //     float minstddev = float.PositiveInfinity;
-
-    //     for (int i = 0; i < histogram.R.Length; i++)
-    //     {
-    //         float value = db * (2 * i + 1) / 2;
-    //         float s = histogram.R[i] * value;
-
-    //         if (N0 == 0 && histogram.R[i] == 0)
-    //             continue;
-
-    //         Ex0 = (Ex0 * N0 + s) / (N0 + histogram.R[i]);
-    //         Ex1 = (Ex1 * N1 - s) / (N1 - histogram.R[i]);
-
-    //         N0 += histogram.R[i];
-    //         N1 -= histogram.R[i];
-
-    //         Dx0 += value * value * histogram.R[i];
-    //         Dx1 -= value * value * histogram.R[i];
-
-    //         float stddev =
-    //             Dx0 - N0 * Ex0 * Ex0 +
-    //             Dx1 - N1 * Ex1 * Ex1;
-
-    //         if (float.IsInfinity(stddev) ||
-    //             float.IsNaN(stddev))
-    //             continue;
-
-    //         if (stddev < minstddev)
-    //         {
-    //             minstddev = stddev;
-    //             threshold = i;
-    //         }
-    //     }
-    //     float bestTreshold = db * (2 * threshold + 1) / 2;
-
-    //     tresh(t, bestTreshold);
-    // }
 }

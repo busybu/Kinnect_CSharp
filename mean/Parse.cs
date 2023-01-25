@@ -147,7 +147,6 @@ public static class ParseCalculo
         return ret;
     }
 }
-
 public class ParseTree
 {
     public Token Token { get; set; }
@@ -180,8 +179,6 @@ public class ParseTree
         }
     }
 }
-
-
 public enum Token
 {
     NUM,
@@ -197,7 +194,3 @@ public enum Token
     medExp,
     highExp,
 }
-
-
-
-

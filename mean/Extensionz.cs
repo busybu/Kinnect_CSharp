@@ -10,11 +10,8 @@ using System.Drawing.Imaging;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-public static class exten
+public static class Extensionz
 {
-
-
-
     public static Bitmap decompress(byte[] file)
     {
         if (file[0] != (byte)'P' ||
@@ -45,7 +42,6 @@ public static class exten
 
         return bmp;
     }
-
     public static byte[] compress((Bitmap bmp, byte[] img) org)
     {
         int wid = org.bmp.Width;
@@ -165,7 +161,6 @@ public static class exten
 
         return file;
     }
-
     public static (Bitmap bmp, float[] img) hough((Bitmap bmp, float[] img) org)
     {
         int wid = org.bmp.Width;
@@ -205,7 +200,6 @@ public static class exten
         var image = img(bmpTranformation, tBytes);
         return (image as Bitmap, tImg);
     }
-
     public static (Bitmap bmp, float[] img) bilinear((Bitmap bmp, float[] img) org)
     {
         float[] orgImg = org.img;
@@ -243,7 +237,6 @@ public static class exten
 
         return (org.bmp, newImg);
     }
-
     public static (Bitmap bmp, float[] img) resize((Bitmap bmp, float[] img) org,
         float scaleX, float scaleY)
     {
@@ -274,7 +267,6 @@ public static class exten
 
         return image;
     }
-
     public static Matrix4x4 mat(params float[] arr)
     {
         return new Matrix4x4(
@@ -920,8 +912,5 @@ public static class exten
 
         showBmp(t.bmp);
     }
-
-
-
 
 }

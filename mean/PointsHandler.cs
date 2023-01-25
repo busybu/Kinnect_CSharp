@@ -8,7 +8,6 @@ public class PointsHandler
   {
     g = Graphics.FromImage(crr);
   }
-
   public void RegisterCursor(Point cursor, bool isDown)
   {
     if (isDown)
@@ -64,6 +63,6 @@ public class PointsHandler
     MessageBox.Show(data.ToString());
     return data;
   }
-  public void Clear()
-    => list.Clear();
+  public void Clear() => list.Clear();
+
 }

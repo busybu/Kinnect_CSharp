@@ -25,6 +25,12 @@ Bitmap bg = null; // Background Salvo
 Point cursor = Point.Empty;
 bool isDown = false;
 
+
+// Function PointsHandler
+int handthreshold = 2900;
+int area = 40;
+double handvalue = 0;
+
 VideoCaptureDevice videoSource = null;
 HandRecognizer hand = new HandRecognizer();
 PointsHandler handler = new PointsHandler();
@@ -32,6 +38,7 @@ PictureBox pb = new PictureBox();
 pb.Dock = DockStyle.Fill;
 System.Windows.Forms.Timer tm = new System.Windows.Forms.Timer();
 var videoSources = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+
 
 form.Controls.Add(pb);
 tm.Interval = 20;
@@ -63,7 +70,7 @@ tm.Tick += (o, e) =>
     handler.GenerateMnist();
     pb.Refresh();
 
-    return; // kk
+    // return; // kk
 
     if (bmp == null || crr == null)
         return;
@@ -83,22 +90,22 @@ tm.Tick += (o, e) =>
     }
 
     var center = hand.GetCenterPixel(bin);
-    var open = hand.IsOpenHand(bin);
+    var open = (hand.BetterOpenHand(bin, handthreshold, area)).Item1;
 
     // Pen pen = new Pen(Color.Red, 2);
-    g.Clear(Color.White);
-    if (bg != null)
-        g.DrawImage(bg, new Rectangle(0, 0, bg.Width, bg.Height));
-    if (crr != null)
-        g.DrawImage(crr, new Rectangle(bg?.Width ?? 0, 0, crr.Width, crr.Height));
-    if (bin != null)
-        g.DrawImage(bin, new Rectangle((bg?.Width ?? 0) + (crr?.Width ?? 0), 0, bin.Width, bin.Height));
-    if (hist != null)
-    {
-        var histImg = drawHist(hist);
-        g.DrawImage(histImg, new Rectangle(0, (bg?.Height ?? 0), bin.Width, bin.Height));
-    }
-    Front.Desenhar(bg, bmp, g, center, open);
+    // g.Clear(Color.White);
+    // if (bg != null)
+    //     g.DrawImage(bg, new Rectangle(0, 0, bg.Width, bg.Height));
+    // if (crr != null)
+    //     g.DrawImage(crr, new Rectangle(bg?.Width ?? 0, 0, crr.Width, crr.Height));
+    // if (bin != null)
+    //     g.DrawImage(bin, new Rectangle((bg?.Width ?? 0) + (crr?.Width ?? 0), 0, bin.Width, bin.Height));
+    // if (hist != null)
+    // {
+    //     var histImg = Extensionz.drawHist(hist);
+    //     g.DrawImage(histImg, new Rectangle(0, (bg?.Height ?? 0), bin.Width, bin.Height));
+    // }
+    Front.Desenhar(crr, bg, g, center, open);
 
     // Front.Desenhar(bg, bmp, g, cursor, isDown);
 
@@ -170,30 +177,3 @@ form.KeyDown += (o, e) =>
 
 Application.Run(form);
 
-Image drawHist(int[] hist)
-{
-    var bmp = new Bitmap(512, 256);
-    var g = Graphics.FromImage(bmp);
-    float margin = 16;
-
-    int max = hist.Max();
-    float barlen = (bmp.Width - 2 * margin) / hist.Length;
-    float r = (bmp.Height - 2 * margin) / max;
-
-    for (int i = 0; i < hist.Length; i++)
-    {
-        float bar = hist[i] * r;
-        g.FillRectangle(Brushes.Black,
-            margin + i * barlen,
-            bmp.Height - margin - bar,
-            barlen,
-            bar);
-        g.DrawRectangle(Pens.DarkBlue,
-            margin + i * barlen,
-            bmp.Height - margin - bar,
-            barlen,
-            bar);
-    }
-
-    return bmp;
-}

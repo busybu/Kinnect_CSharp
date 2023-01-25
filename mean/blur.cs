@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 public static class Blur
 {
     private static long[] integralImage = null;
-
     public static Bitmap QuickParallelBlurGray(Bitmap bmp, int radius = 5) // Mais rápido
     {
         if (integralImage == null)
@@ -89,7 +88,6 @@ public static class Blur
             return bmp;
         }
     }
-
     public static Bitmap QuickParallelBlur(Bitmap bmp, int radius = 5)
     {
         if (integralImage == null)
@@ -173,7 +171,6 @@ public static class Blur
             return bmp;
         }
     }
-
     public static void SetBuffer(Bitmap bmp)
     {
         integralImage = new long[3 * bmp.Width * bmp.Height];
