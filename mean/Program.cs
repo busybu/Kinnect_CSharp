@@ -75,7 +75,7 @@ internal class Program
         };
 
 
-        telaAtual = aluno;
+        telaAtual = bancoQuestoes;
 
 
         ApplicationConfiguration.Initialize();

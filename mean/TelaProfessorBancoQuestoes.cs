@@ -225,6 +225,8 @@ public class BancoQuestoes : Tela
             
                     if(question <= 0)
                         question = 1;
+
+                    OnClearRequest();
                 }
             }
 
@@ -330,7 +332,7 @@ public class BancoQuestoes : Tela
             String NumQuestao = $"Questão {question}";
             Font fontNumQuestao = new Font("Arial", (int)(0.050 * bmp.Height));
 
-            String ValorQuestão = "Valor da Questão: {valor}";
+            String ValorQuestão = "Valor da Questão: ";
             Font fontValor = new Font("Arial", (int)(0.050 * bmp.Height));
 
             String Questao = text;

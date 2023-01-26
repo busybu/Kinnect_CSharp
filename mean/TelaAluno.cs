@@ -49,7 +49,7 @@ public class Aluno : Tela
             Rectangle Refazer = new Rectangle(larguraBotao, alturaMolduraMarrom + 20, larguraBotao, alturaBotao); 
             Rectangle Resetar = new Rectangle(2 * larguraBotao, alturaMolduraMarrom + 20, larguraBotao, alturaBotao); 
             Rectangle Enviar = new Rectangle(3 * larguraBotao, alturaMolduraMarrom + 20, larguraBotao, alturaBotao); 
-            Rectangle TirarFoto = new Rectangle(bmp.Width - (larguraCamera / 3 - 20), alturaCamera + 10, (larguraCamera / 3 - 20), alturaBotao / 2);
+            Rectangle Virgula = new Rectangle(bmp.Width - (larguraCamera / 3 - 20), alturaCamera + 10, (larguraCamera / 3 - 20), alturaBotao / 2);
             Rectangle Explicacao = new Rectangle(larguraMolduraPreta, alturaCamera + 10, (int)(larguraCamera /1.5), alturaBotao / 2);
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -92,6 +92,7 @@ public class Aluno : Tela
             //Escritas//
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             SolidBrush drawBrush = new SolidBrush(Color.AliceBlue);
+            SolidBrush LetraPreta = new SolidBrush(Color.Black);
             StringFormat format = new StringFormat();
             format.Alignment = StringAlignment.Center;
             format.LineAlignment = StringAlignment.Center;
@@ -107,9 +108,12 @@ public class Aluno : Tela
           
             String textoEnviar = "Enviar";
             Font fontEnviar = new Font(FontFamily.GetFamilies(g)[59], alturaPreenchimentoBotoes - (int)(0.160 * bmp.Height));
+
+            String textoTirarFoto = "Aperte 'espaço' para tirar foto";
+            Font fontTirarFoto = new Font("Arial", (int)(0.030 * bmp.Height));
             
-            String textoTirarFoto = ",";
-            Font fontTirarFoto = new Font(FontFamily.GetFamilies(g)[59], (alturaBotao / 2) - (int)(0.055 * bmp.Height));
+            String virgula = ",";
+            Font fontvirgula = new Font(FontFamily.GetFamilies(g)[59], (alturaBotao / 2) - (int)(0.055 * bmp.Height));
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
             
@@ -172,7 +176,7 @@ public class Aluno : Tela
                     g.FillRectangle(Brushes.DarkRed, PreenchimentoEnviar);
             }
 
-            g.DrawRectangle(CanetaPreta, TirarFoto);
+            g.DrawRectangle(CanetaPreta, Virgula);
             if (PreenchimentoTirarFoto.Contains(cursor))
             {
                 g.FillRectangle(Brushes.Red, PreenchimentoTirarFoto);
@@ -190,8 +194,9 @@ public class Aluno : Tela
             g.DrawString(textoRefazer, fontRefazer, drawBrush, Refazer, format);
             g.DrawString(textoResetar, fontResetar, drawBrush, Resetar, format);
             g.DrawString(textoEnviar, fontEnviar, drawBrush, Enviar, format);
-            g.DrawString(textoTirarFoto, fontTirarFoto, drawBrush, TirarFoto, format);
+            g.DrawString(virgula, fontvirgula, drawBrush, Virgula, format);
 
+            g.DrawString(textoTirarFoto, fontTirarFoto, LetraPreta, Explicacao , format);
             
             //Imagem Camera
             RectangleF destRect = new RectangleF((bmp.Width - 5) - larguraCamera + 30, 5, larguraCamera - 30, alturaCamera);    

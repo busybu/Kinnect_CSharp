@@ -53,11 +53,11 @@ public class Login : Tela
             Rectangle RetanguloPretoTela = new Rectangle(0, 0, bmp.Width, bmp.Height);
             Rectangle PreenchimentoRetanguloPretoTela = new Rectangle(5, 5, bmp.Width - 10, bmp.Height - 10);
 
-            Rectangle BotaoAluno = new Rectangle(50, 100, largurabotaoaluno, alturabotaoaluno);
-            Rectangle BotaoProfessor = new Rectangle(50, ((bmp.Height - 100) - alturabotaoprofessor), largurabotaoprofessor, alturabotaoprofessor);
+            Rectangle BotaoAluno = new Rectangle((int)(0.030 * bmp.Width), (int)(0.100 * bmp.Height), largurabotaoaluno, alturabotaoaluno);
+            Rectangle BotaoProfessor = new Rectangle((int)(0.030 * bmp.Width), ((bmp.Height - (int)(0.100 * bmp.Height)) - alturabotaoprofessor), largurabotaoprofessor, alturabotaoprofessor);
 
-            Rectangle PreenchimentoBotaoAluno = new Rectangle(55, 105, largurabotaoaluno - 10, alturabotaoaluno - 10);
-            Rectangle PreenchimentoBotaoProfessor = new Rectangle(55, ((bmp.Height - 100) - alturabotaoprofessor + 5), largurabotaoprofessor - 10, alturabotaoprofessor - 10);
+            Rectangle PreenchimentoBotaoAluno = new Rectangle((int)(0.0325 * bmp.Width), (int)(0.105 * bmp.Height), largurabotaoaluno - 10, alturabotaoaluno - 10);
+            Rectangle PreenchimentoBotaoProfessor = new Rectangle((int)(0.0325 * bmp.Width), ((bmp.Height - (int)(0.096 * bmp.Height)) - alturabotaoprofessor), largurabotaoprofessor - 10, alturabotaoprofessor - 10);
 
             Rectangle BotaoLogin = new Rectangle(700, 300, largurabotaologin, alturabotaologin);
             Rectangle BotaoSenha = new Rectangle(700, 600, largurabotaosenha, alturabotaosenha);
