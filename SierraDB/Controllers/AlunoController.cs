@@ -109,4 +109,63 @@ public class AlunoController : ControllerBase
         return Ok(query);
     }
 
+    [HttpGet("notaAluno/{aluno}/{modulo}")]
+    public ActionResult GetNotaModulo(string aluno, string modulo)
+    {
+        using KinnectContext context = new KinnectContext();
+
+        var queryAluno = context.Alunos.FirstOrDefault(a => a.Nome == aluno);
+        if (queryAluno == null)
+            return BadRequest("Usuário inválido");
+
+        var queryModulo = context.Modulos.FirstOrDefault(m => m.Nome == modulo);
+        if (queryModulo == null)
+            return BadRequest("Modulo inválido");
+
+        var query = context.Alunos
+            .Where(a => a.Nome == aluno)
+            .Join(context.Respostas,
+                aluno => aluno.Id,
+                resp => resp.Idaluno,
+                (aluno, resp) => new
+                {
+                    idQ = resp.Idquestoes,
+                    respostaA = resp.Resposta1,
+                })
+            .Join(context.Questoes,
+                obj => obj.idQ,
+                quest => quest.Id,
+                (obj, quest) => new
+                {
+                    idM = quest.Idmodulo,
+                    respostaQ = quest.Resposta,
+                    respostaA = obj.respostaA,
+                    peso = quest.Peso,
+                    idQ = obj.idQ
+                })
+            .Join(context.Modulos,
+                obj => obj.idM,
+                modulo => modulo.Id,
+                (obj, modulo) => new
+                {   modulo = modulo.Nome,
+                    respostaA = obj.respostaA,
+                    respostaQ = obj.respostaQ,
+                    peso = obj.peso,
+                    idQ = obj.idQ,
+                    aluno = aluno
+                })
+            .Where(x => x.modulo == modulo)
+            .GroupBy(a => a.aluno)
+            .Select(g => new
+            {
+                modulo = modulo,
+                aluno = aluno,
+                nota = g.Sum(p => p.peso)
+            })
+            .ToArray();
+
+
+        return Ok(query);
+    }
+
 }

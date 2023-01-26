@@ -45,9 +45,3 @@ public class QuestoesController : ControllerBase
     }
 }
 
-// {
-//   "descricao": "5 / 2 + 15 - (2 * 5)",
-//   "idmodulo": 5,
-//   "peso": 5,
-//   "resposta": "7.5"
-// }

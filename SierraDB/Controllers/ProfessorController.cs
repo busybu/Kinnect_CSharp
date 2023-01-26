@@ -59,22 +59,7 @@ public class ProfessorController : ControllerBase
         if (queryProfessor == null)
             return BadRequest("Usuário inválido");
 
-        // var query = context.Professor
-        //             .Where(p => p.Nome == professor)
-        //             .Join(context.Modulos,
-        //                 p => p.Id,
-        //                 m => m.Idprofessor,
-        //                 (p, m) => new
-        //                 {
-        //                     modulo = m.Nome,
-        //                     professor = p.Nome
-        //                 })
-        //             .GroupBy(p => p.modulo)
-        //             .Select(m => new {
-        //                 modulo = m.Key,
-        //                 professor = professor
-        //             })
-        //         .ToArray();
+
         var query =
         context.Professor
             .Where(p => p.Nome == professor)
@@ -84,11 +69,11 @@ public class ProfessorController : ControllerBase
                 (p, m) => m.Nome)
             .ToList();
 
-        if(query.Count() < 1)
+        if (query.Count() < 1)
             return NotFound();
 
         return Ok(new
-        { 
+        {
             professor = professor,
             modulos = query,
         });
