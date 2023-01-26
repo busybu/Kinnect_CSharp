@@ -1,3 +1,5 @@
+
+
 public class PointsHandler
 {
   private List<Point> list = new List<Point>();
@@ -32,7 +34,12 @@ public class PointsHandler
     }
     else
     {
-      GenerateMnist();
+      byte[] Mnist = GenerateMnist();
+
+      byte[] processedMnist = Convolutions.Core.Convolutions.Convolute4(Mnist, 28, 28);
+
+      // IA(processedMnist)  // Só chamar a função da IA e esta pronto
+
       Clear();
     }
   }
