@@ -88,7 +88,7 @@ tm.Tick += (o, e) =>
     }
 
     var center = hand.GetCenterPixel(bin);
-    var open = (hand.BetterOpenHand(bin, handthreshold, area)).Item1;
+    var open = (hand.TheBestOpenHand(bin, handthreshold, area)).Item1;
 
     Front.Desenhar(crr, bmp, g, center, isDown); // estavamos aqui!!!!"  desenha com os pontos da mão se mouse clicado
 
