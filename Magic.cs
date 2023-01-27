@@ -26,7 +26,7 @@ public static class Abra
 
         return hist;
     }
-    
+
     private static void normalize(BitmapData data, float param, float bgParam)
     {
         unsafe
@@ -93,7 +93,7 @@ public static class Abra
     private static Bitmap applyBin(BitmapData dataBmp, BitmapData dataBg, float treshold = .001f)
     {
 
-        var returnBmp = new Bitmap(dataBmp.Width, dataBmp.Height); 
+        var returnBmp = new Bitmap(dataBmp.Width, dataBmp.Height);
         var dataRt = returnBmp.LockBits(
             new Rectangle(0, 0, returnBmp.Width, returnBmp.Height),
             ImageLockMode.ReadWrite,
@@ -115,7 +115,7 @@ public static class Abra
                 {
                     int db = lBkg[0] - lBmp[0];
                     int dg = lBkg[1] - lBmp[1];
-                    int dr =lBkg[2] - lBmp[2];
+                    int dr = lBkg[2] - lBmp[2];
 
                     float diff = (dr * dr + db * db + dg * dg) / (3f * 255 * 255);
 
@@ -141,7 +141,7 @@ public static class Abra
     }
 
     private static long[] integralImage = null;
-    
+
     private static void blur(BitmapData data, int radius = 5)
     {
         if (integralImage == null)
@@ -167,7 +167,7 @@ public static class Abra
             });
 
             int width = data.Width;
-            
+
             integralImage[0] = p[0];
 
             for (int i = 1; i < width; i++)
@@ -185,9 +185,9 @@ public static class Abra
             for (int j = 1; j < data.Height; j++)
             {
                 byte* l = p + j * data.Stride;
-                for (int i = 1; i < width; i++, l+=3)
+                for (int i = 1; i < width; i++, l += 3)
                 {
-                    integralImage[i + j * width] = l[0] 
+                    integralImage[i + j * width] = l[0]
                         + integralImage[i + (j - 1) * width]
                         + integralImage[i - 1 + j * width]
                         - integralImage[i - 1 + (j - 1) * width];
@@ -245,7 +245,7 @@ public static class Abra
                     float d = (dr * dr + db * db + dg * dg) / D;
                     if (d > 1f)
                         d = 1f;
-                    
+
                     medD += d;
                     sqSum += d * d;
 
@@ -276,7 +276,7 @@ public static class Abra
                     int dr = lBkg[2] - lBmp[2];
 
                     float d = (dr * dr + db * db + dg * dg) / D;
-                    
+
                     if (d > threshold)
                     {
                         lBmp[0] = 255;

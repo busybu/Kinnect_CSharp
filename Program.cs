@@ -5,9 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AForge.Video.DirectShow;
+using RandomFlorestLib;
+
+bool test = false;
 
 ApplicationConfiguration.Initialize();
 Application.EnableVisualStyles();
+
+RandomFlorest rfr = RandomFlorest.Load("FalangoFalaBosta.sla");
 
 var form = new Form();
 form.WindowState = FormWindowState.Maximized;
@@ -18,8 +23,8 @@ int M = N;
 float treshold = 0.15f;
 
 //Parametros de calibração da identificação do estado da mão
-int handthreshold = 2900;
-int area = 40;
+int handthreshold = 4500;
+int area = 30;
 double handvalue = 0;
 
 float param = 0;
@@ -63,6 +68,7 @@ form.Load += (o, e) =>
 
 PointsHandler ph = new PointsHandler();
 
+Point ajdCenter = Point.Empty;
 tm.Tick += (o, e) =>
 {   
     // DrawResize.DrawCursor(bmp, g, cursor, isDown);
@@ -87,10 +93,31 @@ tm.Tick += (o, e) =>
         bin = crr;
     }
 
-    var center = hand.GetCenterPixel(bin);
-    var open = (hand.TheBestOpenHand(bin, handthreshold, area)).Item1;
+    Point center = Point.Empty;
+    (bool, double, bool) openfunction = (false, 0, false);
+    try
+    {
+        center = hand.GetCenterPixel(bin);
+        openfunction = (hand.TheBestOpenHand(bin, handthreshold, area));
+    }
+    catch { }
 
-    Front.Desenhar(crr, bmp, g, center, isDown); // estavamos aqui!!!!"  desenha com os pontos da mão se mouse clicado
+    if (center != Point.Empty && ajdCenter == Point.Empty)
+        ajdCenter = center;
+    else if (center != Point.Empty)
+    {
+        ajdCenter = new Point(
+            (int)(0.5 * center.X + 0.5 * ajdCenter.X),
+            (int)(0.5 * center.Y + 0.5 * ajdCenter.Y)
+        );
+    }
+    center = new Point(ajdCenter.X * 2, ajdCenter.Y * 2);
+    center = new Point(bmp.Width - center.X, center.Y);
+
+    handvalue = openfunction.Item2;
+    var open = openfunction.Item1;
+
+    Front.Desenhar(crr, bmp, g, Cursor.Position, test); // estavamos aqui!!!!"  desenha com os pontos da mão se mouse clicado
 
     // Front.Desenhar(crr, bmp, g, cursor, isDown);
 
@@ -100,10 +127,16 @@ tm.Tick += (o, e) =>
 
     g.DrawString(bgParam.ToString(), SystemFonts.CaptionFont,
         Brushes.White, new PointF(20, 20));
+
+    g.DrawString(handvalue.ToString(), SystemFonts.CaptionFont,
+        Brushes.White, new PointF(20, 50));
+
+    g.DrawString(handthreshold.ToString(), SystemFonts.CaptionFont,
+        Brushes.White, new PointF(20, 70));
         
     g.FillRectangle(open ? Brushes.Green : Brushes.Red, center.X * 3 - 5, center.Y * 3 - 5, 10, 10);
     
-    ph.RegisterCursor(center, !open, g, (bmp.Height*bmp.Height) + (bmp.Width*bmp.Width));
+    ph.RegisterCursor(Cursor.Position, !test, g, (bmp.Height*bmp.Height) + (bmp.Width*bmp.Width), rfr);
 
     pb.Refresh();
 };
@@ -141,6 +174,8 @@ form.KeyDown += (o, e) =>
 {
     if (e.KeyCode == Keys.Space)
     {
+        test = !test;
+        return;
         N = M;
         var img = (Bitmap)crr.Clone();
         bgParam = Equalization.GetParam(img);
@@ -194,3 +229,6 @@ form.KeyDown += (o, e) =>
 
 Application.Run(form);
 
+// RandomFlorest rfr = new RandomFlorest();
+// rfr.Fit();
+// rfr.Store("FalangoFalaBosta.sla");

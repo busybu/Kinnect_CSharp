@@ -9,8 +9,8 @@ public static class Front
     public static bool aux1 {get; set;} = false;
     public static void Desenhar(Bitmap cam, Bitmap bmp, Graphics g,Point cursor, bool isDown)
     {
-        try
-        {
+        // try
+        // {
             //Canetas
             Pen CanetaVermelhaTeste = new Pen(Brushes.Red, 10f);
             Pen CanetaPreta = new Pen(Brushes.Black, 10f);
@@ -120,7 +120,7 @@ public static class Front
             {
                 if (isDown)
                 {
-                    Points.Add(cursor);
+                    Points.Add(new Point(bmp.Width - cursor.X, cursor.Y));
                 }
                 else
                 {
@@ -192,15 +192,33 @@ public static class Front
             g.DrawString(textoTirarFoto, fontTirarFoto, drawBrush, TirarFoto, format);
             
             //Imagem Camera
-            RectangleF destRect = new RectangleF((bmp.Width - 5) - larguraCamera + 30, 5, larguraCamera - 30, alturaCamera);    
-            RectangleF srcRect = new RectangleF(0.0F, 0.0F, cam.Width, cam.Height);
-            GraphicsUnit units = GraphicsUnit.Pixel;      
-            g.DrawImage(cam, destRect, srcRect, units);
+            try
+            {
+                RectangleF destRect = new RectangleF((bmp.Width - 5) - larguraCamera + 30, 5, larguraCamera - 30, alturaCamera);
+                RectangleF srcRect = new RectangleF(0.0F, 0.0F, cam.Width, cam.Height);
+                GraphicsUnit units = GraphicsUnit.Pixel;      
+                destRect = new RectangleF(destRect.X + destRect.Width, destRect.Y, -destRect.Width, destRect.Height);
+                g.DrawImage(cam, destRect, srcRect, units);
+            }
+            catch { }
+
+            float y = 0;
+            foreach (var text in PointsHandler.Messages)
+            {
+                g.DrawString(text, SystemFonts.CaptionFont, Brushes.White, new PointF(100, y));
+                y += 20;
+            }
             
-        }
-        catch
-        {
+            try
+            {
+                if (PointsHandler.LastNumber != null)
+                    g.DrawImage(PointsHandler.LastNumber, new Rectangle(200, 0, 200, 200));
+            } catch { }
             
-        }
+        // }
+        // catch
+        // {
+            
+        // }
     }
 }

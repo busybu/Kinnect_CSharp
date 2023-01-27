@@ -1,7 +1,10 @@
-
+using RandomFlorestLib;
 
 public class PointsHandler
 {
+  public static List<string> Messages { get; private set; } = new List<string>();
+  public static Bitmap LastNumber { get; private set; }
+
   private List<Point> list = new List<Point>();
   Bitmap crr = new Bitmap(1200, 1200);
   Graphics g = null;
@@ -12,37 +15,63 @@ public class PointsHandler
   {
     g = Graphics.FromImage(crr);
   }
-  public void RegisterCursor(Point cursor, bool isClosed, Graphics g_aparente, int distanciaTela)
+
+  int count = 0;
+  bool state = false;
+  public void RegisterCursor(Point cursor, bool isClosed, Graphics g_aparente, int distanciaTela, RandomFlorest rfr)
   {
-    if (isClosed)
+    if (isClosed != state)
+    {
+      count++;
+      if (count > 5)
+      {
+        count = 0;
+        state = !state;
+      }
+    }
+    else count = 0;
+
+    if (state)
     {
       g_aparente.DrawString(cursor.ToString(), SystemFonts.CaptionFont,
         Brushes.White, new PointF(10, 100));
         g_aparente.DrawString(last.ToString(), SystemFonts.CaptionFont,
         Brushes.White, new PointF(10, 110));
-      if(tp.Detect(cursor, last, 5, distanciaTela / 4))
+      if(tp.Detect(cursor, last, 5, distanciaTela / 4) && (cursor.X != 0 && cursor.Y != 0))
       {
         list.Add(cursor);
         last = cursor;
         if (list.Count > 1)
           g_aparente.DrawLines(new Pen(Brushes.Black, 10f), list.ToArray());
       }
-      else
-      {
-        list.Add(last);
-      }
     }
     else
     {
       byte[] Mnist = GenerateMnist();
-
+      if (Mnist.Any(x => x > 0) && Mnist.All(x => x == 255 || x == 0))
+        return;
+      Mnist = Mnist.Select(x => x == (byte)255 ? (byte)0 : x).ToArray();
+      Mnist = Mnist.Select(x => x == (byte)1 ? (byte)0 : x).ToArray();
+      
       byte[] processedMnist = Convolutions.Core.Convolutions.Convolute4(Mnist, 28, 28);
 
-      // IA(processedMnist)  // Só chamar a função da IA e esta pronto
+      if (processedMnist.All(x => x == 0))
+      {
+        Clear();
+        return; 
+      }
 
+      File.AppendAllLines("output.ds", new string[] { Mnist.Append((byte)(i % 10)).Aggregate("", (a, b) => a + b.ToString() + ",") });
+      i++;
+
+      int numero = rfr.Choose(processedMnist);
+      Messages.Add(numero.ToString());
+      
       Clear();
     }
   }
+  int i = 0;
+
   public byte[] GenerateMnist(int margin = 100)
   {
     var data = new byte[28 * 28];
@@ -70,7 +99,7 @@ public class PointsHandler
       ret, GraphicsUnit.Pixel);
     
     var sla = result.LockBits(
-      new Rectangle(0,0,result.Width,result.Height),
+      new Rectangle(0, 0, result.Width, result.Height),
       System.Drawing.Imaging.ImageLockMode.ReadOnly,
       System.Drawing.Imaging.PixelFormat.Format24bppRgb
     );
@@ -83,13 +112,14 @@ public class PointsHandler
       for(int j = 0; j < result.Height; j++)
       {
         byte* linha = p + j * sla.Stride;
-        for(int i = 0; i < result.Width; i++, linha+=3)
+        for(int i = 0; i < result.Width; i++, linha += 3)
         {
           data[index] = (byte)(255 - linha[0]);
           index++;
         }
       }
     }
+    LastNumber = (Bitmap)result.Clone();
     return data;
   }
   public void Clear() => list.Clear();
