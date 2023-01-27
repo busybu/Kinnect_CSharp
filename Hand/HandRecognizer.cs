@@ -298,7 +298,7 @@ public class HandRecognizer
         return (true, whites);
     }
 
-    public (Boolean, double) BetterOpenHandNew(Bitmap bmp, int calibration=3600, int area=40)
+    public (Boolean, double, Boolean) TheBestOpenHand(Bitmap bmp, int calibration=4500, int area=30)
     {
         Point topPixel = getTopPixel(bmp);
         double whites = 0;
@@ -312,14 +312,14 @@ public class HandRecognizer
             for (int j = topPixel.Y; j < (topPixel.Y + area*3/4) ; j++)
             {
                 sequence = 1;
-                whites += flips*area/10;
+                whites -= flips*area/10;
                 for (int i = (topPixel.X - area*1/3); i < (topPixel.X + area); i++)
                 {
                     Color pixel = bmp.GetPixel(i, j);
 
                     if (pixel.G != 0)
                     {
-                        whites += Math.Pow(sequence*2, 3);
+                        whites += Math.Pow(sequence*2, 4);
                         if (last == 1)
                         {
                             sequence++;
@@ -347,9 +347,73 @@ public class HandRecognizer
         whites = whites/2000;
 
         if (whites>calibration)
-            return (false, whites);
+        {
+            var sideResult = SideCheck(bmp, calibration, area);
+            if (Math.Abs(sideResult.Item2 - calibration) < calibration*0.1)
+            {
+                return (false, whites, false);
+            }
+            return sideResult;
+        }
+
+        return (true, whites, false);
+    }
+
+    public (Boolean, double, Boolean) SideCheck(Bitmap bmp, int calibration=4500, int area=30)
+    {
+        Point topPixel = getTopPixel(bmp);
+        Point right = getRightPixel(bmp);
+        double whites = 0;
+        byte last = 0;
+        int sequence = 1;
+        int flips = 1;
+        //area = OptimalArea(bmp);
+
+        //average 3000
+
+        if(topPixel.X > area+5 && topPixel.X < bmp.Width-(area+5))
+        {
+            for (int i = right.X; i > (right.X - area*3/4) ; i--)
+            {
+                sequence = 1;
+                whites -= flips*area/10;
+                for (int j = (right.Y - area*1/3); j < (right.Y + area); j++)
+                {
+                    Color pixel = bmp.GetPixel(i, j);
+
+                    if (pixel.G != 0)
+                    {
+                        whites += Math.Pow(sequence*2, 4);
+                        if (last == 1)
+                        {
+                            sequence++;
+                        }
+                        else
+                        {
+                            flips++;
+                        }
+                        last = 1;
+                    }
+                    else
+                    {
+                        if (last == 1)
+                        {
+                            flips++;
+                        }
+                        last = 0;
+
+                        sequence = 1;
+                    }
+                }
+            }
+        }
+
+        whites = whites/2000;
+
+        if (whites>calibration)
+            return (false, whites, true);
         
-        return (true, whites);
+        return (true, whites, true);
     }
 
     public int OptimalArea (Bitmap bmp)
