@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
+[Serializable]
 public class Node
 {
     public Node Left { get; private set; }

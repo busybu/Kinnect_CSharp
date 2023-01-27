@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using Core;
 
+[System.Serializable]
 public class DecisionTree
 {
     public Node Root { get; private set; }
@@ -55,18 +56,18 @@ public class DecisionTree
         }
     }
 
-    public void Save(string path)
+    public void Save(string path, int num)
     {
-        string txt = "public float Choose(int[] data)\n{\n";
-        txt += Append(this.Root, 1, "if");
-        Console.WriteLine(txt.Length);
+        string txt = "#pragma warning disable\npublic partial class NumberModel\n{\n";
+        txt += $"\tpublic float Choose{num}(int[] data)\n" + "\t{\n";
+        txt += Append(this.Root, 2, "if");
 
         if (File.Exists(path))
             File.Delete(path);
 
         using (FileStream fs = File.Create(path))
         {
-            byte[] info = new UTF8Encoding(true).GetBytes(txt + "\n}");
+            byte[] info = new UTF8Encoding(true).GetBytes(txt + "return 0f;\t\t\n}\n}");
 
             fs.Write(info, 0, info.Length);
         }
@@ -83,7 +84,7 @@ public class DecisionTree
             if (node.Left is not null)
                 code += Append(node.Left, tab + 1, "else");
 
-            return code += tablacao + $"\treturn {node.Probability};\n".Replace(',', '.') + tablacao + "}\n";
+            return code += tablacao + $"\treturn {node.Probability}f;\n".Replace(',', '.') + tablacao + "}\n";
         }
 
         string ComparisonString(ComparisonSigns comparison)
