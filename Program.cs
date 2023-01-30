@@ -70,13 +70,8 @@ PointsHandler ph = new PointsHandler();
 
 Point ajdCenter = Point.Empty;
 tm.Tick += (o, e) =>
-{   
-    // DrawResize.DrawCursor(bmp, g, cursor, isDown);
-    handler.GenerateMnist();
-    pb.Refresh();
-
-
-    if (bmp == null || crr == null)
+{
+    if (bmp == null)
         return;
 
     Bitmap bin;
@@ -121,7 +116,7 @@ tm.Tick += (o, e) =>
 
     // Front.Desenhar(crr, bmp, g, cursor, isDown);
 
- 
+
     g.DrawString(param.ToString(), SystemFonts.CaptionFont,
         Brushes.White, new PointF(10, 10));
 
@@ -133,9 +128,9 @@ tm.Tick += (o, e) =>
 
     g.DrawString(handthreshold.ToString(), SystemFonts.CaptionFont,
         Brushes.White, new PointF(20, 70));
-        
+
     g.FillRectangle(open ? Brushes.Green : Brushes.Red, center.X * 3 - 5, center.Y * 3 - 5, 10, 10);
-    
+
     ph.RegisterCursor(Cursor.Position, !test, g, (bmp.Height*bmp.Height) + (bmp.Width*bmp.Width), rfr);
 
     pb.Refresh();
@@ -169,7 +164,7 @@ pb.MouseUp += (o, e) =>
     isDown = false;
 };
 
-  
+
 form.KeyDown += (o, e) =>
 {
     if (e.KeyCode == Keys.Space)
@@ -224,7 +219,7 @@ form.KeyDown += (o, e) =>
             area--;
         }
     }
-    
+
 };
 
 Application.Run(form);
