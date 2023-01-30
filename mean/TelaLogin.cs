@@ -6,9 +6,13 @@ public class Login : Tela
 {
     public List<Point> Points = new List<Point>();
 
-    private bool CampoLoginClicked = false;
+    private bool CampoClicked = false;
+    private int selectedField = 0;
 
     public event Action CadastrarOpen;
+
+    private String login = "";
+    private String senha = "";
 
     public override void Desenhar(Bitmap cam, Bitmap bmp, Graphics g,
         Point cursor, bool isDown, string text)
@@ -41,11 +45,11 @@ public class Login : Tela
             int alturamolduralogin = (int)(0.900 * bmp.Height);
             int larguramolduralogin = (int)(0.720 * bmp.Width);
 
-            int alturabotaologin = (int)(0.100 * bmp.Height);
-            int largurabotaologin = (int)(0.500 * bmp.Width);
+            int alturabotaologin = (int)(0.085 * bmp.Height);
+            int largurabotaologin = (int)(0.485 * bmp.Width);
 
-            int alturabotaosenha = (int)(0.100 * bmp.Height);
-            int largurabotaosenha = (int)(0.500 * bmp.Width);
+            int alturabotaosenha = (int)(0.085 * bmp.Height);
+            int largurabotaosenha = (int)(0.485 * bmp.Width);
 
 
             //Molduras
@@ -53,20 +57,20 @@ public class Login : Tela
             Rectangle RetanguloPretoTela = new Rectangle(0, 0, bmp.Width, bmp.Height);
             Rectangle PreenchimentoRetanguloPretoTela = new Rectangle(5, 5, bmp.Width - 10, bmp.Height - 10);
 
-            Rectangle BotaoAluno = new Rectangle((int)(0.030 * bmp.Width), (int)(0.100 * bmp.Height), largurabotaoaluno, alturabotaoaluno);
-            Rectangle BotaoProfessor = new Rectangle((int)(0.030 * bmp.Width), ((bmp.Height - (int)(0.100 * bmp.Height)) - alturabotaoprofessor), largurabotaoprofessor, alturabotaoprofessor);
+            Rectangle BotaoAluno = new Rectangle((int)(0.030 * bmp.Width), (int)(0.100 * bmp.Height), largurabotaoaluno - 5, alturabotaoaluno - 5);
+            Rectangle BotaoProfessor = new Rectangle((int)(0.030 * bmp.Width), ((bmp.Height - (int)(0.100 * bmp.Height)) - alturabotaoprofessor), largurabotaoprofessor - 5, alturabotaoprofessor - 5);
 
-            Rectangle PreenchimentoBotaoAluno = new Rectangle((int)(0.0325 * bmp.Width), (int)(0.105 * bmp.Height), largurabotaoaluno - 10, alturabotaoaluno - 10);
-            Rectangle PreenchimentoBotaoProfessor = new Rectangle((int)(0.0325 * bmp.Width), ((bmp.Height - (int)(0.096 * bmp.Height)) - alturabotaoprofessor), largurabotaoprofessor - 10, alturabotaoprofessor - 10);
+            Rectangle PreenchimentoBotaoAluno = new Rectangle((int)(0.034 * bmp.Width), (int)(0.107 * bmp.Height), largurabotaoaluno - 15, alturabotaoaluno - 15);
+            Rectangle PreenchimentoBotaoProfessor = new Rectangle((int)(0.034 * bmp.Width), ((bmp.Height - (int)(0.094 * bmp.Height)) - alturabotaoprofessor), largurabotaoprofessor - 15, alturabotaoprofessor - 15);
 
-            Rectangle BotaoLogin = new Rectangle(700, 300, largurabotaologin, alturabotaologin);
-            Rectangle BotaoSenha = new Rectangle(700, 600, largurabotaosenha, alturabotaosenha);
+            Rectangle BotaoLogin = new Rectangle((int)(0.350 * bmp.Width), (int)(0.305 * bmp.Height), largurabotaologin - 5, alturabotaologin - 10);
+            Rectangle BotaoSenha = new Rectangle((int)(0.350 * bmp.Width), (int)(0.600 * bmp.Height), largurabotaosenha - 5, alturabotaosenha - 10);
 
-            Rectangle PreenchimentoBotaoLogin = new Rectangle(705, 305, largurabotaologin - 10, alturabotaologin - 10);
-            Rectangle PreenchimentoBotaoSenha = new Rectangle(705, 605, largurabotaosenha - 10, alturabotaosenha - 10);
+            Rectangle PreenchimentoBotaoLogin = new Rectangle((int)(0.350 * bmp.Width), (int)(0.300 * bmp.Height), largurabotaologin - 10, alturabotaologin - 10);
+            Rectangle PreenchimentoBotaoSenha = new Rectangle((int)(0.350 * bmp.Width), (int)(0.600 * bmp.Height), largurabotaosenha - 10, alturabotaosenha - 10);
 
-            Rectangle MolduraLogin = new Rectangle(500, 50, larguramolduralogin, alturamolduralogin);
-            Rectangle PreenchimentoMolduraLogin = new Rectangle(505, 55, larguramolduralogin - 10, alturamolduralogin - 10);
+            Rectangle MolduraLogin = new Rectangle((int)(0.250 * bmp.Width), (int)(0.050 * bmp.Height), larguramolduralogin - 5, alturamolduralogin - 10);
+            Rectangle PreenchimentoMolduraLogin = new Rectangle((int)(0.250 * bmp.Width), (int)(0.050 * bmp.Height), larguramolduralogin - 10, alturamolduralogin - 10);
 
             //Gradient
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,7 +107,7 @@ public class Login : Tela
                 g.FillRectangle(GradientBotaoVermelho, PreenchimentoBotaoAluno);
                 if(BotaoAluno.Contains(cursor) && isDown)
                 {
-                    CampoLoginClicked = true;
+                    CampoClicked = true;
                     g.FillRectangle(GradientBotaoVermelho, PreenchimentoBotaoAluno);
                 }
             }
@@ -113,7 +117,7 @@ public class Login : Tela
                 g.FillRectangle(GradientBotaoVermelho, PreenchimentoBotaoProfessor);
                 if(BotaoProfessor.Contains(cursor) && isDown)
                 {
-                    CampoLoginClicked = true;
+                    CampoClicked = true;
                     g.FillRectangle(GradientBotaoVermelho, PreenchimentoBotaoProfessor);
                 }
             }
@@ -143,16 +147,52 @@ public class Login : Tela
             Font fontAluno = new Font("Arial", (int)(0.050 * bmp.Height));
 
             String textoPROFESSOR = "Sou Professor";
-            Font fontProfessor = new Font("Arial", (int)(0.050 * bmp.Height));
+            Font fontProfessor = new Font("Arial", (int)(0.049 * bmp.Height));
 
             float fontSize = 60f;
 
             String textoLogin = "Login:";
             Font fontLogin = new Font(FontFamily.GetFamilies(g)[59], fontSize);
 
-            String inputLogin = text;
 
-            String inputSenha = text;
+            String inputLogin = login;
+            String inputSenha = senha;
+
+            switch (selectedField)
+            {   
+                case 0:
+                    inputLogin = text;
+                    login = text;
+                break;
+
+                case 1:
+                    inputSenha = text;
+                    senha = text;
+                break;
+
+                default:
+                    text = "";
+                break;
+            }
+
+            // if(selectedField == 0)
+            //     inputLogin = text;
+            // else
+            // {
+            //     login = text;
+            //     inputLogin = login;
+            //     text = "";
+            // }
+
+           
+            //  if(selectedField == 1)
+            //     inputSenha = text;
+            // else
+            // {
+            //     senha = text;
+            //     inputSenha = senha;
+            //     text = "";
+            // }
 
             String textoSenha = "Senha:";
             Font fontSenha = new Font(FontFamily.GetFamilies(g)[59], fontSize);
@@ -164,8 +204,32 @@ public class Login : Tela
             g.DrawString(inputSenha, fontAluno, letraPreta, BotaoSenha, format2);
 
             g.DrawRectangle(CanetaPreta, BotaoLogin);
+            if (BotaoLogin.Contains(cursor))
+            {
+            
+                if(BotaoLogin.Contains(cursor) && isDown)
+                    CampoClicked = true;
+
+                if (BotaoLogin.Contains(cursor) && !isDown && CampoClicked)
+                {
+                    CampoClicked = false;
+                    selectedField = 0;
+                }
+            }
 
             g.DrawRectangle(CanetaPreta, BotaoSenha);
+            if (BotaoSenha.Contains(cursor))
+            {
+            
+                if(BotaoSenha.Contains(cursor) && isDown)
+                    CampoClicked = true;
+
+                if (BotaoSenha.Contains(cursor) && !isDown && CampoClicked)
+                {
+                    CampoClicked = false;
+                    selectedField = 1;
+                }
+            }
             
 
             g.DrawString(textoALUNO, fontAluno, drawBrush, BotaoAluno, format);
@@ -181,12 +245,12 @@ public class Login : Tela
             
                 if(retanguloCadastrar.Contains(cursor) && isDown)
                 {
-                    CampoLoginClicked = true;
+                    CampoClicked = true;
                 }
 
-                if (retanguloCadastrar.Contains(cursor) && !isDown && CampoLoginClicked)
+                if (retanguloCadastrar.Contains(cursor) && !isDown && CampoClicked)
                 {
-                    CampoLoginClicked = false;
+                    CampoClicked = false;
                     CadastrarOpen();
                 }
             }

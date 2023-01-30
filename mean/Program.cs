@@ -75,7 +75,7 @@ internal class Program
         };
 
 
-        telaAtual = bancoQuestoes;
+        telaAtual = login;
 
 
         ApplicationConfiguration.Initialize();
@@ -129,7 +129,6 @@ internal class Program
             isDown = false;
         };
 
-        int i = 0;
         form.Load += (o, e) =>
         {
             bmp = new Bitmap(pb.Width, pb.Height);
@@ -174,6 +173,8 @@ internal class Program
                 bg = Blur.QuickParallelBlur(img, 20);
             }
         };
+
+
 
 
         Application.Run(form);

@@ -51,21 +51,20 @@ public class Cadastro : Tela
             Rectangle RetanguloPretoTela = new Rectangle(0, 0, bmp.Width, bmp.Height);
             Rectangle PreenchimentoRetanguloPretoTela = new Rectangle(5,5, bmp.Width - 10, bmp.Height - 10);
 
-
             Rectangle BotaoAluno = new Rectangle(50, 100, largurabotaoaluno, alturabotaoaluno);
             Rectangle BotaoProfessor = new Rectangle(50, ((bmp.Height - 100) - alturabotaoprofessor), largurabotaoprofessor, alturabotaoprofessor);
 
             Rectangle PreenchimentoBotaoAluno = new Rectangle(55, 105, largurabotaoaluno - 10, alturabotaoaluno - 10);
             Rectangle PreenchimentoBotaoProfessor = new Rectangle(55, ((bmp.Height - 100) - alturabotaoprofessor + 5), largurabotaoprofessor - 10, alturabotaoprofessor - 10);
 
-            Rectangle BotaoLogin = new Rectangle(700, 500, largurabotaologin,alturabotaologin);
+            Rectangle BotaoLogin = new Rectangle((int)(0.350 * bmp.Width), (int)(0.500 * bmp.Height), largurabotaologin,alturabotaologin);
 
-            Rectangle BotaoSenha = new Rectangle(700, 700, largurabotaosenha,alturabotaosenha);
+            Rectangle BotaoSenha = new Rectangle((int)(0.350 * bmp.Width), (int)(0.700 * bmp.Height), largurabotaosenha,alturabotaosenha);
 
-            Rectangle BotaoNome = new Rectangle(700, 300, largurabotaonome,alturabotaonome);
+            Rectangle BotaoNome = new Rectangle((int)(0.350 * bmp.Width), (int)(0.300 * bmp.Height), largurabotaonome,alturabotaonome);
 
-            Rectangle MolduraLogin = new Rectangle(500, 50, larguramolduralogin, alturamolduralogin);
-            Rectangle PreenchimentoMolduraLogin = new Rectangle(505, 55, larguramolduralogin - 10, alturamolduralogin - 10);
+            Rectangle MolduraLogin = new Rectangle((int)(0.250 * bmp.Width), (int)(0.050 * bmp.Height), larguramolduralogin, alturamolduralogin);
+            Rectangle PreenchimentoMolduraLogin = new Rectangle((int)(0.250 * bmp.Width), (int)(0.050 * bmp.Height), larguramolduralogin, alturamolduralogin);
 
             
 

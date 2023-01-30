@@ -175,8 +175,14 @@ public class BancoQuestoes : Tela
                 g.FillRectangle(GradientBotaoBanco, PreeBotaoSairX);
                 if(PreeBotaoSairX.Contains(cursor) && isDown)
                 {
+                    botaoSairClicked = true;
                     g.FillRectangle(Brushes.DarkRed, PreeBotaoSairX);
-                    OnGradePageOpen();
+                }
+
+                if (PreeBotaoSairX.Contains(cursor) && !isDown && botaoSairClicked)
+                {
+                    botaoSairClicked = false;
+                    HomeOpen();
                 }
             }
 
@@ -280,7 +286,6 @@ public class BancoQuestoes : Tela
             StringFormat formatValor = new StringFormat();
             formatValor.Alignment = StringAlignment.Center;
             formatValor.LineAlignment = StringAlignment.Far;
-
 
 
             String textoBanco = "Banco de Questões";

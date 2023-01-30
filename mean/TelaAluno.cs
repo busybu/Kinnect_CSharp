@@ -4,13 +4,38 @@ using System.Drawing.Drawing2D;
 
 public class Aluno : Tela
 {
+    private int i = 0;
     public List<Point> Points = new List<Point>();
+    
+    public partial class Questao
+    {
+        public int NQuestao { get; set; }
+        public string? Descricao { get; set; }
+        public int? Peso { get; set; }
+    }
+    public static List<Questao> questoes = new List<Questao>();
 
+    Questao q = new Questao();
+
+     Questao q2 = new Questao();
+    
+        
     public override void Desenhar(Bitmap cam, Bitmap bmp, Graphics g,
         Point cursor, bool isDown, string text)
     {
         try
         {
+            q.NQuestao = 1;
+            q.Descricao = "2+2";
+            q.Peso = 1;
+
+            q2.NQuestao = 2;
+            q2.Descricao = "3+3";
+            q2.Peso = 1;
+
+            questoes.Add(q);
+            questoes.Add(q2);
+
             //Canetas
             Pen CanetaVermelhaTeste = new Pen(Brushes.Red, 10f);
             Pen CanetaPreta = new Pen(Brushes.Black, 10f);
@@ -39,6 +64,7 @@ public class Aluno : Tela
             int alturaCamera = (int)(0.380 * bmp.Height);
             int larguraCamera = (bmp.Width - larguraMolduraMarrom);
 
+            
 
             //Molduras
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,6 +112,7 @@ public class Aluno : Tela
             Rectangle Reconhecimento = new Rectangle(4 * larguraPreenchimentoBotoes + 45, alturaMolduraMarrom + 25, larguraMolduraPreta - (4 * larguraBotao), alturaPreenchimentoBotoes + 10);
             Rectangle EspaçoCamera = new Rectangle(larguraMolduraPreta, 0, larguraCamera, alturaCamera + 10);
             Rectangle AreaParaDesenhar = new Rectangle(larguraMolduraPreta + 5, alturaCamera + (alturaBotao / 2) + 15, (larguraCamera - 30), bmp.Height - alturaCamera - (alturaBotao / 2) - 20);
+           
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
 
@@ -93,9 +120,19 @@ public class Aluno : Tela
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             SolidBrush drawBrush = new SolidBrush(Color.AliceBlue);
             SolidBrush LetraPreta = new SolidBrush(Color.Black);
+            SolidBrush LetraBranca = new SolidBrush(Color.White);
+
             StringFormat format = new StringFormat();
             format.Alignment = StringAlignment.Center;
             format.LineAlignment = StringAlignment.Center;
+
+            StringFormat formatQuestao = new StringFormat();
+            formatQuestao.Alignment = StringAlignment.Center;
+            formatQuestao.LineAlignment = StringAlignment.Near;
+
+            StringFormat formatValor = new StringFormat();
+            formatValor.Alignment = StringAlignment.Center;
+            formatValor.LineAlignment = StringAlignment.Far;
 
             String textoDesfazer = "←";
             Font fontDesfazer = new Font("Arial", alturaPreenchimentoBotoes - (int)(0.115 * bmp.Height));
@@ -103,7 +140,7 @@ public class Aluno : Tela
             String textoRefazer = "→";
             Font fontRefazer = new Font("Arial", alturaPreenchimentoBotoes - (int)(0.115 * bmp.Height));
     
-            String textoResetar = "Resetar";
+            String textoResetar = "Apagar";
             Font fontResetar = new Font(FontFamily.GetFamilies(g)[59], alturaPreenchimentoBotoes - (int)(0.160 * bmp.Height));
           
             String textoEnviar = "Enviar";
@@ -114,6 +151,26 @@ public class Aluno : Tela
             
             String virgula = ",";
             Font fontvirgula = new Font(FontFamily.GetFamilies(g)[59], (alturaBotao / 2) - (int)(0.055 * bmp.Height));
+
+            String NQuestao = "";
+            foreach (var i in questoes)
+            {
+                NQuestao = $"Questão N°{i.NQuestao}";
+            }
+
+            String Questao = "";
+            foreach (var i in questoes)
+            {
+                Questao = $"{i.Descricao} = ?";
+            }
+
+            String ValorQuestao = "";
+            foreach (var i in questoes)
+            {
+                ValorQuestao = $"Valor: {i.Peso}";
+            }
+
+            Font fontQuestao = new Font("Arial", (int)(0.075 * bmp.Height));
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
             
@@ -157,7 +214,9 @@ public class Aluno : Tela
             {
                 g.FillRectangle(Brushes.Red, PreenchimentoRefazer);
                 if(PreenchimentoRefazer.Contains(cursor) && isDown == true)
+                {
                     g.FillRectangle(Brushes.DarkRed, PreenchimentoRefazer);
+                }
             }
 
             g.DrawRectangle(CanetaPreta, Resetar);
@@ -204,6 +263,9 @@ public class Aluno : Tela
             GraphicsUnit units = GraphicsUnit.Pixel;      
             g.DrawImage(cam, destRect, srcRect, units);
             
+            g.DrawString($"Questão N°{questoes[i].NQuestao.ToString()}", fontQuestao, LetraBranca, QuadroVerde, formatQuestao);
+            g.DrawString($"{questoes[i].Descricao.ToString()} = ?", fontQuestao, LetraBranca, QuadroVerde, format);
+            g.DrawString($"Valor: {questoes[i].Peso.ToString()}", fontQuestao, LetraBranca, QuadroVerde, formatValor);
         }
         catch
         {

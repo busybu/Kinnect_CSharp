@@ -108,14 +108,14 @@ public class VisualizarNotas : Tela
                 Color.FromArgb(255,8,159,143));
 
             Rectangle GradientVermelho = new Rectangle(5, 5 + alturaBotoesNavbar, larguraBotoesNavbar, alturaBotoesNavbar - 10);
-            Brush GradientCorVermelha = new LinearGradientBrush(
+             Brush GradientBotaoBanco = new LinearGradientBrush(
                 new Point(0, alturaBotoesNavbar),
                 new Point(larguraBotoesNavbar, alturaBotoesNavbar),
                 Color.FromArgb(255,110,0,0),  
                 Color.FromArgb(255,220,0,0));
 
             g.FillRectangle(GradientCorAzul, GradientAzul);
-            g.FillRectangle(GradientCorVermelha, GradientVermelho);
+            g.FillRectangle(GradientBotaoBanco, GradientVermelho);
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -134,7 +134,7 @@ public class VisualizarNotas : Tela
             g.DrawRectangle(CanetaPreta, BotaoBancoQuestoes);
             if (PreeBotaoBancoQuestoes.Contains(cursor))
             {
-                g.FillRectangle(GradientCorVermelha, PreeBotaoBancoQuestoes);
+                g.FillRectangle(GradientBotaoBanco, PreeBotaoBancoQuestoes);
                 if(PreeBotaoBancoQuestoes.Contains(cursor) && isDown)
                 {
                     g.FillRectangle(Brushes.DarkRed, PreeBotaoBancoQuestoes);
@@ -154,10 +154,16 @@ public class VisualizarNotas : Tela
             g.DrawRectangle(CanetaPreta, BotaoSairX);
             if (BotaoSairX.Contains(cursor))
             {
-                g.FillRectangle(GradientCorVermelha, PreeBotaoSairX);
+                g.FillRectangle(GradientBotaoBanco, PreeBotaoSairX);
                 if(PreeBotaoSairX.Contains(cursor) && isDown)
                 {
+                    botaoSairClicked = true;
                     g.FillRectangle(Brushes.DarkRed, PreeBotaoSairX);
+                }
+
+                if (PreeBotaoSairX.Contains(cursor) && !isDown && botaoSairClicked)
+                {
+                    botaoSairClicked = false;
                     HomeOpen();
                 }
             }
